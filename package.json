@@ -1,0 +1,51 @@
+{
+
+  "name": "amanda",
+  "description": "JSON Schema validator",
+  "version": "0.1.0",
+  "author": "František Hába <hello@frantisekhaba.com>",
+
+  "devDependencies": {
+    "nodeunit": "0.5.1"
+  },
+
+  "keywords": [
+    "JSON",
+    "JSON Schema",
+    "schema",
+    "validator",
+    "validate",
+    "JSON validator",
+    "schema validator",
+    "async",
+    "browser"
+  ],
+
+  "homepage": "https://github.com/Baggz/Amanda",
+
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Baggz/Amanda.git"
+  },
+
+  "engines": {
+    "node": ">= 0.3.0"
+  },
+
+  "bugs": {
+    "url": "https://github.com/Baggz/Amanda/issues",
+    "email": "hello@frantisekhaba.com"
+  },
+
+  "licenses": [ 
+    {
+      "type": "MIT",
+      "url": "https://github.com/Baggz/Amanda/blob/master/README.md"
+    }
+  ],
+
+  "scripts": {
+    "test" : "nodeunit tests/"
+  }
+
+}
