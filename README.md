@@ -319,22 +319,16 @@ From version **0.4.11**.
 
 **Desktop**
 
-| **Browser** | **Version** |
-|:------------|:------------|
-| Google Chrome | 12+ |
-| Safari | *Not tested* |
-| Firefox | *Not tested* |
-| Opera | *Not tested* |
-| Internet Explorer | *Not tested* |
+| **Browser** | **Supported** | **Version** |
+|:------------|:-----------:|:------------|
+| Google Chrome | ✔ | 12+ |
+| Safari | n/a | *Not tested* |
+| Firefox | n/a | *Not tested* |
+| Opera | n/a | *Not tested* |
+| Internet Explorer | ✖ | *Not tested* |
 
 **Mobile**
 
-| **Browser** | **Version** |
-|:------------|:------------|
-| Android | *Not tested* |
-| Safari | *Not tested* |
-| Opera Mini | *Not tested* |
-| Opera Mobile | *Not tested* |
 
 <a name="tests"></a>
 # Running Tests
