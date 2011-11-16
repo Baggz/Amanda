@@ -31,9 +31,8 @@
    */
   var each = function(list, iterator, callback) {
 
-    // Fronta jednotlivých požadavků
     var queue = [];
-    
+
     /**
      * AddToQueue
      *
@@ -60,14 +59,14 @@
       });
     };
 
-    // If list is an array
+    // If the list is an array
     if ( Object.prototype.toString.call(list) === '[object Array]' ) {
       for (var i = 0, len = list.length; i < len; i++) {
         addToQueue(undefined, list[i]);
       }
     }
 
-    // If list is an object
+    // If the list is an object
     if ( Object.prototype.toString.call(list) === '[object Object]' ) {
       for (var key in list) {
         if (list.hasOwnProperty(key)) {
@@ -76,7 +75,7 @@
       }
     }
 
-    // And goo!
+    // And go!
     return queue[0]();
 
   };
@@ -149,13 +148,20 @@
        *   }
        * }
        */
-
       if (['object', 'array'].indexOf(schema.type) !== -1) {
         return validateParam(undefined, schema, instance, function(error) {
           if (error) {
             return callback(error);
           } else {
-            
+
+            /**
+             * {
+             *   type: 'object',
+             *   properties: {
+             *     ... 
+             *   }
+             * }
+             */
             if (schema.properties) {
               return each(schema.properties, function(paramName, paramValidators, callback) {
                 if ((paramValidators.type === 'object' && paramValidators.properties) || paramValidators.type === 'array' )  {
@@ -164,20 +170,32 @@
                   return validateParam(paramName, paramValidators, instance[paramName], callback);
                 }
               }, callback);
-            } else if (schema.items) {
-              if ( schema.items.type === 'object' || schema.items.type === 'array' ) {
 
-                each(instance, function(item, callback) {
+            /**
+             * {
+             *   type: 'array',
+             *   items: {
+             *     type: 'string'
+             *     ... 
+             *   }
+             * }
+             */
+            } else if (schema.items) {
+              if (['object', 'array'].indexOf(schema.items.type) !== -1) {
+                return each(instance, function(item, callback) {
                   return validateSchema(item, schema.items, callback);
                 }, callback);
-
-                
-                //callback(null);
               } else {
                 return each(instance, function(item, callback) {
                   return validateParam(undefined, schema.items, item, callback);
                 }, callback);
               }
+            
+            /**
+             * {
+             *   type: 'array'
+             * }
+             */
             } else {
               return callback(null);
             }
@@ -316,11 +334,11 @@
    * Length
    */
   amanda.addValidator('length', function(paramName, paramValue, validator, validators, callback) {
-
-    // Validátor spustíme jen pokud se jedná string, jinak přeskočíme
+    
+    // Check the length only if the type of ‘paramValue’ is string
     if (typeof paramValue === 'string') {
 
-      // Pokud je validátor zapsán ve tvaru “[2, 45]”
+      // If the length is specified as an array (for instance ‘[2, 45]’)
       if (Array.isArray(validator) && (paramValue.length < validator[0] || paramValue.length > validator[1])) {
         return callback(new Error(
           paramName,
@@ -331,7 +349,7 @@
         ));
       }
 
-      // Pokud je validátor zapsán ve tvaru “12”
+      // If the length is specified as a string (for instance ‘2’)
       if (typeof validator === 'number' && paramValue.length !== validator) {
         return callback(new Error(
           paramName,
@@ -342,12 +360,10 @@
         ));
       }
 
-      // Vše je v pořádku, jedeme dál
       return callback(null);
 
     }
 
-    // Vše je v pořádku, jedeme dál
     return callback(null);
 
   });
@@ -356,8 +372,6 @@
    * Values
    */
   amanda.addValidator('values', function(paramName, paramValue, validator, validators, callback) {
-
-    // Pokud hodnota parametru neodpovídá výčtu
     if (validator.indexOf( paramValue ) === -1) {
       return callback(new Error(
         paramName,
@@ -366,19 +380,15 @@
         validator,
         null
       ));
+    } else {
+      return callback(null);
     }
-
-    // Vše je v pořádku, jedeme dál
-    return callback(null);
-
   });
 
   /**
    * Except
    */
   amanda.addValidator('except', function(paramName, paramValue, validator, validators, callback) {
-    
-    // Pokud hodnota parametru odpovídá výčtu nepovolených hodnot
     if (validator.indexOf( paramValue ) !== -1) {
       return callback(new Error(
         paramName,
@@ -387,11 +397,9 @@
         validator,
         null
       ));
+    } else {
+      return callback(null);
     }
-
-    // Vše je v pořádku, jedeme dál
-    return callback(null);
-
   });
 
   /**
