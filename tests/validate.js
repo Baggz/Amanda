@@ -230,11 +230,10 @@ exports['Advanced validation with ‘required’'] = function(test) {
   test.done();
 };
 
-
 /**
  * Test ‘validate’
  */
-exports['Array validation with ‘required’'] = function(test) {
+exports['Advanced array and object validation'] = function(test) {
 
   /**
    * Schema
@@ -277,7 +276,18 @@ exports['Array validation with ‘required’'] = function(test) {
       }
     ]
   }, schema, function(error) {
-    test.equal(error, undefined);
+    test.equals(error, undefined);
+  });
+
+  amanda.validate({
+    users: [
+      {
+        name: 123,
+        surname: 'Hába'
+      }
+    ]
+  }, schema, function(error) {
+    test.ok(error);
   });
 
   amanda.validate({
@@ -286,18 +296,102 @@ exports['Array validation with ‘required’'] = function(test) {
         name: 'František',
         surname: 'Hába'
       },
-      {},
+      {
+        name: 'František',
+        surname: 123
+      },
       {
         name: 'František',
         surname: 'Hába'
       }
     ]
   }, schema, function(error) {
-    test.equal(error, undefined);
+    test.ok(error);
   });
+
 
   test.done();
 
   
+
+};
+
+
+/**
+ * Test ‘validate’
+ */
+exports['Array validation with ‘required’'] = function(test) {
+
+  /**
+   * Schema
+   */
+  var schema = {
+    type: 'object',
+    properties: {
+      users: {
+        type: 'array',
+        required: false,
+        items: {
+          type: 'object',
+          properties: {
+            name: {
+              type: 'string',
+              required: true
+            },
+            surname: {
+              type: 'string',
+              required: true
+            }
+          }
+        }
+      }
+    }
+  };
+
+  amanda.validate({
+    users: [
+      {
+        name: 'František',
+        surname: 'Hába'
+      },
+      {
+        name: 'František',
+        surname: 'Hába'
+      },
+      {
+        name: 'František',
+        surname: 'Hába'
+      }
+    ]
+  }, schema, function(error) {
+    test.equals(error, undefined);
+  });
+
+  amanda.validate({
+    
+  }, schema, function(error) {
+    test.equals(error, undefined);
+  });
+
+  amanda.validate({
+    users: [
+      {
+        name: 'František',
+        surname: 'Hába'
+      },
+      {
+        name: 'František',
+        surname: 123
+      },
+      {
+        name: 'František',
+        surname: 'Hába'
+      }
+    ]
+  }, schema, function(error) {
+    test.ok(error);
+  });
+
+  test.done();  
 
 };
