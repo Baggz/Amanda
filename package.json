@@ -2,11 +2,12 @@
 
   "name": "amanda",
   "description": "JSON Schema validator",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "author": "František Hába <hello@frantisekhaba.com>",
 
   "devDependencies": {
-    "nodeunit": "0.5.1"
+    "nodeunit": "0.5.1",
+    "async": "0.1.15"
   },
 
   "keywords": [
