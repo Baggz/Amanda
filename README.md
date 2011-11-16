@@ -13,10 +13,6 @@
 * Fully **documented**
 * Tested
 
-<a name="quickStart"></a>
-## Quick Start
-
-
 <a name="download"></a>
 ## Download
 
