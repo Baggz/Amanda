@@ -112,7 +112,7 @@
      * @param {function} callback
      */
     var iterator = function(validatorName, callback) {
-      if ( paramValidators[validatorName] ) {
+      if (paramValidators[validatorName]) {
         var fn = validators[validatorName];  
         fn(paramName, paramValue, paramValidators[validatorName], paramValidators, callback);
       } else {
@@ -120,8 +120,11 @@
       }
     };
 
-    // Run forEach
-    return each(validatorsList, iterator, callback);
+    if (paramValidators.required === false && paramValue === undefined) {
+      return callback(null);
+    } else {
+      return each(validatorsList, iterator, callback);
+    }
 
   };
 
@@ -184,27 +187,6 @@
     }
 
   };
-
-  /**
-   * Required
-   */
-  amanda.addValidator('required', function(paramName, paramValue, validator, validators, callback) {
-
-    // Pokud je parametr povinný a není vyplněn
-    if (validator && !paramValue) {
-      return callback(new Error(
-        paramName,
-        paramValue,
-        'required',
-        validator,
-        null
-      ));
-    }
-
-    // Vše je v pořádku, jedeme dál
-    return callback(null);
-
-  });
 
   /**
    * Type
@@ -377,7 +359,7 @@
    * Min
    */
   amanda.addValidator('min', function(paramName, paramValue, validator, validators, callback) {
-    if (typeof paramValue === 'number' && paramValue <= validator) {
+    if (typeof paramValue === 'number' && paramValue < validator) {
       return callback(new Error(
         paramName,
         paramValue,
@@ -394,7 +376,7 @@
    * Max
    */
   amanda.addValidator('max', function(paramName, paramValue, validator, validators, callback) {
-    if (typeof paramValue === 'number' && paramValue >= validator) {
+    if (typeof paramValue === 'number' && paramValue > validator) {
       return callback(new Error(
         paramName,
         paramValue,
