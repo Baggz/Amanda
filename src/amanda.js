@@ -149,42 +149,39 @@
        *   }
        * }
        */
-      if (schema.type === 'object' && schema.properties) {
-        return validateParam(undefined, schema, instance, function(error) {
-          if (error) {
-            return callback(error);
-          } else {
-            return each(schema.properties, function(paramName, paramValidators, callback) {
-              if ((paramValidators.type === 'object' && paramValidators.properties) || paramValidators.type === 'array' )  {
-                return validateSchema(instance[paramName], schema.properties[paramName], callback);
-              } else {
-                return validateParam(paramName, paramValidators, instance[paramName], callback);
-              }
-            }, callback);
-          }
-        });
 
-      /**
-       * {
-       *   type: 'array',
-       *   items: {
-       *     type: ...,
-       *     length: ...
-       *   }
-       * }
-       */
-      } else if (schema.type === 'array') {
+      if (['object', 'array'].indexOf(schema.type) !== -1) {
         return validateParam(undefined, schema, instance, function(error) {
           if (error) {
             return callback(error);
           } else {
-            if ( schema.items ) {
-              return each(instance, function(item, callback) {
-                return validateParam(undefined, schema.items, item, callback);
+            
+            if (schema.properties) {
+              return each(schema.properties, function(paramName, paramValidators, callback) {
+                if ((paramValidators.type === 'object' && paramValidators.properties) || paramValidators.type === 'array' )  {
+                  return validateSchema(instance[paramName], schema.properties[paramName], callback);
+                } else {
+                  return validateParam(paramName, paramValidators, instance[paramName], callback);
+                }
               }, callback);
+            } else if (schema.items) {
+              if ( schema.items.type === 'object' || schema.items.type === 'array' ) {
+
+                each(instance, function(item, callback) {
+                  return validateSchema(item, schema.items, callback);
+                }, callback);
+
+                
+                //callback(null);
+              } else {
+                return each(instance, function(item, callback) {
+                  return validateParam(undefined, schema.items, item, callback);
+                }, callback);
+              }
             } else {
               return callback(null);
             }
+
           }
         });
 
