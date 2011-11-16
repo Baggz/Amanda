@@ -30,8 +30,8 @@ Releases are available for download from GitHub.
 
 | **Version** | **Description** | **Size** | **Action** |
 |:------------|:----------------|:---------|:-----------|
-| `amanda.js` | *uncompressed, with comments* | 9.17KB (2.38KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/src/amanda.js) |
-| `amanda.min.js` | *compressed, without comments* | 4.35KB (1.52KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/dist/amanda.min.js) |
+| `amanda.js` | *uncompressed, with comments* | 9.43 KB (2.45 KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/src/amanda.js) |
+| `amanda.min.js` | *compressed, without comments* | 4.53 KB (1.58 KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/dist/amanda.min.js) |
 
 <a name="documentation"></a>
 # Documentation
@@ -306,7 +306,15 @@ var schema = {
 <a name="error"></a>
 ## Error
 
-
+```javascript
+{
+  paramName: ...
+  paramValue: ...
+  validatorName: ...
+  validatorValue: ...
+  message: ...
+}
+```
 
 <a name="compatibility"></a>
 # Compatibility
@@ -325,7 +333,7 @@ From version **0.4.11**.
 | Safari | n/a | *Not tested* |
 | Firefox | n/a | *Not tested* |
 | Opera | n/a | *Not tested* |
-| Internet Explorer | ✖ | *Not tested* |
+| Internet Explorer | ✕ | *Not tested* |
 
 **Mobile**
 
