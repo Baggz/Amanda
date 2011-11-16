@@ -158,10 +158,10 @@
   };
 
   /**
-   * Amanda
+   * amanda
    *
    */
-  var Amanda = {
+  var amanda = {
 
     /**
      * Validate
@@ -188,7 +188,7 @@
   /**
    * Required
    */
-  Amanda.addValidator('required', function(paramName, paramValue, validator, validators, callback) {
+  amanda.addValidator('required', function(paramName, paramValue, validator, validators, callback) {
 
     // Pokud je parametr povinný a není vyplněn
     if (validator && !paramValue) {
@@ -209,7 +209,7 @@
   /**
    * Type
    */
-  Amanda.addValidator('type', (function() {
+  amanda.addValidator('type', (function() {
 
     /**
      * Types
@@ -294,7 +294,7 @@
   /**
    * Length
    */
-  Amanda.addValidator('length', function(paramName, paramValue, validator, validators, callback) {
+  amanda.addValidator('length', function(paramName, paramValue, validator, validators, callback) {
 
     // Validátor spustíme jen pokud se jedná string, jinak přeskočíme
     if (typeof paramValue === 'string') {
@@ -334,7 +334,7 @@
   /**
    * Values
    */
-  Amanda.addValidator('values', function(paramName, paramValue, validator, validators, callback) {
+  amanda.addValidator('values', function(paramName, paramValue, validator, validators, callback) {
 
     // Pokud hodnota parametru neodpovídá výčtu
     if (validator.indexOf( paramValue ) === -1) {
@@ -355,7 +355,7 @@
   /**
    * Except
    */
-  Amanda.addValidator('except', function(paramName, paramValue, validator, validators, callback) {
+  amanda.addValidator('except', function(paramName, paramValue, validator, validators, callback) {
     
     // Pokud hodnota parametru odpovídá výčtu nepovolených hodnot
     if (validator.indexOf( paramValue ) !== -1) {
@@ -376,7 +376,7 @@
   /**
    * Min
    */
-  Amanda.addValidator('min', function(paramName, paramValue, validator, validators, callback) {
+  amanda.addValidator('min', function(paramName, paramValue, validator, validators, callback) {
     if (typeof paramValue === 'number' && paramValue <= validator) {
       return callback(new Error(
         paramName,
@@ -393,7 +393,7 @@
   /**
    * Max
    */
-  Amanda.addValidator('max', function(paramName, paramValue, validator, validators, callback) {
+  amanda.addValidator('max', function(paramName, paramValue, validator, validators, callback) {
     if (typeof paramValue === 'number' && paramValue >= validator) {
       return callback(new Error(
         paramName,
@@ -410,7 +410,7 @@
   /**
    * Pattern
    */
-  Amanda.addValidator('pattern', function(paramName, paramValue, validator, validators, callback) {
+  amanda.addValidator('pattern', function(paramName, paramValue, validator, validators, callback) {
     if (typeof paramValue === 'string' && !paramValue.match(validator)) {
       return callback(new Error(
         paramName,
@@ -426,13 +426,13 @@
 
   // Export
   if ( typeof module !== 'undefined' && module.exports ) {
-    module.exports = Amanda;
+    module.exports = amanda;
   } else if ( typeof define !== 'undefined' ) {
     define(function() {
-      return Amanda;
+      return amanda;
     });
   } else {
-    this.Amanda = Amanda;
+    this.amanda = amanda;
   }
 
 }());
