@@ -137,25 +137,67 @@
    */
   var validateSchema = function(instance, schema, callback) {
 
-    // Pokud se jedná o objekt
-    if (schema.type === 'object' && schema.properties) {
-      return each(schema.properties, function(paramName, paramValidators, callback) {
-        if (paramValidators.type === 'object' && paramValidators.properties) {
-          return validateSchema(instance[paramName], schema.properties[paramName], callback);
-        } else {
-          return validateParam(paramName, paramValidators, instance[paramName], callback);
-        }
-      }, callback);
-    } else if (schema.type === 'array') {
-      if ( schema.items ) {
-        return each(instance, function(item, callback) {
-          return validateParam(undefined, schema.items, item, callback);
-        }, callback);
+    if (schema.required === false && instance === undefined) {
+      return callback(null);
+    } else {
+
+      /**
+       * {
+       *   type: 'object',
+       *   properties: {
+       *     ... 
+       *   }
+       * }
+       */
+      if (schema.type === 'object' && schema.properties) {
+        return validateParam(undefined, schema, instance, function(error) {
+          if (error) {
+            return callback(error);
+          } else {
+            return each(schema.properties, function(paramName, paramValidators, callback) {
+              if ((paramValidators.type === 'object' && paramValidators.properties) || paramValidators.type === 'array' )  {
+                return validateSchema(instance[paramName], schema.properties[paramName], callback);
+              } else {
+                return validateParam(paramName, paramValidators, instance[paramName], callback);
+              }
+            }, callback);
+          }
+        });
+
+      /**
+       * {
+       *   type: 'array',
+       *   items: {
+       *     type: ...,
+       *     length: ...
+       *   }
+       * }
+       */
+      } else if (schema.type === 'array') {
+        return validateParam(undefined, schema, instance, function(error) {
+          if (error) {
+            return callback(error);
+          } else {
+            if ( schema.items ) {
+              return each(instance, function(item, callback) {
+                return validateParam(undefined, schema.items, item, callback);
+              }, callback);
+            } else {
+              return callback(null);
+            }
+          }
+        });
+
+      /**
+       * {
+       *   type: 'string',
+       *   length: ...
+       * }
+       */
       } else {
         return validateParam(undefined, schema, instance, callback);
       }
-    } else {
-      return validateParam(undefined, schema, instance, callback);
+
     }
 
   };
