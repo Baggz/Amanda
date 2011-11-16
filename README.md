@@ -346,7 +346,7 @@ $ npm tests/
 
 The following are the major contributors of Amanda (in alphabetical order).
 
-* František Hába (@Baggz)
+* František Hába ([@Baggz](https://github.com/Baggz))
 
 <a name="license"></a>
 # License
