@@ -13,6 +13,10 @@
 * Fully **documented**
 * Tested
 
+## Quick Start
+
+
+
 ## Download
 
 To install **Amanda**, use [NPM](http://npmjs.org/).
@@ -38,11 +42,12 @@ Releases are available for download from GitHub.
 **Objects**
 
 * [schema](#schema)
+* [error](#error)
 
 <a name="validate"></a>
 ## Validate
 
-### validate(instance, schema, callback)
+### validate(data, schema, callback)
 
 **Example**
 
@@ -69,9 +74,9 @@ var schema = {
 };
 
 /**
- * Body
+ * Data
  */
-var body = {
+var ata = {
   user: {
     name: 'František',
     surname: 'Hába'
@@ -79,7 +84,7 @@ var body = {
 };
 
 // Validate
-amanda.validate(body, schema, function(error) {
+amanda.validate(data, schema, function(error) {
   if (error) {
     // Do something...
   }
@@ -236,11 +241,46 @@ var schema = {
 };
 ```
 
+
+# Compatibility
+
+### Node.js
+
+From version **0.4.11**.
+
+### Browsers
+
+**Desktop**
+
+| **Browser** | **Version** |
+|:------------|:------------|
+| Google Chrome | 12+ |
+| Safari | *Not tested* |
+| Firefox | *Not tested* |
+| Opera | *Not tested* |
+| Internet Explorer | *Not tested* |
+
+**Mobile**
+
+| **Browser** | **Version** |
+|:------------|:------------|
+| Android | *Not tested* |
+| Safari | *Not tested* |
+| Opera Mini | *Not tested* |
+| Opera Mobile | *Not tested* |
+
+
 # Running Tests
 
 ```
 $ npm tests/
 ```
+
+# Contributors
+
+The following are the major contributors of Amanda (in alphabetical order).
+
+* František Hába (@Baggz)
 
 # License
 
