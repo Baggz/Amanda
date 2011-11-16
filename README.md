@@ -13,10 +13,11 @@
 * Fully **documented**
 * Tested
 
+<a name="quickStart"></a>
 ## Quick Start
 
 
-
+<a name="download"></a>
 ## Download
 
 To install **Amanda**, use [NPM](http://npmjs.org/).
@@ -32,6 +33,7 @@ Releases are available for download from GitHub.
 | `amanda.js` | *uncompressed, with comments* | 9.17KB (2.38KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/src/amanda.js) |
 | `amanda.min.js` | *compressed, without comments* | 4.35KB (1.52KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/dist/amanda.min.js) |
 
+<a name="documentation"></a>
 # Documentation
 
 **Methods**
@@ -48,6 +50,8 @@ Releases are available for download from GitHub.
 ## Validate
 
 ### validate(data, schema, callback)
+
+The `callback` gets one argument which is an `error` object (see [error](#error) below for more information).
 
 **Example**
 
@@ -87,6 +91,8 @@ var ata = {
 amanda.validate(data, schema, function(error) {
   if (error) {
     // Do something...
+  } else {
+    // Do something else...
   }
 });
 ```
@@ -95,6 +101,8 @@ amanda.validate(data, schema, function(error) {
 ## AddValidator
 
 ### addValidator(name, fn)
+
+This method allows you to add a custom validator.
 
 **Example**
 
@@ -142,7 +150,11 @@ var schema = {
 * [type](#type)
 * [values](#values)
 * [except](#except)
+* [min](#min)
+* [max](#max)
+* [patter](#pattern)
 
+<a name="required"></a>
 ### Required
 
 ```javascript
@@ -156,6 +168,7 @@ var schema = {
 };
 ```
 
+<a name="length"></a>
 ### Length
 
 **Example**
@@ -172,20 +185,31 @@ var schema = {
 };
 ```
 
+<a name="type"></a>
 ### Type
 
-**Values**
+**Supported Types**
 
-* string
-* object
-* array
-* function
-* url
-* email
-* alphanumeric
-* alpha
-* number
-...TODO
+* `string`
+* `number`
+* function`
+* `object`
+* `boolean`
+* `array`
+* `alpha`
+* `alphanumeric`
+* `ipv4`
+* `ipv6`
+* `ip`
+* `email`
+* `url`
+* `date`
+* `decimal`
+* `int`
+* `percentage`
+* `port`
+* `regexp`
+* `unsignedInt`
 
 **Example**
 
@@ -209,6 +233,7 @@ var schema = {
 };
 ```
 
+<a name="values"></a>
 ### Values
 
 **Example**
@@ -225,6 +250,7 @@ var schema = {
 };
 ```
 
+<a name="except"></a>
 ### Except
 
 **Example**
@@ -241,7 +267,48 @@ var schema = {
 };
 ```
 
+<a name="min"></a>
+### Min
 
+**Example**
+
+```javascript
+var schema = {
+  type: 'number',
+  min: 100
+};
+```
+
+<a name="max"></a>
+### Max
+
+**Example**
+
+```javascript
+var schema = {
+  type: 'number',
+  max: 100
+};
+```
+
+<a name="pattern"></a>
+### Pattern
+
+**Example**
+
+```javascript
+var schema = {
+  type: 'string',
+  pattern: /^[a]{2,4}$/
+};
+```
+
+<a name="error"></a>
+## Error
+
+
+
+<a name="compatibility"></a>
 # Compatibility
 
 ### Node.js
@@ -269,19 +336,21 @@ From version **0.4.11**.
 | Opera Mini | *Not tested* |
 | Opera Mobile | *Not tested* |
 
-
+<a name="tests"></a>
 # Running Tests
 
 ```
 $ npm tests/
 ```
 
+<a name="contributors"></a>
 # Contributors
 
 The following are the major contributors of Amanda (in alphabetical order).
 
 * František Hába (@Baggz)
 
+<a name="license"></a>
 # License
 
 (The MIT License)
