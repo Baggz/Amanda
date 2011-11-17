@@ -413,7 +413,7 @@
    * Min
    */
   amanda.addValidator('min', function(paramName, paramValue, validator, validators, callback) {
-    if (typeof paramValue === 'number' && paramValue < validator) {
+    if (typeof paramValue !== 'number' || paramValue < validator) {
       return callback(new Error(
         paramName,
         paramValue,
