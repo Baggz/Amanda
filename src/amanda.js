@@ -321,13 +321,13 @@
       };
     });
 
-    return function(paramName, paramValue, validator, validators, callback) {
-      if ( !types[validator](paramValue) ) {
+    return function(paramName, paramValue, validatorValue, validators, callback) {
+      if ( !types[validatorValue](paramValue) ) {
         return callback(new Error(
           paramName,
           paramValue,
           'type',
-          validator,
+          validatorValue,
           null
         ));
       } else {
@@ -340,29 +340,29 @@
   /**
    * Length
    */
-  amanda.addValidator('length', function(paramName, paramValue, validator, validators, callback) {
+  amanda.addValidator('length', function(paramName, paramValue, validatorValue, validators, callback) {
     
     // Check the length only if the type of ‘paramValue’ is string
     if (typeof paramValue === 'string') {
 
       // If the length is specified as an array (for instance ‘[2, 45]’)
-      if (Array.isArray(validator) && (paramValue.length < validator[0] || paramValue.length > validator[1])) {
+      if (Array.isArray(validatorValue) && (paramValue.length < validatorValue[0] || paramValue.length > validatorValue[1])) {
         return callback(new Error(
           paramName,
           paramValue,
           'length',
-          validator,
+          validatorValue,
           null
         ));
       }
 
       // If the length is specified as a string (for instance ‘2’)
-      if (typeof validator === 'number' && paramValue.length !== validator) {
+      if (typeof validatorValue === 'number' && paramValue.length !== validatorValue) {
         return callback(new Error(
           paramName,
           paramValue,
           'length',
-          validator,
+          validatorValue,
           null
         ));
       }
@@ -378,13 +378,13 @@
   /**
    * Values
    */
-  amanda.addValidator('values', function(paramName, paramValue, validator, validators, callback) {
-    if (validator.indexOf( paramValue ) === -1) {
+  amanda.addValidator('values', function(paramName, paramValue, validatorValue, validators, callback) {
+    if (validatorValue.indexOf(paramValue) === -1) {
       return callback(new Error(
         paramName,
         paramValue,
         'values',
-        validator,
+        validatorValue,
         null
       ));
     } else {
@@ -395,13 +395,13 @@
   /**
    * Except
    */
-  amanda.addValidator('except', function(paramName, paramValue, validator, validators, callback) {
-    if (validator.indexOf( paramValue ) !== -1) {
+  amanda.addValidator('except', function(paramName, paramValue, validatorValue, validators, callback) {
+    if (validatorValue.indexOf(paramValue) !== -1) {
       return callback(new Error(
         paramName,
         paramValue,
         'except',
-        validator,
+        validatorValue,
         null
       ));
     } else {
@@ -412,13 +412,13 @@
   /**
    * Min
    */
-  amanda.addValidator('min', function(paramName, paramValue, validator, validators, callback) {
-    if (typeof paramValue !== 'number' || paramValue < validator) {
+  amanda.addValidator('min', function(paramName, paramValue, validatorValue, validators, callback) {
+    if (typeof paramValue !== 'number' || paramValue < validatorValue) {
       return callback(new Error(
         paramName,
         paramValue,
         'min',
-        validator,
+        validatorValue,
         null
       ));
     } else {
@@ -429,13 +429,13 @@
   /**
    * Max
    */
-  amanda.addValidator('max', function(paramName, paramValue, validator, validators, callback) {
-    if (typeof paramValue !== 'number' || paramValue > validator) {
+  amanda.addValidator('max', function(paramName, paramValue, validatorValue, validators, callback) {
+    if (typeof paramValue !== 'number' || paramValue > validatorValue) {
       return callback(new Error(
         paramName,
         paramValue,
         'max',
-        validator,
+        validatorValue,
         null
       ));
     } else {
@@ -446,13 +446,13 @@
   /**
    * Pattern
    */
-  amanda.addValidator('pattern', function(paramName, paramValue, validator, validators, callback) {
-    if (typeof paramValue === 'string' && !paramValue.match(validator)) {
+  amanda.addValidator('pattern', function(paramName, paramValue, validatorValue, validators, callback) {
+    if (typeof paramValue === 'string' && !paramValue.match(validatorValue)) {
       return callback(new Error(
         paramName,
         paramValue,
         'pattern',
-        validator,
+        validatorValue,
         null
       ));
     } else {
