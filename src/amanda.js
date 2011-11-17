@@ -241,6 +241,13 @@
     addValidator: function(validatorName, validatorFn) {
       validatorsList.push(validatorName);
       validators[validatorName] = validatorFn;
+    },
+
+    /**
+     * getVersion
+     */
+    getVersion: function() {
+      return [0, 0, 1].join('.');
     }
 
   };
