@@ -31,7 +31,8 @@ exports['Test ‘array’'] = function(test) {
     null,
     undefined,
     {},
-    function() {}
+    function() {},
+    123
   ].forEach(function(data) {
     amanda.validate(data, schema, function(error) {
       count += 1;
@@ -39,7 +40,7 @@ exports['Test ‘array’'] = function(test) {
     });  
   });
 
-  test.equal(count, 10);
+  test.equal(count, 11);
   test.done();
 
 };

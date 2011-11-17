@@ -293,7 +293,6 @@ exports['Test ‘url’'] = function(test) {
     'https://example',
     'www.example',
     'www.example',
-    'example',
     'example'
   ];
 
@@ -303,19 +302,23 @@ exports['Test ‘url’'] = function(test) {
     '/path/to/file/',
     '/path/to/file/?query',
     '/path/to/file/?foo1=bar1&foo2=bar2',
-    '/index.html'
+    '/index.html',
+    '/myPage.html',
+    '/my-Page.html',
+    '/my_Page_hello.htm'
   ];
 
   domains.forEach(function(domain) {
-
     names.forEach(function(name) {
 
+      // http://www.example + .com
       amanda.validate(name + domain, schema, function(error) {
         count += 1;
         test.equal(error, undefined);
       });
 
       params.forEach(function(param) {
+        // http://www.example + .com + /?foo
         amanda.validate(name + domain + param, schema, function(error) {
           count += 1;
           test.equal(error, undefined);
@@ -323,10 +326,31 @@ exports['Test ‘url’'] = function(test) {
       });
 
     });
-
   });
 
-  test.equal(count, (domains.length*names.length) + (domains.length*names.length*params.length));
+  [
+    'google.a',
+    'google.rog',
+    'google://google',
+    'example',
+    'http://ex.o',
+    'www.ex.o',
+    'pam.pam.pam',
+    'go@gle',
+    'g::gle',
+    '☺☻☹.com',
+    '☜☞☝☟'
+  ].forEach(function(input) {
+    amanda.validate(input, schema, function(error) {
+      count += 1;
+      test.ok(error);
+    });  
+  });
+  
+  
+
+
+  test.equal(count, (domains.length*names.length) + (domains.length*names.length*params.length) +11);
   test.done();
 
 };

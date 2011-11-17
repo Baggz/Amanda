@@ -10,9 +10,19 @@ exports['Test ‘max’'] = function(test) {
     max: 10
   };
 
-  amanda.validate(11, schema, function(error) {
-    count += 1;
-    test.ok(error);
+  [
+    11,
+    100,
+    {},
+    null,
+    [],
+    function() {},
+    'Hello!' 
+  ].forEach(function(input) {
+    amanda.validate(input, schema, function(error) {
+      count += 1;
+      test.ok(error);
+    });
   });
 
   amanda.validate(2, schema, function(error) {
@@ -25,7 +35,7 @@ exports['Test ‘max’'] = function(test) {
     test.equal(error, undefined);
   });
 
-  test.equal(count, 3);
+  test.equal(count, 9);
   test.done();
 
 };

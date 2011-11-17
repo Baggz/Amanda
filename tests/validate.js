@@ -395,3 +395,117 @@ exports['Array validation with ‘required’'] = function(test) {
   test.done();  
 
 };
+
+exports['Another array validation'] = function(test) {
+
+  /**
+   * Schema
+   */
+  var schema = {
+    type: 'object',
+    properties: {
+      users: {
+        type: 'array',
+        items: {
+          type: 'array',
+          items: {
+            type: 'array',
+            items: {
+              type: 'object'
+            }
+          }
+        }
+      }
+    }
+  };
+
+  var data = {
+    users: [
+      [
+        [{}, {}, {}],
+        [{}, {}, {}],
+        [{}, {}, {}]
+      ],
+      [
+        [{}, {}, {}],
+        [{}, {}, {}],
+        [{}, {}, {}]
+      ]
+    ]
+  };
+
+  var a = 0;
+
+  amanda.validate(data, schema, function(error) {
+    a += 1;
+    test.equal(error, undefined);
+  });
+
+  // Error
+  amanda.validate({
+    users: [
+      [
+        [{}, {}, {}],
+        [{}, 'Ha, string!', {}],
+        [{}, {}, {}]
+      ],
+      [
+        [{}, {}, {}],
+        [{}, {}, {}],
+        [{}, {}, {}]
+      ]
+    ]
+  }, schema, function(error) {
+    a += 1;
+    test.ok(error);
+  });
+
+  // Error
+  amanda.validate({
+    users: [
+      [
+        [{}, {}, {}],
+        [{}, {}, {}],
+        [{}, {}, 'Ha, string!']
+      ],
+      [
+        [{}, {}, {}],
+        [{}, {}, {}],
+        [{}, {}, {}]
+      ]
+    ]
+  }, schema, function(error) {
+    a += 1;
+    test.ok(error);
+  });
+
+  // Error
+  amanda.validate({
+    users: [
+      [
+        [{}, {}, {}],
+        [{}, {}, {}],
+        [{}, {}, {}]
+      ],
+      'Ha, string!'
+    ]
+  }, schema, function(error) {
+    a += 1;
+    test.ok(error);
+  });
+
+  // Error
+  amanda.validate({
+    users: 'String!'
+  }, schema, function(error) {
+    a += 1;
+    test.ok(error);
+  });
+
+
+
+
+  test.equal(a, 5);
+  test.done();  
+
+};

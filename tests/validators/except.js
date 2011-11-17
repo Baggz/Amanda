@@ -14,19 +14,15 @@ exports['Test ‘except’'] = function(test) {
     ]
   };
 
-  amanda.validate('admin', schema, function(error) {
-    count += 1;
-    test.ok(error);
-  });
-
-  amanda.validate('administrator', schema, function(error) {
-    count += 1;
-    test.ok(error);
-  });
-
-  amanda.validate('superadmin', schema, function(error) {
-    count += 1;
-    test.ok(error);
+  [
+    'admin',
+    'administrator',
+    'superadmin'
+  ].forEach(function(user) {
+    amanda.validate(user, schema, function(error) {
+      count += 1;
+      test.ok(error);
+    });
   });
 
   amanda.validate('superadmin2', schema, function(error) {

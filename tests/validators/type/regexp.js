@@ -14,7 +14,8 @@ exports['Test ‘regexp’'] = function(test) {
   };
 
   [
-    new RegExp()
+    new RegExp(),
+    /a/gi
   ].forEach(function(data) {
     amanda.validate(data, schema, function(error) {
       count += 1;
@@ -22,7 +23,21 @@ exports['Test ‘regexp’'] = function(test) {
     });  
   });
 
-  test.equal(count, 1);
+  [
+    new Date(),
+    [],
+    {},
+    function() {},
+    '11/11/11',
+    11
+  ].forEach(function(data) {
+    amanda.validate(data, schema, function(error) {
+      count += 1;
+      test.ok(error);
+    });  
+  });
+
+  test.equal(count, 8);
   test.done();
 
 };

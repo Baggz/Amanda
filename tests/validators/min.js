@@ -10,9 +10,18 @@ exports['Test ‘min’'] = function(test) {
     min: 10
   };
 
-  amanda.validate(2, schema, function(error) {
-    count += 1;
-    test.ok(error);
+  [
+    2,
+    {},
+    null,
+    [],
+    function() {},
+    'Hello!' 
+  ].forEach(function(input) {
+    amanda.validate(input, schema, function(error) {
+      count += 1;
+      test.ok(error);
+    });
   });
 
   amanda.validate(10, schema, function(error) {
@@ -25,7 +34,7 @@ exports['Test ‘min’'] = function(test) {
     test.equal(error, undefined);
   });
 
-  test.equal(count, 3);
+  test.equal(count, 8);
   test.done();
 
 };
