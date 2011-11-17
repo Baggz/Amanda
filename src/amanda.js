@@ -1,28 +1,6 @@
 (function() {
 
   /**
-   * Error
-   *
-   */
-  var Error = function(paramName, paramValue, validatorName, validatorValue, message) {
-
-    var properties = [
-      'paramName', 
-      'paramValue',
-      'validatorName',
-      'validatorValue',
-      'message'
-    ];
-
-    for (var i = 0, len = arguments.length; i < len; i++) {
-      this[properties[i]] = arguments[i];
-    }
-
-    return this;
-
-  };
-
-  /**
    * Each
    *
    * @param {object} list
@@ -45,29 +23,29 @@
 
         var next = function(error) {
           var fn = queue[index];
-          if ( !error && fn ) {
+          if (!error && fn) {
             return fn();
-          } else if ( !error && !fn ) {
+          } else if (!error && !fn) {
             return callback(null);
           } else {
             return callback(error);
           }
         };
 
-        return ( key && value ) ? iterator(key, value, next) : iterator(value, next);
+        return (key && value) ? iterator(key, value, next) : iterator(value, next);
 
       });
     };
 
     // If the list is an array
-    if ( Object.prototype.toString.call(list) === '[object Array]' ) {
+    if (Object.prototype.toString.call(list) === '[object Array]') {
       for (var i = 0, len = list.length; i < len; i++) {
         addToQueue(undefined, list[i]);
       }
     }
 
     // If the list is an object
-    if ( Object.prototype.toString.call(list) === '[object Object]' ) {
+    if (Object.prototype.toString.call(list) === '[object Object]') {
       for (var key in list) {
         if (list.hasOwnProperty(key)) {
           addToQueue(key, list[key]);
@@ -164,7 +142,7 @@
              */
             if (schema.properties) {
               return each(schema.properties, function(paramName, paramValidators, callback) {
-                if ((paramValidators.type === 'object' && paramValidators.properties) || paramValidators.type === 'array' )  {
+                if ((paramValidators.type === 'object' && paramValidators.properties) || paramValidators.type === 'array')  {
                   return validateSchema(instance[paramName], schema.properties[paramName], callback);
                 } else {
                   return validateParam(paramName, paramValidators, instance[paramName], callback);
@@ -317,21 +295,15 @@
       'boolean'
     ].forEach(function(type) {
       types[type] = function() {
-        return ( typeof arguments[0] === type ) ? true : false;
+        return (typeof arguments[0] === type) ? true : false;
       };
     });
 
     return function(paramName, paramValue, validatorValue, validators, callback) {
-      if ( !types[validatorValue](paramValue) ) {
-        return callback(new Error(
-          paramName,
-          paramValue,
-          'type',
-          validatorValue,
-          null
-        ));
+      if (!types[validatorValue](paramValue)) {
+        return callback(true);
       } else {
-        return callback(null);
+        return callback(false);
       }
     };
 
@@ -347,31 +319,20 @@
 
       // If the length is specified as an array (for instance ‘[2, 45]’)
       if (Array.isArray(validatorValue) && (paramValue.length < validatorValue[0] || paramValue.length > validatorValue[1])) {
-        return callback(new Error(
-          paramName,
-          paramValue,
-          'length',
-          validatorValue,
-          null
-        ));
-      }
+        return callback(true);
 
       // If the length is specified as a string (for instance ‘2’)
-      if (typeof validatorValue === 'number' && paramValue.length !== validatorValue) {
-        return callback(new Error(
-          paramName,
-          paramValue,
-          'length',
-          validatorValue,
-          null
-        ));
+      } else if (typeof validatorValue === 'number' && paramValue.length !== validatorValue) {
+        return callback(true);
+
+      // If the length is specified in a different way
+      } else {
+        return callback(false);
       }
 
-      return callback(null);
-
+    } else {
+      return callback(false); 
     }
-
-    return callback(null);
 
   });
 
@@ -380,15 +341,9 @@
    */
   amanda.addValidator('values', function(paramName, paramValue, validatorValue, validators, callback) {
     if (validatorValue.indexOf(paramValue) === -1) {
-      return callback(new Error(
-        paramName,
-        paramValue,
-        'values',
-        validatorValue,
-        null
-      ));
+      return callback(true);
     } else {
-      return callback(null);
+      return callback(false);
     }
   });
 
@@ -397,15 +352,9 @@
    */
   amanda.addValidator('except', function(paramName, paramValue, validatorValue, validators, callback) {
     if (validatorValue.indexOf(paramValue) !== -1) {
-      return callback(new Error(
-        paramName,
-        paramValue,
-        'except',
-        validatorValue,
-        null
-      ));
+      return callback(true);
     } else {
-      return callback(null);
+      return callback(false);
     }
   });
 
@@ -414,15 +363,9 @@
    */
   amanda.addValidator('min', function(paramName, paramValue, validatorValue, validators, callback) {
     if (typeof paramValue !== 'number' || paramValue < validatorValue) {
-      return callback(new Error(
-        paramName,
-        paramValue,
-        'min',
-        validatorValue,
-        null
-      ));
+      return callback(true);
     } else {
-      return callback(null);
+      return callback(false);
     }
   });
 
@@ -431,15 +374,9 @@
    */
   amanda.addValidator('max', function(paramName, paramValue, validatorValue, validators, callback) {
     if (typeof paramValue !== 'number' || paramValue > validatorValue) {
-      return callback(new Error(
-        paramName,
-        paramValue,
-        'max',
-        validatorValue,
-        null
-      ));
+      return callback(true);
     } else {
-      return callback(null);
+      return callback(false);
     }
   });
 
@@ -448,22 +385,16 @@
    */
   amanda.addValidator('pattern', function(paramName, paramValue, validatorValue, validators, callback) {
     if (typeof paramValue === 'string' && !paramValue.match(validatorValue)) {
-      return callback(new Error(
-        paramName,
-        paramValue,
-        'pattern',
-        validatorValue,
-        null
-      ));
+      return callback(true);
     } else {
-      return callback(null); 
+      return callback(false);
     }
   });
 
   // Export
-  if ( typeof module !== 'undefined' && module.exports ) {
+  if (typeof module !== 'undefined' && module.exports) {
     module.exports = amanda;
-  } else if ( typeof define !== 'undefined' ) {
+  } else if (typeof define !== 'undefined') {
     define(function() {
       return amanda;
     });
