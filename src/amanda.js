@@ -91,14 +91,25 @@
     var iterator = function(validatorName, callback) {
       if (paramValidators[validatorName]) {
         var fn = validators[validatorName];  
-        fn(paramName, paramValue, paramValidators[validatorName], paramValidators, callback);
+        fn(paramName, paramValue, paramValidators[validatorName], paramValidators, function(error) {
+          if (error) {
+            return callback({
+              paramName: paramName,
+              paramValue: paramValue,
+              validatorName: validatorName,
+              validatorValue: paramValidators[validatorName]
+            });
+          } else {
+            return callback(false);
+          }
+        });
       } else {
-        return callback(null);
+        return callback(false);
       }
     };
 
     if (paramValidators.required === false && paramValue === undefined) {
-      return callback(null);
+      return callback(false);
     } else {
       return each(validatorsList, iterator, callback);
     }
