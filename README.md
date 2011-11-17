@@ -26,8 +26,8 @@ Releases are available for download from GitHub.
 
 | **Version** | **Description** | **Size** | **Action** |
 |:------------|:----------------|:---------|:-----------|
-| `amanda.js` | *uncompressed, with comments* | 9.34 KB (2.34 KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/src/amanda.js) |
-| `amanda.min.js` | *compressed, without comments* | 4.48 KB (1.57 KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/dist/amanda.min.js) |
+| `amanda.js` | *uncompressed, with comments* | 9.02 KB (2.29 KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/src/amanda.js) |
+| `amanda.min.js` | *compressed, without comments* | 4. 27KB (1. 52KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/dist/amanda.min.js) |
 
 <a name="documentation"></a>
 # Documentation
