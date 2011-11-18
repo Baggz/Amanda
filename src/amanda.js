@@ -100,16 +100,16 @@
               validatorValue: paramValidators[validatorName]
             });
           } else {
-            return callback(false);
+            return callback();
           }
         });
       } else {
-        return callback(false);
+        return callback();
       }
     };
 
     if (paramValidators.required === false && paramValue === undefined) {
-      return callback(false);
+      return callback();
     } else {
       return each(validatorsList, iterator, callback);
     }
@@ -314,7 +314,7 @@
       if (!types[validatorValue](paramValue)) {
         return callback(true);
       } else {
-        return callback(false);
+        return callback();
       }
     };
 
@@ -338,11 +338,11 @@
 
       // If the length is specified in a different way
       } else {
-        return callback(false);
+        return callback();
       }
 
     } else {
-      return callback(false); 
+      return callback(); 
     }
 
   });
@@ -354,7 +354,7 @@
     if (validatorValue.indexOf(paramValue) === -1) {
       return callback(true);
     } else {
-      return callback(false);
+      return callback();
     }
   });
 
@@ -365,7 +365,7 @@
     if (validatorValue.indexOf(paramValue) !== -1) {
       return callback(true);
     } else {
-      return callback(false);
+      return callback();
     }
   });
 
@@ -376,7 +376,7 @@
     if (typeof paramValue !== 'number' || paramValue < validatorValue) {
       return callback(true);
     } else {
-      return callback(false);
+      return callback();
     }
   });
 
@@ -387,7 +387,7 @@
     if (typeof paramValue !== 'number' || paramValue > validatorValue) {
       return callback(true);
     } else {
-      return callback(false);
+      return callback();
     }
   });
 
@@ -398,7 +398,7 @@
     if (typeof paramValue === 'string' && !paramValue.match(validatorValue)) {
       return callback(true);
     } else {
-      return callback(false);
+      return callback();
     }
   });
 
