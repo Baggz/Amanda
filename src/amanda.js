@@ -235,6 +235,17 @@
   };
 
   /**
+   * Required
+   */
+  amanda.addValidator('required', function(paramName, paramValue, validatorValue, validators, callback) {
+    if (validatorValue && !paramValue) {
+      return callback(true);
+    } else {
+      return callback();
+    }
+  });
+
+  /**
    * Type
    */
   amanda.addValidator('type', (function() {
