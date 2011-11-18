@@ -125,6 +125,38 @@ exports['Advanced array validation'] = function(test) {
 /**
  * Test ‘validate’
  */
+exports['Advanced object validation with ‘required’ validator'] = function(test) {
+
+  /**
+   * Schema
+   */
+  var schema = {
+    type: 'object',
+    properties: {
+      username: {
+        required: true,
+        type: 'string'
+      }
+    }
+  };
+
+  amanda.validate({
+    username: 'Baggz'
+  }, schema, function(error) {
+    test.equal(error, undefined);
+  });
+
+  amanda.validate({}, schema, function(error) {
+    test.ok(error);
+  });
+
+  test.done();
+
+};
+
+/**
+ * Test ‘validate’
+ */
 exports['Validation with ‘required’'] = function(test) {
 
   var c = 0;
