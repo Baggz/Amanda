@@ -66,13 +66,6 @@
   var validators = {};
 
   /**
-   * ValidatorsList
-   *
-   * List of validators names, the order is important.
-   */
-  var validatorsList = [];
-
-  /**
    * ValidateParam
    *
    * @param {string} paramName
@@ -88,10 +81,9 @@
      * @param {string} validatorName
      * @param {function} callback
      */
-    var iterator = function(validatorName, callback) {
+    var iterator = function(validatorName, validatorFn, callback) {
       if (paramValidators[validatorName]) {
-        var fn = validators[validatorName];  
-        fn(paramName, paramValue, paramValidators[validatorName], paramValidators, function(error) {
+        validatorFn(paramName, paramValue, paramValidators[validatorName], paramValidators, function(error) {
           if (error) {
             return callback({
               paramName: paramName,
@@ -111,7 +103,7 @@
     if (paramValidators.required === false && paramValue === undefined) {
       return callback();
     } else {
-      return each(validatorsList, iterator, callback);
+      return each(validators, iterator, callback);
     }
 
   };
@@ -217,8 +209,10 @@
      *
      * @param {object} structure
      */
-    validate: function() {
+    validate: function(data, schema, singleError, callback) {
+
       return validateSchema.apply(this, arguments);
+
     },
 
     /**
@@ -228,7 +222,6 @@
      * @param {function} validatorFn
      */
     addValidator: function(validatorName, validatorFn) {
-      validatorsList.push(validatorName);
       validators[validatorName] = validatorFn;
     },
 
