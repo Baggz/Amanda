@@ -29,6 +29,8 @@
     "url": "git://github.com/Baggz/Amanda.git"
   },
 
+  "main": "./src/amanda.js",
+
   "engines": {
     "node": ">= 0.3.0"
   },
