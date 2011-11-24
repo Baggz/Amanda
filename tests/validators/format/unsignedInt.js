@@ -1,16 +1,16 @@
 // Load dependencies
-var amanda = require('../../../src/amanda.js'),
-    async = require('async');
+var amanda = require('../../../src/amanda.js');
 
 /**
- * Test ‘unsignedInt’
+ * Test #1
  */
-exports['Test ‘unsignedInt’'] = function(test) {
+exports['Test #1'] = function(test) {
 
   var count = 0;
 
   var schema = {
-    type: 'unsignedInt'
+    required: true,
+    format: 'unsignedInt'
   };
 
   [

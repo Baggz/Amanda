@@ -1,11 +1,15 @@
 // Load dependencies
 var amanda = require('../../src/amanda.js');
 
-exports['Test ‘except’'] = function(test) {
+/**
+ * Test #1
+ */
+exports['Test #1'] = function(test) {
 
   var count = 0;
 
   var schema = {
+    required: true,
     type: 'string',
     except: [
       'admin',

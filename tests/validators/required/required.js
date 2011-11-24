@@ -1,9 +1,10 @@
 // Load dependencies
-var amanda = require('../../src/amanda.js');
+var amanda = require('../../../src/amanda.js');
 
-exports['Test ‘required’'] = function(test) {
-
-  var count = 0;
+/**
+ * Test #1
+ */
+exports['Test #1'] = function(test) {
 
   var schema = {
     type: 'string',
@@ -11,21 +12,17 @@ exports['Test ‘required’'] = function(test) {
   };
 
   amanda.validate(null, schema, function(error) {
-    count += 1;
     test.ok(error);
   });
 
   amanda.validate(undefined, schema, function(error) {
-    count += 1;
     test.ok(error);
   });
 
-  amanda.validate('a', schema, function(error) {
-    count += 1;
+  amanda.validate('Hello', schema, function(error) {
     test.equal(error, undefined);
   });
 
-  test.equal(count, 3);
   test.done();
 
 };

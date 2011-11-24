@@ -1,13 +1,17 @@
 // Load dependencies
 var amanda = require('../../src/amanda.js');
 
-exports['Test ‘values’'] = function(test) {
+/**
+ * Test #1
+ */
+exports['Test ‘#1'] = function(test) {
 
   var count = 0;
 
   var schema = {
+    required: true,
     type: 'string',
-    values: [
+    enum: [
       'admin',
       'administrator'
     ]
