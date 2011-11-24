@@ -161,19 +161,22 @@ This method allows you to add a custom validator.
 **Example**
 
 ```javascript
-var evenValidator = function(paramName, paramValue, validator, validators, callback) {
+var evenValidator = function(value, options, callback) {
   
   // If ‘even: true’
-  if ( validator ) {
+  if (options) {
     
-    if (typeof paramValue === 'number' && (paramValue % 2) === 0) {
+    if (typeof value === 'number' && (value % 2) === 0) {
       // No problem, the number is event
-      callback(null);
+      callback();
     } else {
-      // Ou, ou, the number is not even
-      callback('Sorry, but ‘' + paramName + '’ is not even.');
+      // The number is not even
+      callback('Not even.');
     }
 
+  // Skip
+  } else {
+    return callback();
   }
 
 };
