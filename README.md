@@ -95,11 +95,8 @@ Releases are available for download from GitHub.
 
 * `data`
 * `schema` The Schema object, see [Schema](#schema) below.
-* `options` 
-
-  `options.singleError` If you set `options.singleError` to false, validation will continue after first occurred error.
-
-* `callback` The `callback` gets one argument which is an `error` object (see [error](#error) below for more information).
+* `options` If you set `options.singleError` to `false`, validation continue after first error occurred. By default `options.singleError` is set to `true`.
+* `callback` The `callback` gets one argument which is an Error object (see [Error](#error) below for more information).
 
 **Example**
 
@@ -135,8 +132,17 @@ var data = {
   }
 };
 
-// Validate
+// Stop validation after first error
 amanda.validate(data, schema, function(error) {
+  if (error) {
+    // Do something...
+  } else {
+    // Do something else...
+  }
+});
+
+// Validate whole schema
+amanda.validate(data, schema, { singleError: false }, function(error) {
   if (error) {
     // Do something...
   } else {
