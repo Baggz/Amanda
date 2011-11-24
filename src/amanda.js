@@ -241,7 +241,7 @@
      */
     var iterator = function(validatorName, validatorFn, callback) {
       if (propertyValidators[validatorName]) {
-        validatorFn(propertyValue, propertyValidators[validatorName], function(error) {
+        validatorFn(property, propertyValue, propertyValidators[validatorName], propertyValidators, function(error) {
 
           if (error) {
             self.Errors.addError({
@@ -456,15 +456,21 @@
    * Validators
    */
   var validators = {
-    
-    'required': function(value, options, callback) {
-      if (options && !value) {
+
+    /**
+     * Required
+     */
+    'required': function(property, propertyValue, validator, propertyValidators, callback) {
+      if (validator && !propertyValue) {
         return callback(true);
       } else {
         return callback();
       }
     },
 
+    /**
+     * Type
+     */
     'type': (function() {
       
       var types = {
@@ -488,16 +494,16 @@
         };
       });
 
-      return function(value, options, callback) {
+      return function(property, propertyValue, validator, propertyValidators, callback) {
 
         /**
          * {
          *   type: ['string', 'number']
          * }
          */
-        if (Object.prototype.toString.call(options) === '[object Array]') {
+        if (Object.prototype.toString.call(validator) === '[object Array]') {
           var noError = options.some(function(type) {
-            return types[type](value);
+            return types[type](propertyValue);
           });
           return (noError) ? callback() : callback(true);
 
@@ -507,7 +513,7 @@
          * }
          */
         } else {
-          return (types[options](value)) ? callback() : callback(true);
+          return (types[validator](propertyValue)) ? callback() : callback(true);
         }
 
       };
@@ -567,16 +573,16 @@
         }
       };
 
-      return function(value, options, callback) {
+      return function(property, propertyValue, validator, propertyValidators, callback) {
 
         /**
          * {
          *   type: ['string', 'number']
          * }
          */
-        if (Object.prototype.toString.call(options) === '[object Array]') {
+        if (Object.prototype.toString.call(validator) === '[object Array]') {
           var noError = options.some(function(format) {
-            return formats[format](value);
+            return formats[format](propertyValue);
           });
           return (noError) ? callback() : callback(true);
 
@@ -586,7 +592,7 @@
          * }
          */
         } else {
-          return (formats[options](value)) ? callback() : callback(true);
+          return (formats[validator](propertyValue)) ? callback() : callback(true);
         }
 
       };
@@ -596,18 +602,18 @@
     /**
      * Length
      */
-    'length': function(value, options, callback) {
+    'length': function(property, propertyValue, validator, propertyValidators, callback) {
     
       // Check the length only if the type of ‘paramValue’ is string
-      if (typeof value === 'string') {
+      if (typeof propertyValue === 'string') {
 
 
         // If the length is specified as an array (for instance ‘[2, 45]’)
-        if (Array.isArray(options) && (value.length < options[0] || value.length > options[1])) {
+        if (Array.isArray(validator) && (propertyValue.length < validator[0] || propertyValue.length > validator[1])) {
           return callback(true);
 
         // If the length is specified as a string (for instance ‘2’)
-        } else if (typeof options === 'number' && value.length !== options) {
+        } else if (typeof validator === 'number' && propertyValue.length !== validator) {
           return callback(true);
 
         // If the length is specified in a different way
@@ -624,36 +630,36 @@
     /**
      * Enum
      */
-    'enum': function(value, options, callback) {
-      return (options.indexOf(value) === -1) ? callback(true) : callback();
+    'enum': function(property, propertyValue, validator, propertyValidators, callback) {
+      return (validator.indexOf(propertyValue) === -1) ? callback(true) : callback();
     },
 
     /**
      * Except
      */
-    'except': function(value, options, callback) {
-      return (options.indexOf(value) !== -1) ? callback(true) : callback();
+    'except': function(property, propertyValue, validator, propertyValidators, callback) {
+      return (validator.indexOf(propertyValue) !== -1) ? callback(true) : callback();
     },
 
     /**
      * Min
      */
-    'min': function(value, options, callback) {
-      return (typeof value !== 'number' || value < options) ? callback(true) : callback();
+    'min': function(property, propertyValue, validator, propertyValidators, callback) {
+      return (typeof propertyValue !== 'number' || propertyValue < validator) ? callback(true) : callback();
     },
 
     /**
      * Max
      */
-    'max': function(value, options, callback) {
-      return (typeof value !== 'number' || value > options) ? callback(true) : callback();
+    'max': function(property, propertyValue, validator, propertyValidators, callback) {
+      return (typeof propertyValue !== 'number' || propertyValue > validator) ? callback(true) : callback();
     },
 
     /**
      * Pattern
      */
-    'pattern': function(value, options, callback) {
-      return (typeof value === 'string' && !value.match(options)) ? callback(true) : callback();
+    'pattern': function(property, propertyValue, validator, propertyValidators, callback) {
+      return (typeof propertyValue === 'string' && !propertyValue.match(validator)) ? callback(true) : callback();
     }
 
   };
