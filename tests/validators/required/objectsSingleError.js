@@ -72,6 +72,7 @@ exports['Test #3'] = function(test) {
   amanda.validate(data, schema, function(error) {
 
     delete error[0].message;
+    delete error[1].message;
 
     test.deepEqual(error[0], {
       property: 'user',
@@ -80,7 +81,14 @@ exports['Test #3'] = function(test) {
       validatorValue: 'object'
     });
 
-    test.equal(error.length, 1);
+    test.deepEqual(error[1], {
+      property: 'user.name',
+      propertyValue: undefined,
+      validator: 'required',
+      validatorValue: true
+    });
+
+    test.equal(error.length, 2);
 
   });
 
