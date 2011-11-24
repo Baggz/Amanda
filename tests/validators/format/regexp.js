@@ -3,18 +3,20 @@ var amanda = require('../../../src/amanda.js'),
     async = require('async');
 
 /**
- * Test ‘date’
+ * Test #1
  */
-exports['Test ‘date’'] = function(test) {
+exports['Test #1'] = function(test) {
 
   var count = 0;
 
   var schema = {
-    type: 'date'
+    required: true,
+    format: 'regexp'
   };
 
   [
-    new Date()
+    new RegExp(),
+    /a/gi
   ].forEach(function(data) {
     amanda.validate(data, schema, function(error) {
       count += 1;
@@ -23,16 +25,12 @@ exports['Test ‘date’'] = function(test) {
   });
 
   [
-    0,
-    1,
-    2,
-    null,
-    {},
+    new Date(),
     [],
+    {},
     function() {},
-    'Hello!',
-    undefined,
-    ''
+    '11/11/11',
+    11
   ].forEach(function(data) {
     amanda.validate(data, schema, function(error) {
       count += 1;
@@ -40,7 +38,7 @@ exports['Test ‘date’'] = function(test) {
     });  
   });
 
-  test.equal(count, 11);
+  test.equal(count, 8);
   test.done();
 
 };

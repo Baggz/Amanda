@@ -1,17 +1,20 @@
 // Load dependencies
-var amanda = require('../../../src/amanda.js'),
-    async = require('async');
+var amanda = require('../../../src/amanda.js');
 
 /**
- * Test ‘array’
+ * Schema
  */
-exports['Test ‘array’'] = function(test) {
+var schema = {
+  required: true,
+  type: 'array'
+};
 
-  var count = 0;
+/**
+ * Test #1
+ */
+exports['Test #1'] = function(test) {
 
-  var schema = {
-    type: 'array'
-  };
+  var a = 0;
 
   [
     [],
@@ -20,27 +23,55 @@ exports['Test ‘array’'] = function(test) {
     [function() {}, function() {}],
     [{}, {}, {}]
   ].forEach(function(data) {
+
     amanda.validate(data, schema, function(error) {
-      count += 1;
+
+      a += 1;
+
       test.equal(error, undefined);
-    });  
+
+    });
+
   });
+
+  test.equal(a, 5);
+  test.done();
+
+};
+
+/**
+ * Test #2
+ */
+exports['Test #2'] = function(test) {
+
+  var a = 0;
 
   [
-    '',
-    null,
-    undefined,
+    'Hello',
+    123,
+    true,
     {},
     function() {},
-    123
   ].forEach(function(data) {
+
     amanda.validate(data, schema, function(error) {
-      count += 1;
-      test.ok(error);
-    });  
+
+      a += 1;
+      
+      delete error[0].message;
+
+      test.deepEqual(error[0], {
+        property: '',
+        propertyValue: data,
+        validator: 'type',
+        validatorValue: 'array'
+      });
+
+    });
+
   });
 
-  test.equal(count, 11);
+  test.equal(a, 5);
   test.done();
 
 };

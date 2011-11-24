@@ -1,12 +1,15 @@
 // Load dependencies
 var amanda = require('../src/amanda.js');
 
-exports['Test ‘addValidator’'] = function(test) {
+/**
+ * Test #1
+ */
+exports['Test #1'] = function(test) {
 
   /**
    * AddValidator
    */
-  amanda.addValidator('unique', function(paramName, paramValue, validator, validators, callback) {
+  amanda.addValidator('unique', function(value, options, callback) {
 
     var takenUsernames = [
       'Baggz',
@@ -20,8 +23,8 @@ exports['Test ‘addValidator’'] = function(test) {
      *   unique: true 
      * }
      */
-    if (validator && takenUsernames.indexOf(paramValue) !== -1) {
-      return callback('Oops! This username - ' + paramValue + ' - is taken.');
+    if (options && takenUsernames.indexOf(value) !== -1) {
+      return callback('Oops! This username - ' + value + ' - is taken.');
     } else {
       return callback(null);
     }
@@ -32,6 +35,7 @@ exports['Test ‘addValidator’'] = function(test) {
    * Schema
    */
   var schema = {
+    reqired: true,
     unique: true
   };
 
