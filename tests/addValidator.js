@@ -9,7 +9,7 @@ exports['Test #1'] = function(test) {
   /**
    * AddValidator
    */
-  amanda.addValidator('unique', function(value, options, callback) {
+  amanda.addValidator('unique', function(property, propertyValue, validator, propertyValidators, callback) {
 
     var takenUsernames = [
       'Baggz',
@@ -23,8 +23,8 @@ exports['Test #1'] = function(test) {
      *   unique: true 
      * }
      */
-    if (options && takenUsernames.indexOf(value) !== -1) {
-      return callback('Oops! This username - ' + value + ' - is taken.');
+    if (validator && takenUsernames.indexOf(propertyValue) !== -1) {
+      return callback('Oops! This username - ' + propertyValue + ' - is taken.');
     } else {
       return callback(null);
     }
