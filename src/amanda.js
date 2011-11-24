@@ -316,11 +316,6 @@
     if (['object', 'array'].indexOf(schema.type) !== -1) {
       return self.validateProperty(path, instance, schema, function(error) {
 
-        // If an error occurred, the validation process can't continue
-        if (error) {
-          return callback(error);
-        }
-
         /**
          * {
          *   type: 'object',
@@ -373,49 +368,47 @@
          */
         } else if (schema.items) {
 
-          /**
-           * {
-           *   type: 'array',
-           *   items: {
-           *     type: 'object'
-           *   }
-           * }
-           * — or —
-           * {
-           *   type: 'array',
-           *   items: {
-           *     type: 'array'
-           *   }
-           * }
-           */
-          if (['object', 'array'].indexOf(schema.items.type) !== -1) {
-            if (instance && !isEmpty(instance)) {
+          if (instance && !isEmpty(instance)) {
+
+            /**
+             * {
+             *   type: 'array',
+             *   items: {
+             *     type: 'object'
+             *   }
+             * }
+             * — or —
+             * {
+             *   type: 'array',
+             *   items: {
+             *     type: 'array'
+             *   }
+             * }
+             */
+            if (['object', 'array'].indexOf(schema.items.type) !== -1) {
               return each(instance, function(index, propertyValue, callback) {
                 var propertyPath = path + '[' + index + ']';
                 return self.validateSchema(propertyValue, schema.items, propertyPath, callback);
               }, callback);
-            } else {
-              return callback();
-            }
 
-          /*
-           * {
-           *   type: 'array',
-           *   items: {
-           *     type: 'string'
-           *   }
-           * }
-           */
-          } else {
-            if (instance && !isEmpty(instance)) {
+            /*
+             * {
+             *   type: 'array',
+             *   items: {
+             *     type: 'string'
+             *   }
+             * }
+             */
+            } else {
               return each(instance, function(index, propertyValue, callback) {
                 var propertyPath = path + '[' + index + ']';
                 return self.validateProperty(propertyPath, propertyValue, schema.items, callback);
               }, callback);
-            } else {
-              return callback();
             }
-          }
+
+          } else {
+            return callback();
+          } 
 
         /**
          * {
@@ -703,7 +696,7 @@
      * GetVersion
      */
     getVersion: function() {
-      return [0, 0, 2].join('.');
+      return [0, 2, 0].join('.');
     },
 
     /**
