@@ -2,9 +2,15 @@
 
 [Amanda](https://github.com/Baggz/Amanda) validates data against JSON Schema. 
 
+### Version
+
+```
+0.2.0
+```
+
 #### Features
 
-* You can create **your own validators**
+* **Extendable**, you can create **your own validators**
 * Fully **asynchronous**
 * Can be used with **Node.js** and **in the browser**
 * Amanda has **no dependencies**
@@ -12,6 +18,42 @@
 * Lightweight
 * Fully **documented**
 * Tested
+
+<a name="example"></a>
+## Example
+
+```javascript
+var schema = {
+  type: 'object',
+  properties: {
+    name: {
+      required: true,
+      type: 'string',
+      length: [2, 45]
+    },
+    email: {
+      required: true,
+      type: 'string',
+      format: 'email'
+    },
+    username: {
+      required: true,
+      type: 'string',
+      format: 'alphanumeric'
+    }
+  }
+};
+
+var data = {
+  name: 'Kenneth',
+  email: 'kenneth@gmail.com',
+  username: 'kenneth'
+};
+
+amanda.validate(data, schema, function(error) {
+  // Do something...
+});
+```
 
 <a name="download"></a>
 ## Download
@@ -36,18 +78,28 @@ Releases are available for download from GitHub.
 
 * [validate](#validate)
 * [addValidator](#addValidator)
+* [getVersion](#getVersion)
+* [getValidators](#getValidators)
 
 **Objects**
 
-* [schema](#schema)
-* [error](#error)
+* [Schema](#schema)
+* [Error](#error)
 
 <a name="validate"></a>
 ## Validate
 
-### validate(data, schema, callback)
+### validate(data, schema[, options], callback)
 
-The `callback` gets one argument which is an `error` object (see [error](#error) below for more information).
+**Parameters**
+
+* `data`
+* `schema` The Schema object, see [Schema](#schema) below.
+* `options` 
+
+  `options.singleError` If you set `options.singleError` to false, validation will continue after first occurred error.
+
+* `callback` The `callback` gets one argument which is an `error` object (see [error](#error) below for more information).
 
 **Example**
 
@@ -60,14 +112,14 @@ var schema = {
   properties: {
     user: {
       name: {
+        required: true,
         type: 'string',
-        length: [2, 45],
-        required: true
+        length: [2, 45]
       },
       surname: {
+        required: true,
         type: 'string',
-        length: [2, 45],
-        required: true
+        length: [2, 45]
       }
     }
   }
@@ -76,7 +128,7 @@ var schema = {
 /**
  * Data
  */
-var ata = {
+var data = {
   user: {
     name: 'František',
     surname: 'Hába'
@@ -136,6 +188,28 @@ var schema = {
 
 ```
 
+<a name="getVersion"></a>
+## GetVersion
+
+### getVersion()
+
+**Example**
+
+```javascript
+amanda.getVersion(); // => '0.2.0'
+```
+
+<a name="getValidators"></a>
+## GetValidators
+
+### getValidators()
+
+**Example**
+
+```javascript
+amanda.getValidators(); // => { type: function() {}, ... }
+```
+
 <a name="schema"></a>
 ## Schema
 
@@ -143,12 +217,13 @@ var schema = {
 
 * [required](#required)
 * [length](#length)
+* [format](#format)
 * [type](#type)
-* [values](#values)
+* [enum](#enum)
 * [except](#except)
 * [min](#min)
 * [max](#max)
-* [patter](#pattern)
+* [pattern](#pattern)
 
 <a name="required"></a>
 ### Required
@@ -184,14 +259,16 @@ var schema = {
 <a name="type"></a>
 ### Type
 
-**Supported Types**
-
+* `object`
+* `array`
 * `string`
 * `number`
-* function`
-* `object`
+* `function`
 * `boolean`
-* `array`
+
+<a name="format"></a>
+### Format
+
 * `alpha`
 * `alphanumeric`
 * `ipv4`
@@ -207,30 +284,8 @@ var schema = {
 * `regexp`
 * `unsignedInt`
 
-**Example**
-
-```javascript
-var schema = {
-  type: 'object',
-  properties: {
-    username: {
-      type: 'string'
-    },
-    email: {
-      type: 'email'
-    },
-    contacts: {
-      type: 'array',
-      items: {
-        type: 'string'
-      }
-    }
-  }
-};
-```
-
-<a name="values"></a>
-### Values
+<a name="enum"></a>
+### Enum
 
 **Example**
 
@@ -302,14 +357,41 @@ var schema = {
 <a name="error"></a>
 ## Error
 
+**Methods**
+
+* [getProperties](#getProperties)
+* [getMessages](#getMessages)
+
+**Example**
+
 ```javascript
 {
-  paramName: ...
-  paramValue: ...
-  validatorName: ...
-  validatorValue: ...
-  message: ...
+  '0': {
+    property: 'users[0].username'
+    propertyValue: 123
+    validator: 'type'
+    validatorValue: 'string',
+    message: 'Only string is allowed'
+  }
 }
+```
+
+<a name="getProperties"></a>
+### getProperties
+
+**Example**
+
+```javascript
+error.getProperties(); // => ['users[0].username']
+```
+
+<a name="getMessages"></a>
+### getMessages
+
+**Example**
+
+```javascript
+error.getMessages(); // => ['Only string is allowed']
 ```
 
 <a name="compatibility"></a>
@@ -331,14 +413,15 @@ From version **0.4.11**.
 | Opera | n/a | *Not tested* |
 | Internet Explorer | ✕ | *Not tested* |
 
-**Mobile**
 
+
+*Testing in progress...*
 
 <a name="tests"></a>
 # Running Tests
 
 ```
-$ npm tests/
+$ npm test
 ```
 
 <a name="contributors"></a>
