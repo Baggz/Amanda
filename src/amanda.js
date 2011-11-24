@@ -248,7 +248,8 @@
               property: property,
               propertyValue: propertyValue,
               validator: validatorName,
-              validatorValue: propertyValidators[validatorName]
+              validatorValue: propertyValidators[validatorName],
+              message: error
             });
             return (self.singleError) ? callback(true) : callback();
           }
