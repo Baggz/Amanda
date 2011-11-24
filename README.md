@@ -2,12 +2,6 @@
 
 [Amanda](https://github.com/Baggz/Amanda) validates data against JSON Schema. 
 
-### Version
-
-```
-0.2.0
-```
-
 #### Features
 
 * **Extendable**, you can create **your own validators**
@@ -18,6 +12,12 @@
 * Lightweight
 * Fully **documented**
 * Tested
+
+**Version**
+
+```
+0.2.0
+```
 
 <a name="example"></a>
 ## Example
