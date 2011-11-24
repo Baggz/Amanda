@@ -47,6 +47,7 @@ exports['Test #2'] = function(test) {
   amanda.validate(data, schema, { singleError: false }, function(error) {
 
     delete error[0].message;
+    delete error[1].message;
 
     test.deepEqual(error[0], {
       property: 'user.name',

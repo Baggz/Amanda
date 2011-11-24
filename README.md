@@ -161,12 +161,13 @@ This method allows you to add a custom validator.
 **Example**
 
 ```javascript
-var evenValidator = function(value, options, callback) {
+
+var evenValidator = function(property, propertyValue, validator, propertyValidators, callback) {
   
   // If ‘even: true’
-  if (options) {
+  if (validator) {
     
-    if (typeof value === 'number' && (value % 2) === 0) {
+    if (typeof propertyValue === 'number' && (propertyValue % 2) === 0) {
       // No problem, the number is event
       callback();
     } else {
