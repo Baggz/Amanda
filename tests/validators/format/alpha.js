@@ -1,27 +1,23 @@
 // Load dependencies
-var amanda = require('../../../src/amanda.js'),
-    async = require('async');
+var amanda = require('../../../src/amanda.js');
 
 /**
- * Test ‘alphanumeric’
+ * Test #1
  */
-exports['Test ‘alphanumeric’'] = function(test) {
+exports['Test #1'] = function(test) {
 
   var count = 0;
 
   var schema = {
-    type: 'alphanumeric'
+    required: true,
+    format: 'alpha'
   };
 
   [
-    'abc123',
-    '123abc',
-    'a1b2c3',
     'abc',
     'ABC',
     'Abc',
-    '123',
-    123
+    'aBc'
   ].forEach(function(data) {
     amanda.validate(data, schema, function(error) {
       count += 1;
@@ -30,13 +26,17 @@ exports['Test ‘alphanumeric’'] = function(test) {
   });
 
   [
-    undefined,
+    '123',
     '+@#$~^*{}',
     'lorem ipsum',
     ' ',
+    123,
     null,
     [],
-    function() {}
+    {},
+    function() {},
+    null,
+    undefined
   ].forEach(function(data) {
     amanda.validate(data, schema, function(error) {
       count += 1;

@@ -1,11 +1,15 @@
 // Load dependencies
 var amanda = require('../../src/amanda.js');
 
-exports['Test ‘max’'] = function(test) {
+/**
+ * Test #1
+ */
+exports['Test #1'] = function(test) {
 
   var count = 0;
 
   var schema = {
+    required: true,
     type: 'number',
     max: 10
   };

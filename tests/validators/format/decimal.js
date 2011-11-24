@@ -1,23 +1,27 @@
 // Load dependencies
-var amanda = require('../../../src/amanda.js'),
-    async = require('async');
+var amanda = require('../../../src/amanda.js');
 
 /**
- * Test ‘alpha’
+ * Test ‘decimal’
  */
-exports['Test ‘alpha’'] = function(test) {
+exports['Test #1'] = function(test) {
 
   var count = 0;
 
   var schema = {
-    type: 'alpha'
+    required: true,
+    format: 'decimal'
   };
 
   [
-    'abc',
-    'ABC',
-    'Abc',
-    'aBc'
+    1,
+    10,
+    20,
+    30,
+    1.11,
+    1.23,
+    1.30,
+    230.36
   ].forEach(function(data) {
     amanda.validate(data, schema, function(error) {
       count += 1;
@@ -26,14 +30,17 @@ exports['Test ‘alpha’'] = function(test) {
   });
 
   [
-    '123',
+    1.123981273,
+    19723.129319,
     '+@#$~^*{}',
     'lorem ipsum',
     ' ',
-    123,
     null,
     [],
-    function() {}
+    {},
+    function() {},
+    null,
+    undefined
   ].forEach(function(data) {
     amanda.validate(data, schema, function(error) {
       count += 1;
@@ -41,7 +48,7 @@ exports['Test ‘alpha’'] = function(test) {
     });  
   });
 
-  test.equal(count, 12);
+  test.equal(count, 19);
   test.done();
 
 };

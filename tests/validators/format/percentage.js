@@ -1,16 +1,16 @@
 // Load dependencies
-var amanda = require('../../../src/amanda.js'),
-    async = require('async');
+var amanda = require('../../../src/amanda.js');
 
 /**
- * Test ‘percentage’
+ * Test #1
  */
-exports['Test ‘percentage’'] = function(test) {
+exports['Test #1'] = function(test) {
 
   var count = 0;
 
   var schema = {
-    type: 'decimal'
+    required: true,
+    format: 'percentage'
   };
 
   var percentage = [
@@ -85,7 +85,6 @@ exports['Test ‘percentage’'] = function(test) {
     40,
     35,
     33,
-    0,
     100,
     15,
     6,

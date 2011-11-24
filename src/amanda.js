@@ -1,7 +1,54 @@
 (function() {
 
   /**
+   * IsObject
+   *
+   * @param {object} input
+   */
+  var isObject = function(input) {
+    return Object.prototype.toString.call(input) === '[object Object]';
+  };
+
+  /**
+   * IsArray
+   *
+   * @param {object} input
+   */
+  var isArray = function(input) {
+    return Object.prototype.toString.call(input) === '[object Array]';
+  };
+
+  /**
+   * IsEmpty
+   *  
+   * Returns true if input is empty.
+   *
+   * @param {object} input
+   */
+  var isEmpty = function(input) {
+    
+    // Arrays and strings
+    if (isArray(input)) {
+      return input.length === 0;
+    }
+
+    // Objects
+    if (isObject(input)) {
+      for (var key in input) {
+        if (hasOwnProperty.call(input, key)) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+
+  };
+
+  /**
    * Each
+   *
+   * Applies an iterator function to each item in an array or an object, in series.
    *
    * @param {object} list
    * @param {function} iterator
@@ -9,71 +56,182 @@
    */
   var each = function(list, iterator, callback) {
 
-    var queue = [];
-
     /**
-     * AddToQueue
+     * SyncEach
      *
-     * @param {string} key
-     * @param {string|object} value
+     * @param {object} list
+     * @param {function} iterator
      */
-    var addToQueue = function(key, value) {
-      var index = queue.length + 1;
-      queue.push(function() {
+    var syncEach = function(list, iterator) {
 
-        var next = function(error) {
-          var fn = queue[index];
-          if (!error && fn) {
-            return fn();
-          } else if (!error && !fn) {
-            return callback(null);
-          } else {
-            return callback(error);
-          }
-        };
-
-        return (key && value) ? iterator(key, value, next) : iterator(value, next);
-
-      });
-    };
-
-    // If the list is an array
-    if (Object.prototype.toString.call(list) === '[object Array]') {
-      for (var i = 0, len = list.length; i < len; i++) {
-        addToQueue(undefined, list[i]);
-      }
-    }
-
-    // If the list is an object
-    if (Object.prototype.toString.call(list) === '[object Object]') {
-      for (var key in list) {
-        if (list.hasOwnProperty(key)) {
-          addToQueue(key, list[key]);
+      // If the list is an array
+      if (isArray(list) && !isEmpty(list)) {
+        for (var i = 0, len = list.length; i < len; i++) {
+          iterator(i, list[i]);
         }
       }
-    }
 
-    // And go!
-    return queue[0]();
+      // If the list is an object
+      if (isObject(list) && !isEmpty(list)) {
+        for (var key in list) {
+          if (list.hasOwnProperty(key)) {
+            iterator(key, list[key]);
+          }
+        } 
+      }
+
+    };
+
+    /**
+     * AsyncEach
+     * @param {object} list
+     * @param {function} iterator
+     * @param {function} callback
+     */
+    var asyncEach = function(list, iterator, callback) {
+
+      var queue = [];
+
+      /**
+       * AddToQueue
+       *
+       * @param {string} key
+       * @param {string|object} value
+       */
+      var addToQueue = function(key, value) {
+        var index = queue.length + 1;
+        queue.push(function() {
+
+          var next = function(error) {
+            var fn = queue[index];
+            if (!error && fn) {
+              return fn();
+            } else if (!error && !fn) {
+              return callback();
+            } else {
+              return callback(error);
+            }
+          };
+
+          return iterator(key, value, next);
+
+        });
+      };
+
+      // If the list is an array
+      if (isArray(list) && !isEmpty(list)) {
+        for (var i = 0, len = list.length; i < len; i++) {
+          addToQueue(i, list[i]);
+        }
+
+      // If the list is an object
+      } else if (isObject(list) && !isEmpty(list)) {
+        for (var key in list) {
+          if (list.hasOwnProperty(key)) {
+            addToQueue(key, list[key]);
+          }
+        }
+
+      // If the list is not an array or an object
+      } else {
+        return callback();
+      }
+
+      // And go!
+      return queue[0]();
+
+    };
+
+    if (typeof callback === 'undefined') {
+      return syncEach.apply(this, arguments);
+    } else {
+      return asyncEach.apply(this, arguments);
+    }
 
   };
 
   /**
-   * Validators
+   * Pluck
    *
-   * List of validators.
+   * Extracts a list of property values.
+   *
+   * @param {object} list
+   * @param {string} propertyName
    */
-  var validators = {};
+  var pluck = function(list, propertyName) {
+    var output = [];
+    for (var i = 0, len = list.length; i < len; i++) {
+      var property = list[i][propertyName];
+      if (output.indexOf(property) === -1) {
+        output.push(property);
+      }
+    }
+    return output;
+  };
 
   /**
-   * ValidateParam
+   * Error
    *
-   * @param {string} paramName
-   * @param {object} paramValidators
-   * @param {string|object} paramValue
+   * @constructor
+   */
+  var Error = function() {
+    this.length = 0;
+  };
+
+  Error.prototype.addError = function(error) {
+    this[this.length] = error;
+    this.length++;
+  };
+
+  /**
+   * Error.getProperties
+   * Error.getMessages
+   */
+  each({
+    getProperties: 'property',
+    getMessages: 'message'
+  }, function(key, value) {
+    Error.prototype[key] = function() {
+      return pluck(this, value);
+    };    
+  });
+
+  /**
+   * Validator
+   *
+   * @constructor
+   * @param {object} options
+   */
+  var Validator = function(options) {
+
+    var self = this;
+
+    // Errors
+    this.Errors = new Error();
+
+    // Options
+    each([
+      'singleError',
+      'validators'
+    ], function(key, value) {
+      self[value] = options[value];
+    });
+
+  };
+
+  /**
+   * Validator.validateProperty
+   *
+   * @param {string} property
+   * @param {object} propertyValidators
+   * @param {string|object} propertyValue
+   * @param {boolean} singleError
    * @param {function} callback
    */
-  var validateParam = function(paramName, paramValidators, paramValue, callback) {
+  Validator.prototype.validateProperty = function(property, propertyValue, propertyValidators, callback) {
+
+    // Reference na this
+    var self = this;
 
     /**
      * Iterator
@@ -82,125 +240,432 @@
      * @param {function} callback
      */
     var iterator = function(validatorName, validatorFn, callback) {
-      if (paramValidators[validatorName]) {
-        validatorFn(paramName, paramValue, paramValidators[validatorName], paramValidators, function(error) {
+      if (propertyValidators[validatorName]) {
+        validatorFn(propertyValue, propertyValidators[validatorName], function(error) {
+
           if (error) {
-            return callback({
-              paramName: paramName,
-              paramValue: paramValue,
-              validatorName: validatorName,
-              validatorValue: paramValidators[validatorName]
+            self.Errors.addError({
+              property: property,
+              propertyValue: propertyValue,
+              validator: validatorName,
+              validatorValue: propertyValidators[validatorName]
             });
-          } else {
-            return callback();
+            return (self.singleError) ? callback(true) : callback();
           }
+
+          return callback();
+
         });
       } else {
         return callback();
       }
     };
 
-    if (paramValidators.required === false && paramValue === undefined) {
+    if (propertyValidators.required !== true && typeof propertyValue === 'undefined') {
       return callback();
     } else {
-      return each(validators, iterator, callback);
+      return each(self.validators, iterator, callback);
     }
 
   };
 
   /**
-   * ValidateSchema
+   * Validator.validate
    *
    * @param {object} instance
    * @param {object} schema
+   * @param {boolean} singleError
    * @param {function} callback
    */
-  var validateSchema = function(instance, schema, callback) {
+  Validator.prototype.validate = function(instance, schema, callback) {
 
-    if (schema.required === false && instance === undefined) {
-      return callback(null);
-    } else {
+    var self = this;
 
-      /**
-       * {
-       *   type: 'object',
-       *   properties: {
-       *     ... 
-       *   }
-       * }
-       */
-      if (['object', 'array'].indexOf(schema.type) !== -1) {
-        return validateParam(undefined, schema, instance, function(error) {
-          if (error) {
-            return callback(error);
-          } else {
+    return this.validateSchema(instance, schema, '', function(error) {
+      return callback((self.Errors.length > 0) ? self.Errors : undefined);
+    });
+
+  };
+
+  /**
+   * Validator.validateSchema
+   *
+   * @param {object} instance
+   * @param {object} schema
+   * @param {boolean} singleError
+   * @param {function} callback
+   */
+  Validator.prototype.validateSchema = function(instance, schema, path, callback) {
+
+    var self = this;
+
+    /**
+     * {
+     *   type: 'object',
+     *   properties: {
+     *     ... 
+     *   }
+     * }
+     * — or —
+     * {
+     *   type: 'array',
+     *   items: {
+     *     ...
+     * }
+     */
+    if (['object', 'array'].indexOf(schema.type) !== -1) {
+      return self.validateProperty(path, instance, schema, function(error) {
+
+        // If an error occurred, the validation process can't continue
+        if (error) {
+          return callback(error);
+        }
+
+        /**
+         * {
+         *   type: 'object',
+         *   properties: {
+         *     ... 
+         *   }
+         * }
+         */
+        if (schema.properties) {
+          return each(schema.properties, function(property, propertyValidators, callback) {
+            
+            var isObject = propertyValidators.type === 'object' && propertyValidators.properties,
+                isArray =  propertyValidators.type === 'array';
+
+            // Get the value of property (instance[property])
+            var propertyValue = self.getProperty(instance, property);
+
+            // Compose the property path
+            var propertyPath = (path.length === 0) ? property : path + '.' + property;
 
             /**
              * {
              *   type: 'object',
              *   properties: {
-             *     ... 
+             *     user: {
+             *       type: 'object',
+             *       properties: {
+             *         ...
+             *       }
+             *     }
              *   }
              * }
              */
-            if (schema.properties) {
-              return each(schema.properties, function(paramName, paramValidators, callback) {
-                if ((paramValidators.type === 'object' && paramValidators.properties) || paramValidators.type === 'array')  {
-                  return validateSchema(instance[paramName], schema.properties[paramName], callback);
-                } else {
-                  return validateParam(paramName, paramValidators, instance[paramName], callback);
-                }
-              }, callback);
-
-            /**
-             * {
-             *   type: 'array',
-             *   items: {
-             *     type: 'string'
-             *     ... 
-             *   }
-             * }
-             */
-            } else if (schema.items) {
-              if (['object', 'array'].indexOf(schema.items.type) !== -1) {
-                return each(instance, function(item, callback) {
-                  return validateSchema(item, schema.items, callback);
-                }, callback);
-              } else {
-                return each(instance, function(item, callback) {
-                  return validateParam(undefined, schema.items, item, callback);
-                }, callback);
-              }
-            
-            /**
-             * {
-             *   type: 'array'
-             * }
-             */
+            if (isObject || isArray)  {
+              return self.validateSchema(propertyValue, schema.properties[property], propertyPath, callback);
             } else {
-              return callback(null);
+              return self.validateProperty(propertyPath, propertyValue, propertyValidators, callback);
             }
 
+          }, callback);
+
+        /**
+         * {
+         *   type: 'array',
+         *   items: {
+         *     type: 'string'
+         *     ... 
+         *   }
+         * }
+         */
+        } else if (schema.items) {
+
+          /**
+           * {
+           *   type: 'array',
+           *   items: {
+           *     type: 'object'
+           *   }
+           * }
+           * — or —
+           * {
+           *   type: 'array',
+           *   items: {
+           *     type: 'array'
+           *   }
+           * }
+           */
+          if (['object', 'array'].indexOf(schema.items.type) !== -1) {
+            if (instance && !isEmpty(instance)) {
+              return each(instance, function(index, propertyValue, callback) {
+                var propertyPath = path + '[' + index + ']';
+                return self.validateSchema(propertyValue, schema.items, propertyPath, callback);
+              }, callback);
+            } else {
+              return callback();
+            }
+
+          /*
+           * {
+           *   type: 'array',
+           *   items: {
+           *     type: 'string'
+           *   }
+           * }
+           */
+          } else {
+            if (instance && !isEmpty(instance)) {
+              return each(instance, function(index, propertyValue, callback) {
+                var propertyPath = path + '[' + index + ']';
+                return self.validateProperty(propertyPath, propertyValue, schema.items, callback);
+              }, callback);
+            } else {
+              return callback();
+            }
           }
-        });
 
-      /**
-       * {
-       *   type: 'string',
-       *   length: ...
-       * }
-       */
-      } else {
-        return validateParam(undefined, schema, instance, callback);
-      }
+        /**
+         * {
+         *   type: 'array'
+         * }
+         * — or —
+         * {
+         *   type: 'object'
+         * }
+         */
+        } else {
+          return callback();
+        }
 
+      });
+
+    /**
+     * {
+     *   type: 'string',
+     *   length: ...
+     * }
+     */
+    } else {
+      return self.validateProperty(path, instance, schema, callback);
     }
 
   };
 
   /**
-   * amanda
+   * GetProperty
    *
+   * @param {object} source
+   * @param {string} property
+   */
+  Validator.prototype.getProperty = function(source, property) {
+    if (!source) {
+      return undefined;
+    } else {
+      return source[property];
+    }
+  };
+
+  /**
+   * Validators
+   */
+  var validators = {
+    
+    required: function(value, options, callback) {
+      if (options && !value) {
+        return callback(true);
+      } else {
+        return callback();
+      }
+    },
+
+    type: (function() {
+      
+      var types = {
+        'object': function(input) {
+          return Object.prototype.toString.call(input) === '[object Object]';
+        },
+        'array': function(input) {
+          return Object.prototype.toString.call(input) === '[object Array]';
+        }
+      };
+
+      // Generate the rest of type checkers
+      [
+        'string',
+        'number',
+        'function',
+        'boolean'
+      ].forEach(function(type) {
+        types[type] = function() {
+          return typeof arguments[0] === type;
+        };
+      });
+
+      return function(value, options, callback) {
+
+        /**
+         * {
+         *   type: ['string', 'number']
+         * }
+         */
+        if (Object.prototype.toString.call(options) === '[object Array]') {
+          var noError = options.some(function(type) {
+            return types[type](value);
+          });
+          return (noError) ? callback() : callback(true);
+
+        /**
+         * {
+         *   type: 'string'
+         * }
+         */
+        } else {
+          return (types[options](value)) ? callback() : callback(true);
+        }
+
+      };
+
+    }()),
+
+    /**
+     * Format
+     */
+    format: (function() {
+
+      /**
+       * Formats
+       */
+      var formats = {
+        'alpha': function(input) {
+          return (typeof input === 'string' && input.match(/^[a-zA-Z]+$/));
+        },
+        'alphanumeric': function(input) {
+          return (typeof input === 'string' && /^[a-zA-Z0-9]+$/.test(input)) || typeof input === 'number';
+        },
+        'ipv4': function(input) {
+          return typeof input === 'string' && input.match(/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/);
+        },
+        'ipv6': function(input) {
+          return typeof input === 'string' && input.match(/(?:(?:[a-f\d]{1,4}:)*(?:[a-f\d]{1,4}|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})|(?:(?:[a-f\d]{1,4}:)*[a-f\d]{1,4})?::(?:(?:[a-f\d]{1,4}:)*(?:[a-f\d]{1,4}|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}))?)/);
+        },
+        'ip': function(input) {
+          return formats.ipv4(input) || formats.ipv6;
+        },
+        'email': function(input) {
+          return typeof input === 'string' && input.match(/^(?:[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+\.)*[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!\.)){0,61}[a-zA-Z0-9]?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!$)){0,61}[a-zA-Z0-9]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/);
+        },
+        'url': function(input) {
+          return typeof input === 'string' && input.match(/^(?:(?:ht|f)tp(?:s?)\:\/\/|~\/|\/)?(?:\w+:\w+@)?((?:(?:[-\w\d{1-3}]+\.)+(?:com|org|cat|coop|int|pro|tel|xxx|net|gov|mil|biz|info|mobi|name|aero|jobs|edu|co\.uk|ac\.uk|it|fr|tv|museum|asia|local|travel|[a-z]{2})?)|((\b25[0-5]\b|\b[2][0-4][0-9]\b|\b[0-1]?[0-9]?[0-9]\b)(\.(\b25[0-5]\b|\b[2][0-4][0-9]\b|\b[0-1]?[0-9]?[0-9]\b)){3}))(?::[\d]{1,5})?(?:(?:(?:\/(?:[-\w~!$+|.,=]|%[a-f\d]{2})+)+|\/)+|\?|#)?(?:(?:\?(?:[-\w~!$+|.,*:]|%[a-f\d{2}])+=?(?:[-\w~!$+|.,*:=]|%[a-f\d]{2})*)(?:&(?:[-\w~!$+|.,*:]|%[a-f\d{2}])+=?(?:[-\w~!$+|.,*:=]|%[a-f\d]{2})*)*)*(?:#(?:[-\w~!$ |\/.,*:;=]|%[a-f\d]{2})*)?$/);
+        },
+        'date': function(input) {
+          return Object.prototype.toString.call(input) === '[object Date]';
+        },
+        'decimal': function(input) {
+          return /^[0-9]+(\.[0-9]{1,2})?$/.test(input);
+        },
+        'int': function(input) {
+          return /^-?[0-9]+$/.test(input);
+        },
+        'percentage': function(input) {
+          return (typeof input == 'string' && input.match(/^-?[0-9]{0,2}(\.[0-9]{1,2})?$|^-?(100)(\.[0]{1,2})?$/)) || (input >= -100 && input <= 100);
+        },
+        'port': function(input) {
+          return /\:\d+/.test(input);
+        },
+        'regexp': function(input) {
+          return input && input.test && input.exec;
+        },
+        'unsignedInt': function(input) {
+          return /^[0-9]+$/.test(input);
+        }
+      };
+
+      return function(value, options, callback) {
+
+        /**
+         * {
+         *   type: ['string', 'number']
+         * }
+         */
+        if (Object.prototype.toString.call(options) === '[object Array]') {
+          var noError = options.some(function(format) {
+            return formats[format](value);
+          });
+          return (noError) ? callback() : callback(true);
+
+        /**
+         * {
+         *   type: 'string'
+         * }
+         */
+        } else {
+          return (formats[options](value)) ? callback() : callback(true);
+        }
+
+      };
+
+    }()),
+
+    /**
+     * Length
+     */
+    length: function(value, options, callback) {
+    
+      // Check the length only if the type of ‘paramValue’ is string
+      if (typeof value === 'string') {
+
+
+        // If the length is specified as an array (for instance ‘[2, 45]’)
+        if (Array.isArray(options) && (value.length < options[0] || value.length > options[1])) {
+          return callback(true);
+
+        // If the length is specified as a string (for instance ‘2’)
+        } else if (typeof options === 'number' && value.length !== options) {
+          return callback(true);
+
+        // If the length is specified in a different way
+        } else {
+          return callback();
+        }
+
+      } else {
+        return callback(); 
+      }
+
+    },
+
+    /**
+     * Enum
+     */
+    enum: function(value, options, callback) {
+      return (options.indexOf(value) === -1) ? callback(true) : callback();
+    },
+
+    /**
+     * Except
+     */
+    except: function(value, options, callback) {
+      return (options.indexOf(value) !== -1) ? callback(true) : callback();
+    },
+
+    /**
+     * Min
+     */
+    min: function(value, options, callback) {
+      return (typeof value !== 'number' || value < options) ? callback(true) : callback();
+    },
+
+    /**
+     * Max
+     */
+    max: function(value, options, callback) {
+      return (typeof value !== 'number' || value > options) ? callback(true) : callback();
+    },
+
+    /**
+     * Pattern
+     */
+    pattern: function(value, options, callback) {
+      return (typeof value === 'string' && !value.match(options)) ? callback(true) : callback();
+    }
+
+  };
+
+  /**
+   * Amanda
    */
   var amanda = {
 
@@ -209,9 +674,18 @@
      *
      * @param {object} structure
      */
-    validate: function(data, schema, singleError, callback) {
+    validate: function(data, schema, options, callback) {
 
-      return validateSchema.apply(this, arguments);
+      if ( typeof options === 'function') {
+        callback = options;
+        options = {
+          singleError: true
+        };
+      }
+
+      options.validators = validators;
+
+      return (new Validator(options)).validate(data, schema, callback);
 
     },
 
@@ -226,185 +700,20 @@
     },
 
     /**
-     * getVersion
+     * GetVersion
      */
     getVersion: function() {
-      return [0, 0, 1].join('.');
+      return [0, 0, 2].join('.');
+    },
+
+    /**
+     * GetValidators
+     */
+    getValidators: function() {
+      return validators;
     }
 
   };
-
-  /**
-   * Required
-   */
-  amanda.addValidator('required', function(paramName, paramValue, validatorValue, validators, callback) {
-    if (validatorValue && !paramValue) {
-      return callback(true);
-    } else {
-      return callback();
-    }
-  });
-
-  /**
-   * Type
-   */
-  amanda.addValidator('type', (function() {
-
-    /**
-     * Types
-     */
-    var types = {
-      'array': function(input) {
-        return Array.isArray(input);
-      },
-      'alpha': function(input) {
-        return (typeof input === 'string' && input.match(/^[a-zA-Z]+$/));
-      },
-      'alphanumeric': function(input) {
-        return (typeof input === 'string' && /^[a-zA-Z0-9]+$/.test(input)) || typeof input === 'number';
-      },
-      'ipv4': function(input) {
-        return typeof input === 'string' && input.match(/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/);
-      },
-      'ipv6': function(input) {
-        return typeof input === 'string' && input.match(/(?:(?:[a-f\d]{1,4}:)*(?:[a-f\d]{1,4}|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})|(?:(?:[a-f\d]{1,4}:)*[a-f\d]{1,4})?::(?:(?:[a-f\d]{1,4}:)*(?:[a-f\d]{1,4}|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}))?)/);
-      },
-      'ip': function(input) {
-        return types.ipv4(input) || types.ipv6;
-      },
-      'email': function(input) {
-        return typeof input === 'string' && input.match(/^(?:[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+\.)*[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!\.)){0,61}[a-zA-Z0-9]?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!$)){0,61}[a-zA-Z0-9]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/);
-      },
-      'url': function(input) {
-        return typeof input === 'string' && input.match(/^(?:(?:ht|f)tp(?:s?)\:\/\/|~\/|\/)?(?:\w+:\w+@)?((?:(?:[-\w\d{1-3}]+\.)+(?:com|org|cat|coop|int|pro|tel|xxx|net|gov|mil|biz|info|mobi|name|aero|jobs|edu|co\.uk|ac\.uk|it|fr|tv|museum|asia|local|travel|[a-z]{2})?)|((\b25[0-5]\b|\b[2][0-4][0-9]\b|\b[0-1]?[0-9]?[0-9]\b)(\.(\b25[0-5]\b|\b[2][0-4][0-9]\b|\b[0-1]?[0-9]?[0-9]\b)){3}))(?::[\d]{1,5})?(?:(?:(?:\/(?:[-\w~!$+|.,=]|%[a-f\d]{2})+)+|\/)+|\?|#)?(?:(?:\?(?:[-\w~!$+|.,*:]|%[a-f\d{2}])+=?(?:[-\w~!$+|.,*:=]|%[a-f\d]{2})*)(?:&(?:[-\w~!$+|.,*:]|%[a-f\d{2}])+=?(?:[-\w~!$+|.,*:=]|%[a-f\d]{2})*)*)*(?:#(?:[-\w~!$ |\/.,*:;=]|%[a-f\d]{2})*)?$/);
-      },
-      'date': function(input) {
-        return Object.prototype.toString.call(input) === '[object Date]';
-      },
-      'decimal': function(input) {
-        return /^[0-9]+(\.[0-9]{1,2})?$/.test(input);
-      },
-      'int': function(input) {
-        return /^-?[0-9]+$/.test(input);
-      },
-      'percentage': function(input) {
-        return (typeof input === 'string' && input.match(/^-?[0-9]{0,2}(\.[0-9]{1,2})?$|^-?(100)(\.[0]{1,2})?$/));
-      },
-      'port': function(input) {
-        return /\:\d+/.test(input);
-      },
-      'regexp': function(input) {
-        return input && input.test && input.exec;
-      },
-      'unsignedInt':function(input) {
-        return /^[0-9]+$/.test(input);
-      }
-    };
-
-    // Generate the rest of type checkers
-    [
-      'string',
-      'number',
-      'function',
-      'object',
-      'boolean'
-    ].forEach(function(type) {
-      types[type] = function() {
-        return (typeof arguments[0] === type) ? true : false;
-      };
-    });
-
-    return function(paramName, paramValue, validatorValue, validators, callback) {
-      if (!types[validatorValue](paramValue)) {
-        return callback(true);
-      } else {
-        return callback();
-      }
-    };
-
-  }()));
-
-  /**
-   * Length
-   */
-  amanda.addValidator('length', function(paramName, paramValue, validatorValue, validators, callback) {
-    
-    // Check the length only if the type of ‘paramValue’ is string
-    if (typeof paramValue === 'string') {
-
-      // If the length is specified as an array (for instance ‘[2, 45]’)
-      if (Array.isArray(validatorValue) && (paramValue.length < validatorValue[0] || paramValue.length > validatorValue[1])) {
-        return callback(true);
-
-      // If the length is specified as a string (for instance ‘2’)
-      } else if (typeof validatorValue === 'number' && paramValue.length !== validatorValue) {
-        return callback(true);
-
-      // If the length is specified in a different way
-      } else {
-        return callback();
-      }
-
-    } else {
-      return callback(); 
-    }
-
-  });
-
-  /**
-   * Values
-   */
-  amanda.addValidator('values', function(paramName, paramValue, validatorValue, validators, callback) {
-    if (validatorValue.indexOf(paramValue) === -1) {
-      return callback(true);
-    } else {
-      return callback();
-    }
-  });
-
-  /**
-   * Except
-   */
-  amanda.addValidator('except', function(paramName, paramValue, validatorValue, validators, callback) {
-    if (validatorValue.indexOf(paramValue) !== -1) {
-      return callback(true);
-    } else {
-      return callback();
-    }
-  });
-
-  /**
-   * Min
-   */
-  amanda.addValidator('min', function(paramName, paramValue, validatorValue, validators, callback) {
-    if (typeof paramValue !== 'number' || paramValue < validatorValue) {
-      return callback(true);
-    } else {
-      return callback();
-    }
-  });
-
-  /**
-   * Max
-   */
-  amanda.addValidator('max', function(paramName, paramValue, validatorValue, validators, callback) {
-    if (typeof paramValue !== 'number' || paramValue > validatorValue) {
-      return callback(true);
-    } else {
-      return callback();
-    }
-  });
-
-  /**
-   * Pattern
-   */
-  amanda.addValidator('pattern', function(paramName, paramValue, validatorValue, validators, callback) {
-    if (typeof paramValue === 'string' && !paramValue.match(validatorValue)) {
-      return callback(true);
-    } else {
-      return callback();
-    }
-  });
 
   // Export
   if (typeof module !== 'undefined' && module.exports) {

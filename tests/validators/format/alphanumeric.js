@@ -1,21 +1,27 @@
 // Load dependencies
-var amanda = require('../../../src/amanda.js'),
-    async = require('async');
+var amanda = require('../../../src/amanda.js');
 
 /**
- * Test ‘regexp’
+ * Test #1
  */
-exports['Test ‘regexp’'] = function(test) {
+exports['Test #1'] = function(test) {
 
   var count = 0;
 
   var schema = {
-    type: 'regexp'
+    required: true,
+    format: 'alphanumeric'
   };
 
   [
-    new RegExp(),
-    /a/gi
+    'abc123',
+    '123abc',
+    'a1b2c3',
+    'abc',
+    'ABC',
+    'Abc',
+    '123',
+    123
   ].forEach(function(data) {
     amanda.validate(data, schema, function(error) {
       count += 1;
@@ -24,12 +30,15 @@ exports['Test ‘regexp’'] = function(test) {
   });
 
   [
-    new Date(),
+    '+@#$~^*{}',
+    'lorem ipsum',
+    ' ',
+    null,
     [],
     {},
     function() {},
-    '11/11/11',
-    11
+    null,
+    undefined
   ].forEach(function(data) {
     amanda.validate(data, schema, function(error) {
       count += 1;
@@ -37,7 +46,7 @@ exports['Test ‘regexp’'] = function(test) {
     });  
   });
 
-  test.equal(count, 8);
+  test.equal(count, 17);
   test.done();
 
 };
