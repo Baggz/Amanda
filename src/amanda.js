@@ -90,7 +90,6 @@
      */
     var asyncEach = function(list, iterator, callback) {
 
-      // Opravit validator.length
       var uncompleted;
 
       // If the list is an object
@@ -110,9 +109,7 @@
        * Next
        */
       var next = function(error) {
-
         uncompleted -= 1;
-
         if (error) {
           callback(error);
           callback = function() {};
