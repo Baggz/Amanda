@@ -90,55 +90,41 @@
      */
     var asyncEach = function(list, iterator, callback) {
 
-      var queue = [];
-
-      /**
-       * AddToQueue
-       *
-       * @param {string} key
-       * @param {string|object} value
-       */
-      var addToQueue = function(key, value) {
-        var index = queue.length + 1;
-        queue.push(function() {
-
-          var next = function(error) {
-            var fn = queue[index];
-            if (!error && fn) {
-              return fn();
-            } else if (!error && !fn) {
-              return callback();
-            } else {
-              return callback(error);
-            }
-          };
-
-          return iterator(key, value, next);
-
-        });
-      };
-
-      // If the list is an array
-      if (isArray(list) && !isEmpty(list)) {
-        for (var i = 0, len = list.length; i < len; i++) {
-          addToQueue(i, list[i]);
-        }
+      // Opravit validator.length
+      var uncompleted;
 
       // If the list is an object
-      } else if (isObject(list) && !isEmpty(list)) {
-        for (var key in list) {
-          if (list.hasOwnProperty(key)) {
-            addToQueue(key, list[key]);
-          }
-        }
+      if (isObject(list) && !isEmpty(list)) {
+        uncompleted = Object.keys(list).length;
+
+      // If the list is an array
+      } else if (isArray(list) && !isEmpty(list)) {
+        uncompleted = list.length;
 
       // If the list is not an array or an object
       } else {
         return callback();
       }
 
-      // And go!
-      return queue[0]();
+      /**
+       * Next
+       */
+      var next = function(error) {
+
+        uncompleted -= 1;
+
+        if (error) {
+          callback(error);
+          callback = function() {};
+        }
+        if (!error && uncompleted === 0) {
+          return callback();
+        }
+      };
+
+      syncEach(list, function(key, value) {
+        return iterator(key, value, next);
+      });
 
     };
 
