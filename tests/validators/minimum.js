@@ -11,7 +11,7 @@ exports['Test #1'] = function(test) {
   var schema = {
     required: true,
     type: 'number',
-    min: 10
+    minimum: 10
   };
 
   [

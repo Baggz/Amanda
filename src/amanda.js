@@ -627,7 +627,7 @@
     /**
      * Min
      */
-    'min': function(property, propertyValue, validator, propertyValidators, callback) {
+    'minimum': function(property, propertyValue, validator, propertyValidators, callback) {
       return (typeof propertyValue !== 'number' || propertyValue < validator) ? callback(true) : callback();
     },
 
