@@ -650,6 +650,13 @@
      */
     'minItems': function(property, propertyValue, validator, propertyValidators, callback) {
       return (isArray(propertyValue) && propertyValue.length >= validator) ? callback() : callback(true);
+    },
+
+    /**
+     * MaxItems
+     */
+    'maxItems': function(property, propertyValue, validator, propertyValidators, callback) {
+      return (isArray(propertyValue) && propertyValue.length <= validator) ? callback() : callback(true);
     }
 
   };
