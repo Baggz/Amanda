@@ -445,7 +445,7 @@
      */
     'required': function(property, propertyValue, validator, propertyValidators, callback) {
       if (validator && !propertyValue) {
-        return callback(true);
+        return callback('‘' + property + '’ is required');
       } else {
         return callback();
       }
@@ -488,7 +488,7 @@
           var noError = options.some(function(type) {
             return types[type](propertyValue);
           });
-          return (noError) ? callback() : callback(true);
+          return (noError) ? callback() : callback('‘' + property + '’ must be ' + validator.join(' or '));
 
         /**
          * {
@@ -496,7 +496,7 @@
          * }
          */
         } else {
-          return (types[validator](propertyValue)) ? callback() : callback(true);
+          return (types[validator](propertyValue)) ? callback() : callback('‘' + property + '’ must be ' + validator);
         }
 
       };
@@ -643,6 +643,13 @@
      */
     'pattern': function(property, propertyValue, validator, propertyValidators, callback) {
       return (typeof propertyValue === 'string' && !propertyValue.match(validator)) ? callback(true) : callback();
+    },
+
+    /**
+     * MinItems
+     */
+    'minItems': function(property, propertyValue, validator, propertyValidators, callback) {
+      return (isArray(propertyValue) && propertyValue.length >= validator) ? callback() : callback(true);
     }
 
   };
