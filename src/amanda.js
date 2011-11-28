@@ -625,16 +625,16 @@
     },
 
     /**
-     * Min
+     * Minimum
      */
     'minimum': function(property, propertyValue, validator, propertyValidators, callback) {
       return (typeof propertyValue !== 'number' || propertyValue < validator) ? callback(true) : callback();
     },
 
     /**
-     * Max
+     * Maximum
      */
-    'max': function(property, propertyValue, validator, propertyValidators, callback) {
+    'maximum': function(property, propertyValue, validator, propertyValidators, callback) {
       return (typeof propertyValue !== 'number' || propertyValue > validator) ? callback(true) : callback();
     },
 
