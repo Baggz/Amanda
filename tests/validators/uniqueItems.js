@@ -10,18 +10,19 @@ exports['Test #1'] = function(test) {
 
   var schema = {
     required: true,
-    type: 'number',
-    max: 10
+    type: 'array',
+    uniqueItems: true,
+    items: {
+      type: 'string'
+    }
   };
 
   [
-    11,
-    100,
-    {},
-    null,
-    [],
-    function() {},
-    'Hello!' 
+    ['a', 'a', 'a'],
+    ['a', 'a', 'b'],
+    ['a', 'b', 'a'],
+    ['a', 'c', 'c'],
+    ['a', 'c', 'a', 'c']
   ].forEach(function(input) {
     amanda.validate(input, schema, function(error) {
       count += 1;
@@ -29,17 +30,18 @@ exports['Test #1'] = function(test) {
     });
   });
 
-  amanda.validate(2, schema, function(error) {
+  amanda.validate([], schema, function(error) {
     count += 1;
     test.equal(error, undefined);
   });
 
-  amanda.validate(10, schema, function(error) {
+  amanda.validate(['a', 'b', 'c'], schema, function(error) {
     count += 1;
     test.equal(error, undefined);
   });
 
-  test.equal(count, 9);
+
+  test.equal(count, 7);
   test.done();
 
 };

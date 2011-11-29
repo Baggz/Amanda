@@ -445,7 +445,7 @@
      */
     'required': function(property, propertyValue, validator, propertyValidators, callback) {
       if (validator && !propertyValue) {
-        return callback(true);
+        return callback('‘' + property + '’ is required');
       } else {
         return callback();
       }
@@ -488,7 +488,7 @@
           var noError = options.some(function(type) {
             return types[type](propertyValue);
           });
-          return (noError) ? callback() : callback(true);
+          return (noError) ? callback() : callback('‘' + property + '’ must be ' + validator.join(' or '));
 
         /**
          * {
@@ -496,7 +496,7 @@
          * }
          */
         } else {
-          return (types[validator](propertyValue)) ? callback() : callback(true);
+          return (types[validator](propertyValue)) ? callback() : callback('‘' + property + '’ must be ' + validator);
         }
 
       };
@@ -625,17 +625,27 @@
     },
 
     /**
-     * Min
+     * Minimum
      */
-    'min': function(property, propertyValue, validator, propertyValidators, callback) {
-      return (typeof propertyValue !== 'number' || propertyValue < validator) ? callback(true) : callback();
+    'minimum': function(property, propertyValue, validator, propertyValidators, callback) {
+      if (typeof propertyValue === 'number') {
+        var condition = (propertyValidators.exclusiveMinimum) ? propertyValue >= validator : propertyValue > validator;
+        return (condition) ? callback() : callback(true);
+      } else {
+        return callback(true);
+      }
     },
 
     /**
-     * Max
+     * Maximum
      */
-    'max': function(property, propertyValue, validator, propertyValidators, callback) {
-      return (typeof propertyValue !== 'number' || propertyValue > validator) ? callback(true) : callback();
+    'maximum': function(property, propertyValue, validator, propertyValidators, callback) {
+      if (typeof propertyValue === 'number') {
+        var condition = (propertyValidators.exclusiveMaximum) ? propertyValue <= validator : propertyValue < validator;
+        return (condition) ? callback() : callback(true);
+      } else {
+        return callback(true);
+      }
     },
 
     /**
@@ -643,6 +653,38 @@
      */
     'pattern': function(property, propertyValue, validator, propertyValidators, callback) {
       return (typeof propertyValue === 'string' && !propertyValue.match(validator)) ? callback(true) : callback();
+    },
+
+    /**
+     * MinItems
+     */
+    'minItems': function(property, propertyValue, validator, propertyValidators, callback) {
+      return (isArray(propertyValue) && propertyValue.length >= validator) ? callback() : callback(true);
+    },
+
+    /**
+     * MaxItems
+     */
+    'maxItems': function(property, propertyValue, validator, propertyValidators, callback) {
+      return (isArray(propertyValue) && propertyValue.length <= validator) ? callback() : callback(true);
+    },
+
+    /**
+     * UniqueItems
+     */
+    'uniqueItems': function(property, propertyValue, validator, propertyValidators, callback) {
+      return each(propertyValue, function(index, value, callback) {
+        return (propertyValue.indexOf(value) < index) ? callback(true) : callback();
+      }, callback);
+    },
+
+    /**
+     * DivisibleBy
+     */
+    'divisibleBy': function(property, propertyValue, validator, propertyValidators, callback) {
+      var isNumber = typeof propertyValue === 'number',
+          isDivisible = propertyValue % validator === 0;
+      return (isNumber && isDivisible) ? callback() : callback(true);
     }
 
   };
