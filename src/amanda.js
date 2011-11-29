@@ -640,7 +640,12 @@
      * Maximum
      */
     'maximum': function(property, propertyValue, validator, propertyValidators, callback) {
-      return (typeof propertyValue !== 'number' || propertyValue > validator) ? callback(true) : callback();
+      if (typeof propertyValue === 'number') {
+        var condition = (propertyValidators.exclusiveMinimum) ? propertyValue <= validator : propertyValue < validator;
+        return (condition) ? callback() : callback(true);
+      } else {
+        return callback(true);
+      }
     },
 
     /**

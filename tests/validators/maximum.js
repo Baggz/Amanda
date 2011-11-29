@@ -15,13 +15,14 @@ exports['Test #1'] = function(test) {
   };
 
   [
+    10,
     11,
     100,
     {},
     null,
     [],
     function() {},
-    'Hello!' 
+    'Hello!'
   ].forEach(function(input) {
     amanda.validate(input, schema, function(error) {
       count += 1;
@@ -30,11 +31,6 @@ exports['Test #1'] = function(test) {
   });
 
   amanda.validate(2, schema, function(error) {
-    count += 1;
-    test.equal(error, undefined);
-  });
-
-  amanda.validate(10, schema, function(error) {
     count += 1;
     test.equal(error, undefined);
   });
