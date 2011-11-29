@@ -667,6 +667,15 @@
      */
     'maxItems': function(property, propertyValue, validator, propertyValidators, callback) {
       return (isArray(propertyValue) && propertyValue.length <= validator) ? callback() : callback(true);
+    },
+
+    /**
+     * UniqueItems
+     */
+    'uniqueItems': function(property, propertyValue, validator, propertyValidators, callback) {
+      return each(propertyValue, function(index, value, callback) {
+        return (propertyValue.indexOf(value) < index) ? callback(true) : callback();
+      }, callback);
     }
 
   };
