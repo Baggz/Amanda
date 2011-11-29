@@ -676,6 +676,15 @@
       return each(propertyValue, function(index, value, callback) {
         return (propertyValue.indexOf(value) < index) ? callback(true) : callback();
       }, callback);
+    },
+
+    /**
+     * DivisibleBy
+     */
+    'divisibleBy': function(property, propertyValue, validator, propertyValidators, callback) {
+      var isNumber = typeof propertyValue === 'number',
+          isDivisible = propertyValue % validator === 0;
+      return (isNumber && isDivisible) ? callback() : callback(true);
     }
 
   };
