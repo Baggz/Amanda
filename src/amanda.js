@@ -641,7 +641,7 @@
      */
     'maximum': function(property, propertyValue, validator, propertyValidators, callback) {
       if (typeof propertyValue === 'number') {
-        var condition = (propertyValidators.exclusiveMinimum) ? propertyValue <= validator : propertyValue < validator;
+        var condition = (propertyValidators.exclusiveMaximum) ? propertyValue <= validator : propertyValue < validator;
         return (condition) ? callback() : callback(true);
       } else {
         return callback(true);
