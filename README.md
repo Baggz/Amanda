@@ -16,7 +16,7 @@
 **Version**
 
 ```
-0.2.1
+0.2.2
 ```
 
 <a name="example"></a>
@@ -55,7 +55,7 @@ amanda.validate(data, schema, function(error) {
 });
 ```
 
-You can find more examples in the [/examples/]() folder.
+*You can find more examples in the [/examples/](https://github.com/Baggz/Amanda/tree/master/examples) folder.*
 
 <a name="download"></a>
 ## Download
@@ -243,10 +243,12 @@ amanda.getValidators(); // => { type: function() {}, ... }
 * [divisibleBy](#divisibleBy)
 * [uniqueItems](#uniqueItems)
 
+---
+
 <a name="required"></a>
 ### Required
 
-This attribute indicates if the instance must have a value, and not be undefined. This is `false` by default, making the instance optional.
+> This attribute indicates if the instance must have a value, and not be undefined. This is `false` by default, making the instance optional.
 
 **Examples**
 
@@ -261,10 +263,12 @@ var schema = {
 };
 ```
 
+---
+
 <a name="length"></a>
 ### Length
 
-When the instance value is a string, this defines the length of the string.
+> When the instance value is a string, this defines the length of the string.
 
 **Examples**
 
@@ -287,10 +291,12 @@ var schema = {
 };
 ```
 
+---
+
 <a name="type"></a>
 ### Type
 
-This attribute defines what the primitive type or the schema of the instance must be in order to validate. A string indicating a primitive or simple type. The following are acceptable string values:
+> This attribute defines what the primitive type or the schema of the instance must be in order to validate. A string indicating a primitive or simple type. The following are acceptable string values:
 
 * `object` Value must be an object.
 * `array` Value must be an array.
@@ -327,10 +333,12 @@ var schema = {
 };
 ```
 
+---
+
 <a name="format"></a>
 ### Format
 
-This property defines the type of data, content type, or microformat to be expected in the instance property values. The following formats are predefined:
+> This property defines the type of data, content type, or microformat to be expected in the instance property values. The following formats are predefined:
 
 * `alpha`
 * `alphanumeric`
@@ -356,10 +364,12 @@ var schema = {
 };
 ```
 
+---
+
 <a name="enum"></a>
 ### Enum
 
-This provides an enumeration of all possible values that are valid for the instance property. This must be an array, and each item in the array represents a possible value for the instance value.
+> This provides an enumeration of all possible values that are valid for the instance property. This must be an array, and each item in the array represents a possible value for the instance value.
 
 **Examples**
 
@@ -374,6 +384,8 @@ var schema = {
   }
 };
 ```
+
+---
 
 <a name="except"></a>
 ### Except
@@ -392,10 +404,12 @@ var schema = {
 };
 ```
 
+---
+
 <a name="minimum"></a>
 ### Minimum
 
-This attribute defines the minimum value of the instance property when the type of the instance value is a number.
+> This attribute defines the minimum value of the instance property when the type of the instance value is a number.
 
 **Examples**
 
@@ -406,10 +420,12 @@ var schema = {
 };
 ```
 
+---
+
 <a name="maximum"></a>
 ### Maximum
 
-This attribute defines the maximum value of the instance property when the type of the instance value is a number.
+> This attribute defines the maximum value of the instance property when the type of the instance value is a number.
 
 **Examples**
 
@@ -420,10 +436,12 @@ var schema = {
 };
 ```
 
+---
+
 <a name="pattern"></a>
 ### Pattern
 
-When the instance value is a string, this provides a regular expression that a string instance must match in order to be valid.
+> When the instance value is a string, this provides a regular expression that a string instance must match in order to be valid.
 
 **Examples**
 
@@ -434,10 +452,12 @@ var schema = {
 };
 ```
 
+---
+
 <a name="maxItems"></a>
 ### MaxItems
 
-This attribute defines the maximum number of values in an array when the array is the instance value.
+> This attribute defines the maximum number of values in an array when the array is the instance value.
 
 **Examples**
 
@@ -448,10 +468,12 @@ var schema = {
 };
 ```
 
+---
+
 <a name="minItems"></a>
 ### MinItems
 
-This attribute defines the minimum number of values in an array when the array is the instance value.
+> This attribute defines the minimum number of values in an array when the array is the instance value.
 
 **Examples**
 
@@ -462,10 +484,12 @@ var schema = {
 };
 ```
 
+---
+
 <a name="exclusiveMaximum"></a>
 ### ExclusiveMaximum
 
-This attribute indicates if the value of the instance (if the instance is a number) can not equal the number defined by the [maximum](#maximum) attribute.  This is false by default, meaning the instance value can be less then or equal to the maximum value.
+> This attribute indicates if the value of the instance (if the instance is a number) can not equal the number defined by the [maximum](#maximum) attribute.  This is false by default, meaning the instance value can be less then or equal to the maximum value.
 
 **Examples**
 
@@ -477,10 +501,12 @@ var schema = {
 };
 ```
 
-<a name="exclusiveMinimum"></a>
-## ExclusiveMinimum
+---
 
-This attribute indicates if the value of the instance (if the instance is a number) can not equal the number defined by the [minimum](#minimum) attribute. This is false by default, meaning the instance value can be greater then or equal to the minimum value.
+<a name="exclusiveMinimum"></a>
+### ExclusiveMinimum
+
+> This attribute indicates if the value of the instance (if the instance is a number) can not equal the number defined by the [minimum](#minimum) attribute. This is false by default, meaning the instance value can be greater then or equal to the minimum value.
 
 **Examples**
 
@@ -492,10 +518,12 @@ var schema = {
 };
 ```
 
-<a name="uniqueItems"></a>
-## UniqueItems
+---
 
-This attribute indicates that all items in an array instance must be unique (contains no two identical values).
+<a name="uniqueItems"></a>
+### UniqueItems
+
+> This attribute indicates that all items in an array instance must be unique (contains no two identical values).
 
 **Examples**
 
@@ -506,10 +534,12 @@ var schema = {
 };
 ```
 
+---
+
 <a name="divisibleBy"></a>
 ## DivisibleBy
 
-This attribute defines what value the number instance must be divisible by with no remainder (the result of the division must be an integer).
+> This attribute defines what value the number instance must be divisible by with no remainder (the result of the division must be an integer).
 
 **Examples**
 
@@ -519,6 +549,8 @@ var schema = {
   divisibleBy: 2
 };
 ```
+
+---
 
 <a name="error"></a>
 ## Error
