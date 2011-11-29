@@ -11,16 +11,18 @@ exports['Test #1'] = function(test) {
   var schema = {
     required: true,
     type: 'number',
-    min: 10
+    maximum: 10
   };
 
   [
-    2,
+    10,
+    11,
+    100,
     {},
     null,
     [],
     function() {},
-    'Hello!' 
+    'Hello!'
   ].forEach(function(input) {
     amanda.validate(input, schema, function(error) {
       count += 1;
@@ -28,17 +30,12 @@ exports['Test #1'] = function(test) {
     });
   });
 
-  amanda.validate(10, schema, function(error) {
+  amanda.validate(2, schema, function(error) {
     count += 1;
     test.equal(error, undefined);
   });
 
-  amanda.validate(12, schema, function(error) {
-    count += 1;
-    test.equal(error, undefined);
-  });
-
-  test.equal(count, 8);
+  test.equal(count, 9);
   test.done();
 
 };
