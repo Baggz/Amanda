@@ -305,7 +305,7 @@ var schema = {
   properties: {
     sex: {
       type: 'string',
-      values: ['female', 'male']
+      enum: ['female', 'male']
     }
   }
 };
