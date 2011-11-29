@@ -55,6 +55,8 @@ amanda.validate(data, schema, function(error) {
 });
 ```
 
+You can find more examples in the [/examples/]() folder.
+
 <a name="download"></a>
 ## Download
 
@@ -231,12 +233,22 @@ amanda.getValidators(); // => { type: function() {}, ... }
 * [type](#type)
 * [enum](#enum)
 * [except](#except)
-* [min](#min)
-* [max](#max)
+* [minimum](#minimum)
+* [maximum](#maximum)
 * [pattern](#pattern)
+* [maxItems](#maxItems)
+* [minItems](#minItems)
+* [exclusiveMinimum](#exclusiveMinimum)
+* [exclusiveMaximum](#exclusiveMaximum)
+* [divisibleBy](#divisibleBy)
+* [uniqueItems](#uniqueItems)
 
 <a name="required"></a>
 ### Required
+
+This attribute indicates if the instance must have a value, and not be undefined. This is `false` by default, making the instance optional.
+
+**Examples**
 
 ```javascript
 var schema = {
@@ -252,7 +264,9 @@ var schema = {
 <a name="length"></a>
 ### Length
 
-**Example**
+When the instance value is a string, this defines the length of the string.
+
+**Examples**
 
 ```javascript
 var schema = {
@@ -266,18 +280,57 @@ var schema = {
 };
 ```
 
+```javascript
+var schema = {
+  type: 'string',
+  length: 25
+};
+```
+
 <a name="type"></a>
 ### Type
 
-* `object`
-* `array`
-* `string`
-* `number`
-* `function`
-* `boolean`
+This attribute defines what the primitive type or the schema of the instance must be in order to validate. A string indicating a primitive or simple type. The following are acceptable string values:
+
+* `object` Value must be an object.
+* `array` Value must be an array.
+* `string` Value must be a string.
+* `number` Value must be a number, floating point numbers are allowed.
+* `function` Value must be a function.
+* `boolean` Value must be a boolean.
+
+**Examples**
+
+```javascript
+var schema = {
+  type: 'object',
+  properties: {
+    username: {
+      // ...
+    }
+  }
+};
+```
+
+```javascript
+var schema = {
+  type: 'array',
+  items: {
+    // ...
+  }
+};
+```
+
+```javascript
+var schema = {
+  type: 'string'
+};
+```
 
 <a name="format"></a>
 ### Format
+
+This property defines the type of data, content type, or microformat to be expected in the instance property values. The following formats are predefined:
 
 * `alpha`
 * `alphanumeric`
@@ -294,10 +347,21 @@ var schema = {
 * `regexp`
 * `unsignedInt`
 
+**Examples**
+
+```javascript
+var schema = {
+  type: 'string',
+  format: 'email'
+};
+```
+
 <a name="enum"></a>
 ### Enum
 
-**Example**
+This provides an enumeration of all possible values that are valid for the instance property. This must be an array, and each item in the array represents a possible value for the instance value.
+
+**Examples**
 
 ```javascript
 var schema = {
@@ -314,7 +378,7 @@ var schema = {
 <a name="except"></a>
 ### Except
 
-**Example**
+**Examples**
 
 ```javascript
 var schema = {
@@ -328,34 +392,40 @@ var schema = {
 };
 ```
 
-<a name="min"></a>
-### Min
+<a name="minimum"></a>
+### Minimum
 
-**Example**
+This attribute defines the minimum value of the instance property when the type of the instance value is a number.
+
+**Examples**
 
 ```javascript
 var schema = {
   type: 'number',
-  min: 100
+  minimum: 100
 };
 ```
 
-<a name="max"></a>
-### Max
+<a name="maximum"></a>
+### Maximum
 
-**Example**
+This attribute defines the maximum value of the instance property when the type of the instance value is a number.
+
+**Examples**
 
 ```javascript
 var schema = {
   type: 'number',
-  max: 100
+  maximum: 100
 };
 ```
 
 <a name="pattern"></a>
 ### Pattern
 
-**Example**
+When the instance value is a string, this provides a regular expression that a string instance must match in order to be valid.
+
+**Examples**
 
 ```javascript
 var schema = {
@@ -364,8 +434,104 @@ var schema = {
 };
 ```
 
+<a name="maxItems"></a>
+### MaxItems
+
+This attribute defines the maximum number of values in an array when the array is the instance value.
+
+**Examples**
+
+```javascript
+var schema = {
+  type: 'array',
+  maxItems: 10
+};
+```
+
+<a name="minItems"></a>
+### MinItems
+
+This attribute defines the minimum number of values in an array when the array is the instance value.
+
+**Examples**
+
+```javascript
+var schema = {
+  type: 'array',
+  minItems: 10
+};
+```
+
+<a name="exclusiveMaximum"></a>
+### ExclusiveMaximum
+
+This attribute indicates if the value of the instance (if the instance is a number) can not equal the number defined by the [maximum](#maximum) attribute.  This is false by default, meaning the instance value can be less then or equal to the maximum value.
+
+**Examples**
+
+```javascript
+var schema = {
+  type: 'number',
+  maximum: 100,
+  exclusiveMaximum: true
+};
+```
+
+<a name="exclusiveMinimum"></a>
+## ExclusiveMinimum
+
+This attribute indicates if the value of the instance (if the instance is a number) can not equal the number defined by the [minimum](#minimum) attribute. This is false by default, meaning the instance value can be greater then or equal to the minimum value.
+
+**Examples**
+
+```javascript
+var schema = {
+  type: 'number',
+  minimum: 100,
+  exclusiveMinimum: true
+};
+```
+
+<a name="uniqueItems"></a>
+## UniqueItems
+
+This attribute indicates that all items in an array instance must be unique (contains no two identical values).
+
+**Examples**
+
+```javascript
+var schema = {
+  type: 'array',
+  uniqueItems: true
+};
+```
+
+<a name="divisibleBy"></a>
+## DivisibleBy
+
+This attribute defines what value the number instance must be divisible by with no remainder (the result of the division must be an integer).
+
+**Examples**
+
+```javascript
+var schema = {
+  type: 'number',
+  divisibleBy: 2
+};
+```
+
 <a name="error"></a>
 ## Error
+
+**Examples**
+
+```javascript
+var schema = {
+  type: 'number',
+  maximum: 100,
+  exclusiveMaximum: true
+};
+```
 
 **Methods**
 
@@ -439,7 +605,7 @@ $ npm test
 
 The following are the major contributors of Amanda (in alphabetical order).
 
-* František Hába ([@Baggz](https://github.com/Baggz))
+* František Hába ([@Baggz](https://github.com/Baggz)) <hello@frantisekhaba.com>
 
 <a name="license"></a>
 # License
