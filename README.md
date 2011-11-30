@@ -1,5 +1,7 @@
 # Amanda
 
+[![Build Status](https://secure.travis-ci.org/Baggz/Amanda.png)](http://travis-ci.org/Baggz/Amanda)
+
 [Amanda](https://github.com/Baggz/Amanda) validates data against JSON Schema. 
 
 #### Features
