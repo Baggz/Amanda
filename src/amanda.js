@@ -488,7 +488,7 @@
          * }
          */
         if (Object.prototype.toString.call(validator) === '[object Array]') {
-          var noError = options.some(function(type) {
+          var noError = validator.some(function(type) {
             return types[type](propertyValue);
           });
           return (noError) ? callback() : callback('‘' + property + '’ must be ' + validator.join(' or '));
