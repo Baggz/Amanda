@@ -462,6 +462,9 @@
         },
         'array': function(input) {
           return Object.prototype.toString.call(input) === '[object Array]';
+        },
+        'integer': function(input) {
+          return (typeof input === 'number') && input % 1 === 0;
         }
       };
 
