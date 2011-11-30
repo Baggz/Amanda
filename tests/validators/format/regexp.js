@@ -1,6 +1,5 @@
 // Load dependencies
-var amanda = require('../../../src/amanda.js'),
-    async = require('async');
+var amanda = require('../../../src/amanda.js');
 
 /**
  * Test #1
