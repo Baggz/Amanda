@@ -462,6 +462,9 @@
         },
         'array': function(input) {
           return Object.prototype.toString.call(input) === '[object Array]';
+        },
+        'integer': function(input) {
+          return (typeof input === 'number') && input % 1 === 0;
         }
       };
 
@@ -485,7 +488,7 @@
          * }
          */
         if (Object.prototype.toString.call(validator) === '[object Array]') {
-          var noError = options.some(function(type) {
+          var noError = validator.some(function(type) {
             return types[type](propertyValue);
           });
           return (noError) ? callback() : callback('‘' + property + '’ must be ' + validator.join(' or '));
@@ -629,7 +632,7 @@
      */
     'minimum': function(property, propertyValue, validator, propertyValidators, callback) {
       if (typeof propertyValue === 'number') {
-        var condition = (propertyValidators.exclusiveMinimum) ? propertyValue >= validator : propertyValue > validator;
+        var condition = (propertyValidators.exclusiveMinimum) ? propertyValue > validator : propertyValue >= validator;
         return (condition) ? callback() : callback(true);
       } else {
         return callback(true);
@@ -641,7 +644,7 @@
      */
     'maximum': function(property, propertyValue, validator, propertyValidators, callback) {
       if (typeof propertyValue === 'number') {
-        var condition = (propertyValidators.exclusiveMaximum) ? propertyValue <= validator : propertyValue < validator;
+        var condition = (propertyValidators.exclusiveMaximum) ? propertyValue < validator : propertyValue <= validator;
         return (condition) ? callback() : callback(true);
       } else {
         return callback(true);
