@@ -17,6 +17,7 @@ exports['Test #1'] = function(test) {
 
   [
     2,
+    10,
     {},
     null,
     [],
@@ -27,11 +28,6 @@ exports['Test #1'] = function(test) {
       count += 1;
       test.ok(error);
     });
-  });
-
-  amanda.validate(10, schema, function(error) {
-    count += 1;
-    test.equal(error, undefined);
   });
 
   amanda.validate(12, schema, function(error) {

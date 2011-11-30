@@ -560,27 +560,7 @@
       };
 
       return function(property, propertyValue, validator, propertyValidators, callback) {
-
-        /**
-         * {
-         *   type: ['string', 'number']
-         * }
-         */
-        if (Object.prototype.toString.call(validator) === '[object Array]') {
-          var noError = options.some(function(format) {
-            return formats[format](propertyValue);
-          });
-          return (noError) ? callback() : callback(true);
-
-        /**
-         * {
-         *   type: 'string'
-         * }
-         */
-        } else {
-          return (formats[validator](propertyValue)) ? callback() : callback(true);
-        }
-
+        return (formats[validator](propertyValue)) ? callback() : callback(true);
       };
 
     }()),
