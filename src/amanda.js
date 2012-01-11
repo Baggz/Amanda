@@ -444,7 +444,7 @@
      * Required
      */
     'required': function(property, propertyValue, validator, propertyValidators, callback) {
-      if (validator && !propertyValue) {
+      if (validator && propertyValue === undefined) {
         return callback('‘' + property + '’ is required');
       } else {
         return callback();
