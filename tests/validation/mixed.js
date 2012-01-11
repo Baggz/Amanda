@@ -961,3 +961,41 @@ exports['Test #5'] = function(test) {
   test.done();
 
 };
+
+/**
+ * Test #6
+ * Makes sure that numbers of value 0 can have the required flag
+ */
+exports['Test #6'] = function(test) {
+	var schema = {
+		type: 'object',
+		properties: {
+			number: {
+				type: 'number',
+				required: true
+			}
+		}
+	};
+
+	[
+		123,
+		-123,
+		0,
+		-0
+	].forEach(function(input) {
+		amanda.validate(
+			{
+				number: input
+			}, 
+			schema, 
+			{ 
+				singleError: false 
+			},
+			function(error) {
+				test.ok(error === undefined);
+			}
+		);
+	});
+	
+	test.done();
+};
