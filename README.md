@@ -8,27 +8,27 @@
 * [Download](#download)
 * [Usage](#usage)
 * [Documentation](#documentation)
- * [Methods](#methods)
-  * validate
-  * addValidator
+  * [Methods](#methods)
+    * validate
+    * addValidator
  * [Object]()
-  * Schema
-   * Validators
-    * required
-    * length
-    * format
-    * type
-    * enum
-    * except
-    * minimum
-    * maximum
-    * pattern
-    * maxItems
-    * minItems
-    * exclusiveMinimum
-    * exclusiveMaximum
-    * divisibleBy
-    * uniqueItems
+   * Schema
+     * Validators
+       * required
+       * length
+       * format
+       * type
+       * enum
+       * except
+       * minimum
+       * maximum
+       * pattern
+       * maxItems
+       * minItems
+       * exclusiveMinimum
+       * exclusiveMaximum
+       * divisibleBy
+       * uniqueItems
   * Error
 
 * [Tests](#tests)
