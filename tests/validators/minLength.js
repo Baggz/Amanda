@@ -14,13 +14,12 @@ exports['Test #1'] = function(test) {
   var schema = {
     required: true,
     type: 'string',
-    length: 2
+    minLength: 2
   };
 
   [
-    'a',
-    'abc',
-    'abcd'
+    '',
+    'a'
   ].forEach(function(input) {
     amanda.validate(input, schema, function(error) {
       count += 1;
@@ -28,12 +27,21 @@ exports['Test #1'] = function(test) {
     });
   });
 
-  amanda.validate('ab', schema, function(error) {
-    count += 1;
-    test.equal(error, undefined);
+  [
+    'ab',
+    'abc',
+    'abcd',
+    'abcde',
+    'abcdef',
+    'abcdefg',
+  ].forEach(function(input) {
+    amanda.validate(input, schema, function(error) {
+      count += 1;
+      test.equal(error, undefined);
+    });
   });
 
-  test.equal(count, 4);
+  test.equal(count, 8);
   test.done();
 
 };
