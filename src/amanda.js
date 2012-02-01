@@ -254,7 +254,7 @@
                                          .replace(/{{validator}}/g, propertyValidators[validatorName])
                                          .replace(/\s+/g, ' ');
             } else {
-              errorMessage = '';
+              errorMessage = error;
             }
 
             // Add a new error
@@ -466,7 +466,7 @@
    * @param {string} property
    */
   Validation.prototype.getProperty = function(source, property) {
-    return (!source) ? undefined : source[property];s
+    return (!source) ? undefined : source[property];
   };
 
   /**
