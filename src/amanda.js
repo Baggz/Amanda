@@ -234,21 +234,25 @@
               validatorValue: propertyValidators[validatorName],
               message: error
             });
-            return (self.singleError) ? callback(true) : callback();
+            if (self.singleError) return callback(true);
           }
 
-          return callback();
+          if (callback) return callback();
 
         });
       } else {
-        return callback();
+        if (callback) return callback();
       }
     };
 
     if (propertyValidators.required !== true && typeof propertyValue === 'undefined') {
       return callback();
     } else {
-      return each(self.validators, iterator, callback);
+      if (self.singleError)
+        return each(self.validators, iterator, callback);
+      else
+        each(self.validators, iterator);
+        return callback()
     }
 
   };
