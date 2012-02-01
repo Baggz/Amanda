@@ -2,12 +2,43 @@
 
 [![Build Status](https://secure.travis-ci.org/Baggz/Amanda.png)](http://travis-ci.org/Baggz/Amanda)
 
+### Contents
+
+* [Example](#example)
+* [Download](#download)
+* [Usage](#usage)
+* [Documentation](#documentation)
+ * [Methods](#methods)
+  * validate
+  * addValidator
+ * [Object]()
+  * Schema
+   * Validators
+    * required
+    * length
+    * format
+    * type
+    * enum
+    * except
+    * minimum
+    * maximum
+    * pattern
+    * maxItems
+    * minItems
+    * exclusiveMinimum
+    * exclusiveMaximum
+    * divisibleBy
+    * uniqueItems
+  * Error
+
+* [Tests](#tests)
+* [License](#license)
+
 [Amanda](https://github.com/Baggz/Amanda) validates data against JSON Schema. 
 
 #### Features
 
 * **Extendable**, you can create **your own validators**
-* Fully **asynchronous**
 * Can be used with **Node.js** and **in the browser**
 * Amanda has **no dependencies**
 * **AMD compatible**, you can load it via [RequireJS](https://github.com/jrburke/requirejs)
@@ -15,14 +46,8 @@
 * Fully **documented**
 * Tested
 
-**Version**
-
-```
-0.2.2
-```
-
 <a name="example"></a>
-## Example
+# Example
 
 ```javascript
 var schema = {
@@ -60,7 +85,7 @@ amanda.validate(data, schema, function(error) {
 *You can find more examples in the [/examples/](https://github.com/Baggz/Amanda/tree/master/examples) folder.*
 
 <a name="download"></a>
-## Download
+# Download
 
 To install **Amanda**, use [NPM](http://npmjs.org/).
 
@@ -75,6 +100,39 @@ Releases are available for download from GitHub.
 | `amanda.js` | *uncompressed, with comments* | 15.06 KB (3.42 KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/src/amanda.js) |
 | `amanda.min.js` | *compressed, without comments* | 6.2 KB (2.09 KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/dist/amanda.min.js) |
 
+<a name="usage"></a>
+# Usage
+
+## Browser
+
+```
+<script src="robb.js"></script>
+```
+
+## Node.js, RingoJS, Narwhal
+
+```javascript
+var robb = require('robb');
+```
+
+## RequireJS
+
+```javascript
+// Configuration options, the path should not include the .js extension
+require.config({
+  paths: {
+    "robb": "path/to/robb"
+  }
+});
+
+// Load Robb
+require(['robb'], function(robb) {
+
+  // Do something...
+
+});
+```
+
 <a name="documentation"></a>
 # Documentation
 
@@ -82,13 +140,12 @@ Releases are available for download from GitHub.
 
 * [validate](#validate)
 * [addValidator](#addValidator)
-* [getVersion](#getVersion)
-* [getValidators](#getValidators)
 
 **Objects**
 
 * [Schema](#schema)
 * [Error](#error)
+* [Options](#options)
 
 <a name="validate"></a>
 ## Validate
@@ -99,7 +156,7 @@ Releases are available for download from GitHub.
 
 * `data`
 * `schema` The Schema object, see [Schema](#schema) below.
-* `options` If you set `options.singleError` to `false`, validation continue after first error occurred. By default `options.singleError` is set to `true`.
+* `options` The Options object, see [Options](#options) below.
 * `callback` The `callback` gets one argument which is an Error object (see [Error](#error) below for more information).
 
 **Example**
@@ -165,14 +222,18 @@ This method allows you to add a custom validator.
 **Example**
 
 ```javascript
-
+/**
+ * EventValidator
+ *
+ *
+ */
 var evenValidator = function(property, propertyValue, validator, propertyValidators, callback) {
   
   // If ‘even: true’
   if (validator) {
     
     if (typeof propertyValue === 'number' && (propertyValue % 2) === 0) {
-      // No problem, the number is event
+      // The number is even
       callback();
     } else {
       // The number is not even
@@ -202,35 +263,14 @@ var schema = {
 
 ```
 
-<a name="getVersion"></a>
-## GetVersion
-
-### getVersion()
-
-**Example**
-
-```javascript
-amanda.getVersion(); // => '0.2.0'
-```
-
-<a name="getValidators"></a>
-## GetValidators
-
-### getValidators()
-
-**Example**
-
-```javascript
-amanda.getValidators(); // => { type: function() {}, ... }
-```
-
 <a name="schema"></a>
 ## Schema
 
 **Validators**
 
 * [required](#required)
-* [length](#length)
+* [minLength](#minLength)
+* [maxLength](#maxLength)
 * [format](#format)
 * [type](#type)
 * [enum](#enum)
@@ -267,30 +307,34 @@ var schema = {
 
 ---
 
-<a name="length"></a>
-### Length
+<a name="minLength"></a>
+### MinLength
 
-> When the instance value is a string, this defines the length of the string.
+>  When the instance value is a string, this defines the minimum length of the string.
 
-**Examples**
+**Example**
 
 ```javascript
-var schema = {
-  type: 'object',
-  properties: {
-    username: {
-      type: 'string',
-      length: [2, 45]
-    }
-  }
-};
+{
+  type: 'string',
+  minLength: 10
+}
 ```
 
+---
+
+<a name="maxLength"></a>
+### MaxLength
+
+> When the instance value is a string, this defines the maximum length of the string.
+
+**Example**
+
 ```javascript
-var schema = {
+{
   type: 'string',
-  length: 25
-};
+  maxLength: 45
+}
 ```
 
 ---
@@ -300,12 +344,14 @@ var schema = {
 
 > This attribute defines what the primitive type or the schema of the instance must be in order to validate. A string indicating a primitive or simple type. The following are acceptable string values:
 
-* `object` Value must be an object.
-* `array` Value must be an array.
 * `string` Value must be a string.
 * `number` Value must be a number, floating point numbers are allowed.
-* `function` Value must be a function.
+* `integer` Value MUST be an integer, no floating point numbers are allowed. This is a subset of the number type.
 * `boolean` Value must be a boolean.
+* `object` Value must be an object.
+* `array` Value must be an array.
+* `function` Value must be a function.
+
 
 **Examples**
 
@@ -539,7 +585,7 @@ var schema = {
 ---
 
 <a name="divisibleBy"></a>
-## DivisibleBy
+### DivisibleBy
 
 > This attribute defines what value the number instance must be divisible by with no remainder (the result of the division must be an integer).
 
@@ -557,16 +603,6 @@ var schema = {
 <a name="error"></a>
 ## Error
 
-**Examples**
-
-```javascript
-var schema = {
-  type: 'number',
-  maximum: 100,
-  exclusiveMaximum: true
-};
-```
-
 **Methods**
 
 * [getProperties](#getProperties)
@@ -575,15 +611,18 @@ var schema = {
 **Example**
 
 ```javascript
-{
-  '0': {
+[
+  {
     property: 'users[0].username'
     propertyValue: 123
     validator: 'type'
     validatorValue: 'string',
     message: 'Only string is allowed'
+  },
+  {
+    // ...
   }
-}
+]
 ```
 
 <a name="getProperties"></a>
@@ -602,6 +641,53 @@ error.getProperties(); // => ['users[0].username']
 
 ```javascript
 error.getMessages(); // => ['Only string is allowed']
+```
+
+<a name="options"></a>
+## Options
+
+**Properties**
+
+* [singleError](#singleError)
+* [messages](#messages)
+
+### singleError
+
+If you set `singleError` to `false`, validation continue after first error occurred. By default `singleError` is set to `true`.
+
+**Example**
+
+```javascript
+amanda.validate(data, schema, { singleError: false }, function(error) {
+
+  // Do something...
+
+});
+```
+
+### messages
+
+This property allows you to set custom messages.
+Your custom message here
+
+**Placeholders**
+
+* `{{property}}`
+* `{{propertyValue}}`
+
+**Example**
+
+```javascript
+var options = {
+  messages: {
+    type: 'Param {{property}} must be a {{propertyValue}}',
+    format: ''
+  }
+};
+
+amanda.validate(data, schema, options, function(error) {
+  
+});
 ```
 
 <a name="compatibility"></a>
@@ -623,12 +709,10 @@ From version **0.4.11**.
 | Opera | n/a | *Not tested* |
 | Internet Explorer | ✕ | *Not tested* |
 
-
-
 *Testing in progress...*
 
 <a name="tests"></a>
-# Running Tests
+# Tests
 
 ```
 $ npm test
@@ -640,6 +724,7 @@ $ npm test
 The following are the major contributors of Amanda (in alphabetical order).
 
 * František Hába ([@Baggz](https://github.com/Baggz)) <hello@frantisekhaba.com>
+* Iain Carsberg ([@iaincarsberg](https://github.com/iaincarsberg))
 
 <a name="license"></a>
 # License
