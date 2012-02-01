@@ -717,11 +717,11 @@ var options = {
   messages: {
 
     // Custom error message as a string (with placeholders)
-    format: 'Uh oh! Param ‘{{property}}’ must be am {{propertyValue}}.' // Uh oh! Param ‘email’ must be an email.
+    format: 'Uh oh! Param ‘{{property}}’ must be an {{propertyValue}}.' // Uh oh! Param ‘email’ must be an email.
 
     // Custom error message as a function
     enum: function(property, propertyValue, validator) {
-      return 'The ‘' + property + '’ property must be ' + validator.join(' or ') + '.'; // The ‘sex’ property must be male or female.
+      return 'Value of the ‘' + property + '’ property must be ' + validator.join(' or ') + '.'; // Value of the ‘sex’ property must be male or female.
     }
 
   }

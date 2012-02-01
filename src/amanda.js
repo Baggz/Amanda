@@ -723,7 +723,7 @@
 
     // Advanced
     'enum': function(property, propertyValue, validator) {
-      return 'The ‘' + property + '’ must be ' + validator.join(' or ') + '.';
+      return 'Value of the ‘' + property + '’ must be ' + validator.join(' or ') + '.';
     }
 
   };
