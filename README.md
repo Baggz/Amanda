@@ -738,7 +738,7 @@ amanda.validate(data, schema, options, function(error) {
 
 ### Node.js
 
-From version **0.4.11**.
+From version **0.6.0**.
 
 ### Browsers
 
