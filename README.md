@@ -681,6 +681,7 @@ error.getMessages(); // => ['Only string is allowed']
 * [singleError](#singleError)
 * [messages](#messages)
 
+<a name="singleError"></a>
 ### singleError [&uarr;](#options)
 
 If you set `singleError` to `false`, validation continue after first error occurred. By default `singleError` is set to `true`.
@@ -695,6 +696,7 @@ amanda.validate(data, schema, { singleError: false }, function(error) {
 });
 ```
 
+<a name="messages"></a>
 ### messages [&uarr;](#options)
 
 This property allows you to set custom error messages. If you want to use more ambitious messages, you can pass a function.
