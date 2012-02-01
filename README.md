@@ -29,6 +29,9 @@
 # Example [&uarr;](#contents)
 
 ```javascript
+/**
+ * Schema
+ */
 var schema = {
   type: 'object',
   properties: {
@@ -50,12 +53,16 @@ var schema = {
   }
 };
 
+/**
+ * Data
+ */
 var data = {
   name: 'Kenneth',
   email: 'kenneth@gmail.com',
   username: 'kenneth'
 };
 
+// Validate the data against the schema
 amanda.validate(data, schema, function(error) {
   // Do something...
 });
@@ -64,7 +71,7 @@ amanda.validate(data, schema, function(error) {
 *You can find more examples in the [/examples/](https://github.com/Baggz/Amanda/tree/master/examples) folder.*
 
 <a name="download"></a>
-# Download
+# Download [&uarr;](#contents)
 
 To install **Amanda**, use [NPM](http://npmjs.org/).
 
@@ -80,18 +87,18 @@ Releases are available for download from GitHub.
 | `amanda.min.js` | *compressed, without comments* | 6.2 KB (2.09 KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/dist/amanda.min.js) |
 
 <a name="usage"></a>
-# Usage
+# Usage [&uarr;](#contents)
 
 ## Browser
 
 ```
-<script src="robb.js"></script>
+<script src="amanda.js"></script>
 ```
 
 ## Node.js, RingoJS, Narwhal
 
 ```javascript
-var robb = require('robb');
+var amanda = require('amanda');
 ```
 
 ## RequireJS
@@ -100,12 +107,12 @@ var robb = require('robb');
 // Configuration options, the path should not include the .js extension
 require.config({
   paths: {
-    "robb": "path/to/robb"
+    "robb": "path/to/amanda"
   }
 });
 
-// Load Robb
-require(['robb'], function(robb) {
+// Load Amanda
+require(['amanda'], function(amanda) {
 
   // Do something...
 
@@ -113,7 +120,7 @@ require(['robb'], function(robb) {
 ```
 
 <a name="documentation"></a>
-# Documentation
+# Documentation [&uarr;](#contents)
 
 **Methods**
 
@@ -123,8 +130,28 @@ require(['robb'], function(robb) {
 **Objects**
 
 * [Schema](#schema)
+  * [required](#required)
+  * [minLength](#minLength)
+  * [maxLength](#maxLength)
+  * [format](#format)
+  * [type](#type)
+  * [enum](#enum)
+  * [except](#except)
+  * [minimum](#minimum)
+  * [maximum](#maximum)
+  * [pattern](#pattern)
+  * [maxItems](#maxItems)
+  * [minItems](#minItems)
+  * [exclusiveMinimum](#exclusiveMinimum)
+  * [exclusiveMaximum](#exclusiveMaximum)
+  * [divisibleBy](#divisibleBy)
+  * [uniqueItems](#uniqueItems)
 * [Error](#error)
+  * [getProperties](#getProperties)
+  * [getMessages](#getMessages)
 * [Options](#options)
+  * [singleError](#singleError)
+  * [messages](#messages)
 
 <a name="validate"></a>
 ## Validate
@@ -204,7 +231,11 @@ This method allows you to add a custom validator.
 /**
  * EventValidator
  *
- *
+ * @param {string} property
+ * @param {object|number|boolean|string} propertyValue
+ * @param {object} validator
+ * @param {object} propertyValidators
+ * @param {function} callback
  */
 var evenValidator = function(property, propertyValue, validator, propertyValidators, callback) {
   
@@ -229,6 +260,9 @@ var evenValidator = function(property, propertyValue, validator, propertyValidat
 // Add a new validator
 amanda.addValidator('even', evenValidator);
 
+/**
+ * Schema
+ */
 var schema = {
   type: 'object',
   properties: {
@@ -239,11 +273,10 @@ var schema = {
     }
   }
 }
-
 ```
 
 <a name="schema"></a>
-## Schema
+## Schema [&uarr;](#documentation)
 
 **Validators**
 
@@ -267,9 +300,9 @@ var schema = {
 ---
 
 <a name="required"></a>
-### Required
+### Required [&uarr;](#schema)
 
-> This attribute indicates if the instance must have a value, and not be undefined. This is `false` by default, making the instance optional.
+This attribute indicates if the instance must have a value, and not be undefined. This is `false` by default, making the instance optional.
 
 **Examples**
 
@@ -287,9 +320,9 @@ var schema = {
 ---
 
 <a name="minLength"></a>
-### MinLength
+### MinLength [&uarr;](#schema)
 
->  When the instance value is a string, this defines the minimum length of the string.
+When the instance value is a string, this defines the minimum length of the string.
 
 **Example**
 
@@ -303,9 +336,9 @@ var schema = {
 ---
 
 <a name="maxLength"></a>
-### MaxLength
+### MaxLength [&uarr;](#schema)
 
-> When the instance value is a string, this defines the maximum length of the string.
+When the instance value is a string, this defines the maximum length of the string.
 
 **Example**
 
@@ -319,9 +352,9 @@ var schema = {
 ---
 
 <a name="type"></a>
-### Type
+### Type [&uarr;](#schema) [&uarr;](#schema)
 
-> This attribute defines what the primitive type or the schema of the instance must be in order to validate. A string indicating a primitive or simple type. The following are acceptable string values:
+This attribute defines what the primitive type or the schema of the instance must be in order to validate. A string indicating a primitive or simple type. The following are acceptable string values:
 
 * `string` Value must be a string.
 * `number` Value must be a number, floating point numbers are allowed.
@@ -363,9 +396,9 @@ var schema = {
 ---
 
 <a name="format"></a>
-### Format
+### Format [&uarr;](#schema)
 
-> This property defines the type of data, content type, or microformat to be expected in the instance property values. The following formats are predefined:
+This property defines the type of data, content type, or microformat to be expected in the instance property values. The following formats are predefined:
 
 * `alpha`
 * `alphanumeric`
@@ -394,9 +427,9 @@ var schema = {
 ---
 
 <a name="enum"></a>
-### Enum
+### Enum [&uarr;](#schema)
 
-> This provides an enumeration of all possible values that are valid for the instance property. This must be an array, and each item in the array represents a possible value for the instance value.
+This provides an enumeration of all possible values that are valid for the instance property. This must be an array, and each item in the array represents a possible value for the instance value.
 
 **Examples**
 
@@ -415,7 +448,7 @@ var schema = {
 ---
 
 <a name="except"></a>
-### Except
+### Except [&uarr;](#schema)
 
 **Examples**
 
@@ -434,9 +467,9 @@ var schema = {
 ---
 
 <a name="minimum"></a>
-### Minimum
+### Minimum [&uarr;](#schema)
 
-> This attribute defines the minimum value of the instance property when the type of the instance value is a number.
+This attribute defines the minimum value of the instance property when the type of the instance value is a number.
 
 **Examples**
 
@@ -450,9 +483,9 @@ var schema = {
 ---
 
 <a name="maximum"></a>
-### Maximum
+### Maximum [&uarr;](#schema)
 
-> This attribute defines the maximum value of the instance property when the type of the instance value is a number.
+This attribute defines the maximum value of the instance property when the type of the instance value is a number.
 
 **Examples**
 
@@ -466,9 +499,9 @@ var schema = {
 ---
 
 <a name="pattern"></a>
-### Pattern
+### Pattern [&uarr;](#schema)
 
-> When the instance value is a string, this provides a regular expression that a string instance must match in order to be valid.
+When the instance value is a string, this provides a regular expression that a string instance must match in order to be valid.
 
 **Examples**
 
@@ -482,9 +515,9 @@ var schema = {
 ---
 
 <a name="maxItems"></a>
-### MaxItems
+### MaxItems [&uarr;](#schema)
 
-> This attribute defines the maximum number of values in an array when the array is the instance value.
+This attribute defines the maximum number of values in an array when the array is the instance value.
 
 **Examples**
 
@@ -498,9 +531,9 @@ var schema = {
 ---
 
 <a name="minItems"></a>
-### MinItems
+### MinItems [&uarr;](#schema)
 
-> This attribute defines the minimum number of values in an array when the array is the instance value.
+This attribute defines the minimum number of values in an array when the array is the instance value.
 
 **Examples**
 
@@ -514,9 +547,9 @@ var schema = {
 ---
 
 <a name="exclusiveMaximum"></a>
-### ExclusiveMaximum
+### ExclusiveMaximum [&uarr;](#schema)
 
-> This attribute indicates if the value of the instance (if the instance is a number) can not equal the number defined by the [maximum](#maximum) attribute.  This is false by default, meaning the instance value can be less then or equal to the maximum value.
+This attribute indicates if the value of the instance (if the instance is a number) can not equal the number defined by the [maximum](#maximum) attribute.  This is false by default, meaning the instance value can be less then or equal to the maximum value.
 
 **Examples**
 
@@ -531,9 +564,9 @@ var schema = {
 ---
 
 <a name="exclusiveMinimum"></a>
-### ExclusiveMinimum
+### ExclusiveMinimum [&uarr;](#schema)
 
-> This attribute indicates if the value of the instance (if the instance is a number) can not equal the number defined by the [minimum](#minimum) attribute. This is false by default, meaning the instance value can be greater then or equal to the minimum value.
+This attribute indicates if the value of the instance (if the instance is a number) can not equal the number defined by the [minimum](#minimum) attribute. This is false by default, meaning the instance value can be greater then or equal to the minimum value.
 
 **Examples**
 
@@ -548,9 +581,9 @@ var schema = {
 ---
 
 <a name="uniqueItems"></a>
-### UniqueItems
+### UniqueItems [&uarr;](#schema)
 
-> This attribute indicates that all items in an array instance must be unique (contains no two identical values).
+This attribute indicates that all items in an array instance must be unique (contains no two identical values).
 
 **Examples**
 
@@ -564,9 +597,9 @@ var schema = {
 ---
 
 <a name="divisibleBy"></a>
-### DivisibleBy
+### DivisibleBy [&uarr;](#schema)
 
-> This attribute defines what value the number instance must be divisible by with no remainder (the result of the division must be an integer).
+This attribute defines what value the number instance must be divisible by with no remainder (the result of the division must be an integer).
 
 **Examples**
 
@@ -580,7 +613,7 @@ var schema = {
 ---
 
 <a name="error"></a>
-## Error
+## Error [&uarr;](#documentation)
 
 **Methods**
 
@@ -605,7 +638,7 @@ var schema = {
 ```
 
 <a name="getProperties"></a>
-### getProperties
+### getProperties [&uarr;](#error)
 
 **Example**
 
@@ -614,7 +647,7 @@ error.getProperties(); // => ['users[0].username']
 ```
 
 <a name="getMessages"></a>
-### getMessages
+### getMessages [&uarr;](#error)
 
 **Example**
 
@@ -623,14 +656,14 @@ error.getMessages(); // => ['Only string is allowed']
 ```
 
 <a name="options"></a>
-## Options
+## Options [&uarr;](#documentation)
 
 **Properties**
 
 * [singleError](#singleError)
 * [messages](#messages)
 
-### singleError
+### singleError [&uarr;](#options)
 
 If you set `singleError` to `false`, validation continue after first error occurred. By default `singleError` is set to `true`.
 
@@ -644,10 +677,9 @@ amanda.validate(data, schema, { singleError: false }, function(error) {
 });
 ```
 
-### messages
+### messages [&uarr;](#options)
 
-This property allows you to set custom messages.
-Your custom message here
+This property allows you to set custom error messages. If you want to use more ambitious messages, you can pass a function.
 
 **Placeholders**
 
@@ -657,20 +689,31 @@ Your custom message here
 **Example**
 
 ```javascript
+/**
+ * Options
+ */
 var options = {
   messages: {
-    type: 'Param {{property}} must be a {{propertyValue}}',
-    format: ''
+
+    // Custom error message as a string (with placeholders)
+    format: 'Uh oh! Param ‘{{property}}’ must be am {{propertyValue}}.' // Uh oh! Param ‘email’ must be an email.
+
+    // Custom error message as a function
+    enum: function(property, propertyValue) {
+      return 'The ‘' + property + '’ property must be ' + validator.join(' or ') + '.'; // The ‘sex’ property must be male or female.
+    }
+
   }
 };
 
+// Validate the data agains the schema and use custom error messages
 amanda.validate(data, schema, options, function(error) {
-  
+  // Do something...
 });
 ```
 
 <a name="compatibility"></a>
-# Compatibility
+# Compatibility [&uarr;](#contents)
 
 ### Node.js
 
@@ -691,14 +734,14 @@ From version **0.4.11**.
 *Testing in progress...*
 
 <a name="tests"></a>
-# Tests
+# Tests [&uarr;](#tests)
 
 ```
 $ npm test
 ```
 
 <a name="contributors"></a>
-# Contributors
+# Contributors [&uarr;](#contents)
 
 The following are the major contributors of Amanda (in alphabetical order).
 
@@ -706,7 +749,7 @@ The following are the major contributors of Amanda (in alphabetical order).
 * Iain Carsberg ([@iaincarsberg](https://github.com/iaincarsberg))
 
 <a name="license"></a>
-# License
+# License [&uarr;](#contents)
 
 (The MIT License)
 
