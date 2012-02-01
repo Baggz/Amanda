@@ -1,36 +1,15 @@
+<a name="amanda"></a>
 # Amanda
 
 [![Build Status](https://secure.travis-ci.org/Baggz/Amanda.png)](http://travis-ci.org/Baggz/Amanda)
 
+<a name="contents"></a>
 ### Contents
 
 * [Example](#example)
 * [Download](#download)
 * [Usage](#usage)
 * [Documentation](#documentation)
-  * [Methods](#methods)
-    * validate
-    * addValidator
- * [Object]()
-   * Schema
-     * Validators
-       * required
-       * length
-       * format
-       * type
-       * enum
-       * except
-       * minimum
-       * maximum
-       * pattern
-       * maxItems
-       * minItems
-       * exclusiveMinimum
-       * exclusiveMaximum
-       * divisibleBy
-       * uniqueItems
-  * Error
-
 * [Tests](#tests)
 * [License](#license)
 
@@ -47,7 +26,7 @@
 * Tested
 
 <a name="example"></a>
-# Example
+# Example [&uarr;](#contents)
 
 ```javascript
 var schema = {
