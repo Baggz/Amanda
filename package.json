@@ -47,7 +47,7 @@
   ],
 
   "scripts": {
-    "test" : "nodeunit tests/addValidator.js tests/errorObject.js tests/validation/* tests/validators/*"
+    "test" : "nodeunit tests/addValidator.js tests/errorMessages.js tests/errorObject.js tests/validation/* tests/validators/*"
   }
 
 }

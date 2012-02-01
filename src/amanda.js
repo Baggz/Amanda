@@ -46,6 +46,19 @@
   };
 
   /**
+   * Merge
+   *
+   * @param {object} obj1
+   * @param {object} obj2
+   */
+  var merge = function(obj1, obj2) {
+    for (var key in obj2) {
+      if (obj2.hasOwnProperty(key) && !obj1.hasOwnProperty(key)) obj1[key] = obj2[key];
+    }
+    return obj1;
+  };
+
+  /**
    * Each
    *
    * Applies an iterator function to each item in an array or an object, in series.
@@ -180,12 +193,12 @@
   });
 
   /**
-   * Validator
+   * Validation
    *
    * @constructor
    * @param {object} options
    */
-  var Validator = function(options) {
+  var Validation = function(options) {
 
     var self = this;
 
@@ -195,7 +208,8 @@
     // Options
     each([
       'singleError',
-      'validators'
+      'validators',
+      'messages'
     ], function(key, value) {
       self[value] = options[value];
     });
@@ -203,7 +217,7 @@
   };
 
   /**
-   * Validator.validateProperty
+   * Validation.validateProperty
    *
    * @param {string} property
    * @param {object} propertyValidators
@@ -211,7 +225,7 @@
    * @param {boolean} singleError
    * @param {function} callback
    */
-  Validator.prototype.validateProperty = function(property, propertyValue, propertyValidators, callback) {
+  Validation.prototype.validateProperty = function(property, propertyValue, propertyValidators, callback) {
 
     // Reference na this
     var self = this;
@@ -226,15 +240,34 @@
       if (propertyValidators[validatorName]) {
         validatorFn(property, propertyValue, propertyValidators[validatorName], propertyValidators, function(error) {
 
+          // If an error occurred
           if (error) {
+
+            // Get an error message
+            var errorMessage = self.messages[validatorName];
+
+            if (typeof errorMessage === 'function') {
+              errorMessage = errorMessage(property, propertyValue, propertyValidators[validatorName]);
+            } else if (typeof errorMessage === 'string') {
+              errorMessage = errorMessage.replace(/{{property}}/g, property)
+                                         .replace(/{{propertyValue}}/g, propertyValue)
+                                         .replace(/{{validator}}/g, propertyValidators[validatorName])
+                                         .replace(/\s+/g, ' ');
+            } else {
+              errorMessage = '';
+            }
+
+            // Add a new error
             self.Errors.addError({
               property: property,
               propertyValue: propertyValue,
               validator: validatorName,
               validatorValue: propertyValidators[validatorName],
-              message: error
+              message: errorMessage
             });
-            return (self.singleError) ? callback(true) : callback();
+
+            return callback(self.singleError ? true : null);
+
           }
 
           return callback();
@@ -254,14 +287,14 @@
   };
 
   /**
-   * Validator.validate
+   * Validation.validate
    *
    * @param {object} instance
    * @param {object} schema
    * @param {boolean} singleError
    * @param {function} callback
    */
-  Validator.prototype.validate = function(instance, schema, callback) {
+  Validation.prototype.validate = function(instance, schema, callback) {
 
     var self = this;
 
@@ -272,14 +305,14 @@
   };
 
   /**
-   * Validator.validateSchema
+   * Validation.validateSchema
    *
    * @param {object} instance
    * @param {object} schema
    * @param {boolean} singleError
    * @param {function} callback
    */
-  Validator.prototype.validateSchema = function(instance, schema, path, callback) {
+  Validation.prototype.validateSchema = function(instance, schema, path, callback) {
 
     var self = this;
 
@@ -318,7 +351,12 @@
             var propertyValue = self.getProperty(instance, property);
 
             // Compose the property path
-            var propertyPath = (path.length === 0) ? property : path + '.' + property;
+            var propertyName = (property.indexOf(' ') !== -1) ? '[\'' + property + '\']' : '.' + property,
+                propertyPath = (path.length === 0) ? property : path + propertyName;
+            
+            
+
+            
 
             /**
              * {
@@ -427,12 +465,8 @@
    * @param {object} source
    * @param {string} property
    */
-  Validator.prototype.getProperty = function(source, property) {
-    if (!source) {
-      return undefined;
-    } else {
-      return source[property];
-    }
+  Validation.prototype.getProperty = function(source, property) {
+    return (!source) ? undefined : source[property];s
   };
 
   /**
@@ -445,7 +479,7 @@
      */
     'required': function(property, propertyValue, validator, propertyValidators, callback) {
       if (validator && !propertyValue) {
-        return callback('‘' + property + '’ is required');
+        return callback(true);
       } else {
         return callback();
       }
@@ -491,7 +525,7 @@
           var noError = validator.some(function(type) {
             return types[type](propertyValue);
           });
-          return (noError) ? callback() : callback('‘' + property + '’ must be ' + validator.join(' or '));
+          return (noError) ? callback() : callback(true);
 
         /**
          * {
@@ -499,7 +533,7 @@
          * }
          */
         } else {
-          return (types[validator](propertyValue)) ? callback() : callback('‘' + property + '’ must be ' + validator);
+          return (types[validator](propertyValue)) ? callback() : callback(true);
         }
 
       };
@@ -566,31 +600,24 @@
     }()),
 
     /**
+     * MinLength
+     */
+    'minLength': function(property, propertyValue, validator, propertyValidators, callback) {
+      return (typeof propertyValue === 'string' && propertyValue.length >= validator) ? callback() : callback(true);
+    },
+
+    /**
+     * MaxLength
+     */
+    'maxLength': function(property, propertyValue, validator, propertyValidators, callback) {
+      return (typeof propertyValue === 'string' && propertyValue.length <= validator) ? callback() : callback(true);
+    },
+
+    /**
      * Length
      */
     'length': function(property, propertyValue, validator, propertyValidators, callback) {
-    
-      // Check the length only if the type of ‘paramValue’ is string
-      if (typeof propertyValue === 'string') {
-
-
-        // If the length is specified as an array (for instance ‘[2, 45]’)
-        if (Array.isArray(validator) && (propertyValue.length < validator[0] || propertyValue.length > validator[1])) {
-          return callback(true);
-
-        // If the length is specified as a string (for instance ‘2’)
-        } else if (typeof validator === 'number' && propertyValue.length !== validator) {
-          return callback(true);
-
-        // If the length is specified in a different way
-        } else {
-          return callback();
-        }
-
-      } else {
-        return callback(); 
-      }
-
+      return (typeof propertyValue === 'string' && propertyValue.length === validator) ? callback() : callback(true);
     },
 
     /**
@@ -668,6 +695,35 @@
       var isNumber = typeof propertyValue === 'number',
           isDivisible = propertyValue % validator === 0;
       return (isNumber && isDivisible) ? callback() : callback(true);
+
+    }
+
+  };
+
+  /**
+   * Messages
+   */
+  var messages = {
+
+    // Basic
+    'required': 'The ‘{{property}}’ property is required.',
+    'minLength': 'The ‘{{property}}’ property must be at least {{validator}} characters.',
+    'maxLength': 'The ‘{{property}}’ property must not exceed {{validator}} characters.',
+    'length': 'The ‘{{property}}’ property must be exactly {{validator}} characters.',
+    'format': 'The ‘{{property}}’ property must be a/an {{validator}}.',
+    'type': 'The ‘{{property}}’ property must be a/an {{validator}}.',
+    'except': 'The ‘{{property}}’ property must not be {{propertyValue}}',
+    'minimum': 'The minimum value of the ‘{{property}}’ must be {{validator}}',
+    'maximum': 'The maximum value of the ‘{{property}}’ must be {{validator}}',
+    'pattern': 'The `{{property}}` does not match the ‘{{validator}}’ pattern.',
+    'maxItems': 'The `{{property}}` property must not contain more than {{validator}} items.',
+    'minItems': 'The `{{property}}` property must contain at least {{validator}} items.',
+    'divisibleBy': 'The ‘{{property}}’ property is not divisible by {{validator}}.',
+    'uniqueItems': 'All items in the ‘{{property}}’ property must be unique.',
+
+    // Advanced
+    'enum': function(property, propertyValue, validator) {
+      return 'The ‘' + property + '’ must be ' + validator.join(' or ') + '.';
     }
 
   };
@@ -691,9 +747,10 @@
         };
       }
 
+      options.messages = (options.messages) ? merge(options.messages, messages) : messages;
       options.validators = validators;
 
-      return (new Validator(options)).validate(data, schema, callback);
+      return (new Validation(options)).validate(data, schema, callback);
 
     },
 

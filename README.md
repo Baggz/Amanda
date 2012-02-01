@@ -89,19 +89,19 @@ Releases are available for download from GitHub.
 <a name="usage"></a>
 # Usage [&uarr;](#contents)
 
-## Browser
+### Browser
 
 ```
 <script src="amanda.js"></script>
 ```
 
-## Node.js, RingoJS, Narwhal
+### Node.js, RingoJS, Narwhal
 
 ```javascript
 var amanda = require('amanda');
 ```
 
-## RequireJS
+### RequireJS
 
 ```javascript
 // Configuration options, the path should not include the .js extension
@@ -133,6 +133,7 @@ require(['amanda'], function(amanda) {
   * [required](#required)
   * [minLength](#minLength)
   * [maxLength](#maxLength)
+  * [length](#length)
   * [format](#format)
   * [type](#type)
   * [enum](#enum)
@@ -283,6 +284,7 @@ var schema = {
 * [required](#required)
 * [minLength](#minLength)
 * [maxLength](#maxLength)
+* [length](#length)
 * [format](#format)
 * [type](#type)
 * [enum](#enum)
@@ -351,8 +353,24 @@ When the instance value is a string, this defines the maximum length of the stri
 
 ---
 
+<a name="length"></a>
+### Length [&uarr;](#schema)
+
+When the instance value is a string, this defines the length of the string.
+
+**Example**
+
+```javascript
+{
+  type: 'string',
+  length: 5
+}
+```
+
+---
+
 <a name="type"></a>
-### Type [&uarr;](#schema) [&uarr;](#schema)
+### Type [&uarr;](#schema)
 
 This attribute defines what the primitive type or the schema of the instance must be in order to validate. A string indicating a primitive or simple type. The following are acceptable string values:
 
@@ -683,8 +701,9 @@ This property allows you to set custom error messages. If you want to use more a
 
 **Placeholders**
 
-* `{{property}}`
-* `{{propertyValue}}`
+* `{{property}}`
+* `{{propertyValue}}`
+* `{{validator}}`
 
 **Example**
 
@@ -699,7 +718,7 @@ var options = {
     format: 'Uh oh! Param ‘{{property}}’ must be am {{propertyValue}}.' // Uh oh! Param ‘email’ must be an email.
 
     // Custom error message as a function
-    enum: function(property, propertyValue) {
+    enum: function(property, propertyValue, validator) {
       return 'The ‘' + property + '’ property must be ' + validator.join(' or ') + '.'; // The ‘sex’ property must be male or female.
     }
 
@@ -745,7 +764,7 @@ $ npm test
 
 The following are the major contributors of Amanda (in alphabetical order).
 
-* František Hába ([@Baggz](https://github.com/Baggz)) <hello@frantisekhaba.com>
+* František Hába ([@Baggz](https://github.com/Baggz)) &lt;hello@frantisekhaba.com&gt;
 * Iain Carsberg ([@iaincarsberg](https://github.com/iaincarsberg))
 
 <a name="license"></a>
