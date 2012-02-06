@@ -179,6 +179,7 @@
     };    
   });
 
+
   /**
    * Validator
    *
@@ -436,6 +437,21 @@
   };
 
   /**
+   * error_messages
+   */
+  var messages = function(type, name, options){
+    var error_message = options.hasOwnProperty('message') ? options.message : null
+    if(error_message == null){
+      switch(type){
+        case 'required': '‘' + name + '’ is required'
+          break;
+      }
+    }
+
+    return error_message
+  }
+
+  /**
    * Validators
    */
   var validators = {
@@ -445,7 +461,8 @@
      */
     'required': function(property, propertyValue, validator, propertyValidators, callback) {
       if (validator && propertyValue === undefined) {
-        return callback('‘' + property + '’ is required');
+        var error_message = messages('required', property, propertyValidators)
+        return callback(error_message);
       } else {
         return callback();
       }
