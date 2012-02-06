@@ -440,12 +440,12 @@
    * error_messages
    */
   var messages = function(type, name, options){
-    console.warn(options)
     var error_message = options.hasOwnProperty('message') ? options.message : null
     if(error_message == null){
       switch(type){
         case 'required': '‘' + name + '’ is required'
           break;
+      }
     }
 
     return error_message
