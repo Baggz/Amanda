@@ -6,14 +6,14 @@ var amanda = require('../src/amanda.js');
  */
 exports['should be able to set custom error messages'] = function(test) {
 
-  var expected = 'this is a custome error messsage.';
+  var expected_error_message = 'this is a custome error messsage.';
   var schema = {
     type: 'object',
     properties: {
       some_number: {
         required: true,
         type: 'string',
-        message: expected
+        message: expected_error_message
       }
     }
   };
@@ -22,7 +22,7 @@ exports['should be able to set custom error messages'] = function(test) {
   }, schema, { singleError: true }, function(error) {
     var error_messages = error
     console.log(error_messages)
-    test.equal(error_messages[0]['message'], expected)
+    test.equal(error_messages[0]['message'], expected_error_message)
   })
 
   test.done();
