@@ -227,6 +227,9 @@
         validatorFn(property, propertyValue, propertyValidators[validatorName], propertyValidators, function(error) {
 
           if (error) {
+            if(propertyValidators.hasOwnProperty('message')){
+              error = propertyValidators.message
+            }
             self.Errors.addError({
               property: property,
               propertyValue: propertyValue,
