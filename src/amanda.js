@@ -212,9 +212,48 @@
    * @param {function} callback
    */
   Validator.prototype.validateProperty = function(property, propertyValue, propertyValidators, callback) {
-
     // Reference na this
     var self = this;
+
+    //default error messages
+    var error_messages = {
+      required: '%a is required',
+      type: {
+        'object'   : '%a must be an object',
+        'array'    : '%a must be an array',
+        'integer'  : '%a must be an integer',
+        'string'   : '%a must be a string',
+        'number'   : '%a must be a number',
+        'function' : '%a must be a function',
+        'boolean'  : '%a must be a boolean',
+      },
+      format: {
+        'alpha'        : '%a must be alphabet',
+        'alphanumeric' : '%a must be alphanumeric',
+        'ipv4'         : '%a must be ipv4 format',
+        'ipv6'         : '%a must be ipv6 format',
+        'ip'           : '%a must be ip format',
+        'email'        : '%a must be an email address',
+        'url'          : '%a must be an url',
+        'date'         : '%a must be a date',
+        'decimal'      : '%a must be a decimal number',
+        'int'          : '%a must be an integer number',
+        'percentage'   : '%a must be a percentage',
+        'port'         : '%a must be a port number',
+        'regexp'       : '%a must be match against %e',
+        'unsignedInt'  : '%a must be an unsigned integer number',
+      },
+      length      : '%a must be between %e characters',
+      enum        : '%a must be one of %e',
+      except      : '%a must not be one of %e',
+      minimum     : '%a must be over %e',
+      maximum     : '%a must be under %e',
+      pattern     : '%a must be match against %e',
+      minItems    : '%a must have minimum %e items',
+      maxItems    : '%a must have maximum %e items',
+      uniqueItems : '%a must be unique',
+      divisibleBy : '%a must be divisible by %e'
+    }
 
     /**
      * Iterator
@@ -225,10 +264,29 @@
     var iterator = function(validatorName, validatorFn, callback) {
       if (propertyValidators[validatorName]) {
         validatorFn(property, propertyValue, propertyValidators[validatorName], propertyValidators, function(error) {
-
           if (error) {
-            if(propertyValidators.hasOwnProperty('message')){
-              error = propertyValidators.message
+            if(error === true){
+              if(error_messages.hasOwnProperty(validatorName)){
+                var expected = propertyValidators[validatorName]
+                if(validatorName == 'length'){
+                  expected = expected.join(' and ')
+                }
+                if(validatorName == 'type'){
+                  var typeName = propertyValidators[validatorName]
+                  error = error_messages[validatorName][typeName]
+                }
+                else if(validatorName == 'format'){
+                  var formatName = propertyValidators[validatorName]
+                  error = error_messages[validatorName][formatName]
+                }
+                else {
+                  error = error_messages[validatorName]
+                }
+                error = error.replace('%a', property).replace('%e', expected)
+              }
+              else if(propertyValidators.hasOwnProperty('message')){
+                error = propertyValidators.message
+              }
             }
             self.Errors.addError({
               property: property,
@@ -448,7 +506,7 @@
      */
     'required': function(property, propertyValue, validator, propertyValidators, callback) {
       if (validator && propertyValue === undefined) {
-        return callback('‘' + property + '’ is required');
+        return callback(true);
       } else {
         return callback();
       }
@@ -502,7 +560,7 @@
          * }
          */
         } else {
-          return (types[validator](propertyValue)) ? callback() : callback('‘' + property + '’ must be ' + validator);
+          return (types[validator](propertyValue)) ? callback() : callback(true);
         }
 
       };
@@ -531,7 +589,7 @@
           return typeof input === 'string' && input.match(/(?:(?:[a-f\d]{1,4}:)*(?:[a-f\d]{1,4}|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})|(?:(?:[a-f\d]{1,4}:)*[a-f\d]{1,4})?::(?:(?:[a-f\d]{1,4}:)*(?:[a-f\d]{1,4}|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}))?)/);
         },
         'ip': function(input) {
-          return formats.ipv4(input) || formats.ipv6;
+          return (formats.ipv4(input) || formats.ipv6(input));
         },
         'email': function(input) {
           return typeof input === 'string' && input.match(/^(?:[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+\.)*[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!\.)){0,61}[a-zA-Z0-9]?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!$)){0,61}[a-zA-Z0-9]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/);
@@ -549,7 +607,8 @@
           return /^-?[0-9]+$/.test(input);
         },
         'percentage': function(input) {
-          return (typeof input == 'string' && input.match(/^-?[0-9]{0,2}(\.[0-9]{1,2})?$|^-?(100)(\.[0]{1,2})?$/)) || (input >= -100 && input <= 100);
+          return (typeof input == 'string' && input != '' && input.match(/^-?[0-9]{0,2}(\.[0-9]{1,2})?$|^-?(100)(\.[0]{1,2})?$/)) || (typeof input == 'number' && input >= -100 && input <= 100);
+
         },
         'port': function(input) {
           return /\:\d+/.test(input);
