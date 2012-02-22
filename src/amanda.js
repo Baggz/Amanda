@@ -881,7 +881,7 @@
      * GetVersion
      */
     getVersion: function() {
-      return [0, 2, 0].join('.');
+      return [0, 3, 0].join('.');
     },
 
     /**
