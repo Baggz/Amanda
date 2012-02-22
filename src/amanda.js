@@ -21,7 +21,7 @@
   /**
    * IsEmpty
    *  
-   * Returns true if input is empty.
+   * Returns true if the input is empty.
    *
    * @param {object} input
    */
@@ -47,6 +47,8 @@
 
   /**
    * Merge
+   *
+   * Copy all of the properties in the source objects over to the destination object.
    *
    * @param {object} obj1
    * @param {object} obj2
@@ -80,7 +82,7 @@
       // If the list is an array
       if (isArray(list) && !isEmpty(list)) {
         for (var i = 0, len = list.length; i < len; i++) {
-          iterator(i, list[i]);
+          iterator.apply(list, [i, list[i]]);
         }
       }
 
@@ -88,7 +90,7 @@
       if (isObject(list) && !isEmpty(list)) {
         for (var key in list) {
           if (list.hasOwnProperty(key)) {
-            iterator(key, list[key]);
+            iterator.apply(list, [key, list[key]]);
           }
         } 
       }
@@ -103,38 +105,55 @@
      */
     var asyncEach = function(list, iterator, callback) {
 
-      var uncompleted;
+      var queue = [];
 
-      // If the list is an object
-      if (isObject(list) && !isEmpty(list)) {
-        uncompleted = Object.keys(list).length;
+      /**
+       * AddToQueue
+       *
+       * @param {string} key
+       * @param {string|object} value
+       */
+      var addToQueue = function(key, value) {
+        var index = queue.length + 1;
+        queue.push(function() {
+
+          var next = function(error) {
+            var fn = queue[index];
+            if (!error && fn) {
+              return fn();
+            } else if (!error && !fn) {
+              return callback();
+            } else {
+              return callback(error);
+            }
+          };
+
+          return iterator(key, value, next);
+
+        });
+      };
 
       // If the list is an array
-      } else if (isArray(list) && !isEmpty(list)) {
-        uncompleted = list.length;
+      if (isArray(list) && !isEmpty(list)) {
+        for (var i = 0, len = list.length; i < len; i++) {
+          addToQueue(i, list[i]);
+        }
+
+      // If the list is an object
+      } else if (isObject(list) && !isEmpty(list)) {
+        for (var key in list) {
+          if (list.hasOwnProperty(key)) {
+            addToQueue(key, list[key]);
+          }
+        }
 
       // If the list is not an array or an object
       } else {
         return callback();
       }
 
-      /**
-       * Next
-       */
-      var next = function(error) {
-        uncompleted -= 1;
-        if (error) {
-          callback(error);
-          callback = function() {};
-        }
-        if (!error && uncompleted === 0) {
-          return callback();
-        }
-      };
-
-      syncEach(list, function(key, value) {
-        return iterator(key, value, next);
-      });
+      // And go!
+      return queue[0]();
 
     };
 
@@ -217,6 +236,36 @@
   };
 
   /**
+   * RenderErrorMessage
+   *
+   * @param {string} validatorName
+   * @param {object} templateData
+   */
+  Validation.prototype.renderErrorMessage = function(validatorName, templateData) {
+    
+    // Gets an error message
+    var errorMessage = this.messages[validatorName];
+    
+    // If the error message is a function
+    if (typeof errorMessage === 'function') {
+      return errorMessage(
+        templateData.property,
+        templateData.propertyValue,
+        templateData.validator
+      );
+    }
+
+    // If the error message is a string
+    if (typeof errorMessage === 'string') {
+      each(templateData, function(key, value) {
+        errorMessage = errorMessage.replace(new RegExp('{{' + key + '}}', 'g'), value);
+      });
+      return errorMessage.replace(/\s+/g, ' ');
+    }
+
+  }
+
+  /**
    * Validation.validateProperty
    *
    * @param {string} property
@@ -227,7 +276,7 @@
    */
   Validation.prototype.validateProperty = function(property, propertyValue, propertyValidators, callback) {
 
-    // Reference na this
+    // Save a reference to the ‘this’
     var self = this;
 
     /**
@@ -237,47 +286,52 @@
      * @param {function} callback
      */
     var iterator = function(validatorName, validatorFn, callback) {
-      if (propertyValidators[validatorName]) {
-        validatorFn(property, propertyValue, propertyValidators[validatorName], propertyValidators, function(error) {
 
-          // If an error occurred
-          if (error) {
+      /**
+       * OnComplete
+       *
+       * @param {object} error
+       */
+      var onComplete = function(error) {
 
-            // Get an error message
-            var errorMessage = self.messages[validatorName];
+        if (!error) return callback();
 
-            if (typeof errorMessage === 'function') {
-              errorMessage = errorMessage(property, propertyValue, propertyValidators[validatorName]);
-            } else if (typeof errorMessage === 'string') {
-              errorMessage = errorMessage.replace(/{{property}}/g, property)
-                                         .replace(/{{propertyValue}}/g, propertyValue)
-                                         .replace(/{{validator}}/g, propertyValidators[validatorName])
-                                         .replace(/\s+/g, ' ');
-            } else {
-              errorMessage = error;
-            }
+        // Renders an error messaage
+        var errorMessage = self.renderErrorMessage(validatorName, {
+          property: property,
+          propertyValue: propertyValue,
+          validator: propertyValidators[validatorName]
+        }) || error;
 
-            // Add a new error
-            self.Errors.addError({
-              property: property,
-              propertyValue: propertyValue,
-              validator: validatorName,
-              validatorValue: propertyValidators[validatorName],
-              message: errorMessage
-            });
-
-            return callback(self.singleError ? true : null);
-
-          }
-
-          return callback();
-
+        // Add a new error
+        self.Errors.addError({
+          property: property,
+          propertyValue: propertyValue,
+          validator: validatorName,
+          validatorValue: propertyValidators[validatorName],
+          message: errorMessage
         });
+
+        // If the ‘singleError’ is on, stop the validation process
+        return callback(self.singleError ? true : null);
+
+      };
+
+      if (propertyValidators[validatorName]) {
+        return validatorFn(
+          property,
+          propertyValue,
+          propertyValidators[validatorName],
+          propertyValidators,
+          onComplete
+        );
       } else {
         return callback();
       }
+
     };
 
+    // If it's not a required param and it's empty, skip
     if (propertyValidators.required !== true && typeof propertyValue === 'undefined') {
       return callback();
     } else {
@@ -296,11 +350,145 @@
    */
   Validation.prototype.validate = function(instance, schema, callback) {
 
+    // Save a reference to the ‘this’
     var self = this;
 
     return this.validateSchema(instance, schema, '', function(error) {
       return callback((self.Errors.length > 0) ? self.Errors : undefined);
     });
+
+  };
+
+  /**
+   * Validation.validateProperties
+   *
+   * @param {object} instance
+   * @param {object} schema
+   * @param {string} path
+   * @param {function} callback
+   */
+  Validation.prototype.validateProperties = function(instance, schema, path, callback) {
+    
+    // Save a reference to the ‘this’
+    var self = this;
+
+    // Goes
+    return each(schema.properties, function(property, propertyValidators, callback) {
+
+      var isObject = propertyValidators.type === 'object' && propertyValidators.properties,
+          isArray =  propertyValidators.type === 'array';
+
+      // Get the value of property (instance[property])
+      var propertyValue = self.getProperty(instance, property);
+
+      // Compose the property path
+      var propertyName = property.indexOf(' ') !== -1 ? '[\'' + property + '\']' : '.' + property,
+          propertyPath = path.length === 0 ? property : path + propertyName;
+
+      /**
+       * {
+       *   type: 'object',
+       *   properties: {
+       *     user: {
+       *       type: 'object',
+       *       properties: {
+       *         ...
+       *       }
+       *     }
+       *   }
+       * }
+       */
+      if (isObject || isArray)  {
+        return self.validateSchema(
+          propertyValue,
+          schema.properties[property],
+          propertyPath,
+          callback
+        );
+      } else {
+        return self.validateProperty(
+          propertyPath,
+          propertyValue,
+          propertyValidators,
+          callback
+        );
+      }
+
+    }, callback);
+
+  };
+
+  /**
+   * Validation.validateItems
+   *
+   * @param {object} instance
+   * @param {object} schema
+   * @param {string} path
+   * @param {function} callback
+   */
+  Validation.prototype.validateItems = function(instance, schema, path, callback) {
+
+    // Save a reference to the ‘this’
+    var self = this;
+
+    // If the instance is not empty
+    if (instance && !isEmpty(instance)) {
+
+      /**
+       * {
+       *   type: 'array',
+       *   items: {
+       *     type: 'object'
+       *   }
+       * }
+       * — or —
+       * {
+       *   type: 'array',
+       *   items: {
+       *     type: 'array'
+       *   }
+       * }
+       */
+      if (['object', 'array'].indexOf(schema.items.type) !== -1) {
+        return each(instance, function(index, propertyValue, callback) {
+
+          var propertyPath = path + '[' + index + ']';
+
+          return self.validateSchema(
+            propertyValue,
+            schema.items,
+            propertyPath,
+            callback
+          );
+
+        }, callback);
+
+      /*
+       * {
+       *   type: 'array',
+       *   items: {
+       *     type: 'string'
+       *   }
+       * }
+       */
+      } else {
+        return each(instance, function(index, propertyValue, callback) {
+
+          var propertyPath = path + '[' + index + ']';
+
+          return self.validateProperty(
+            propertyPath,
+            propertyValue,
+            schema.items,
+            callback
+          );
+
+        }, callback);
+      }
+
+    } else {
+      return callback();
+    }
 
   };
 
@@ -314,6 +502,7 @@
    */
   Validation.prototype.validateSchema = function(instance, schema, path, callback) {
 
+    // Reference na this
     var self = this;
 
     /**
@@ -342,42 +531,7 @@
          * }
          */
         if (schema.properties) {
-          return each(schema.properties, function(property, propertyValidators, callback) {
-            
-            var isObject = propertyValidators.type === 'object' && propertyValidators.properties,
-                isArray =  propertyValidators.type === 'array';
-
-            // Get the value of property (instance[property])
-            var propertyValue = self.getProperty(instance, property);
-
-            // Compose the property path
-            var propertyName = (property.indexOf(' ') !== -1) ? '[\'' + property + '\']' : '.' + property,
-                propertyPath = (path.length === 0) ? property : path + propertyName;
-            
-            
-
-            
-
-            /**
-             * {
-             *   type: 'object',
-             *   properties: {
-             *     user: {
-             *       type: 'object',
-             *       properties: {
-             *         ...
-             *       }
-             *     }
-             *   }
-             * }
-             */
-            if (isObject || isArray)  {
-              return self.validateSchema(propertyValue, schema.properties[property], propertyPath, callback);
-            } else {
-              return self.validateProperty(propertyPath, propertyValue, propertyValidators, callback);
-            }
-
-          }, callback);
+          return self.validateProperties(instance, schema, path, callback);
 
         /**
          * {
@@ -389,48 +543,7 @@
          * }
          */
         } else if (schema.items) {
-
-          if (instance && !isEmpty(instance)) {
-
-            /**
-             * {
-             *   type: 'array',
-             *   items: {
-             *     type: 'object'
-             *   }
-             * }
-             * — or —
-             * {
-             *   type: 'array',
-             *   items: {
-             *     type: 'array'
-             *   }
-             * }
-             */
-            if (['object', 'array'].indexOf(schema.items.type) !== -1) {
-              return each(instance, function(index, propertyValue, callback) {
-                var propertyPath = path + '[' + index + ']';
-                return self.validateSchema(propertyValue, schema.items, propertyPath, callback);
-              }, callback);
-
-            /*
-             * {
-             *   type: 'array',
-             *   items: {
-             *     type: 'string'
-             *   }
-             * }
-             */
-            } else {
-              return each(instance, function(index, propertyValue, callback) {
-                var propertyPath = path + '[' + index + ']';
-                return self.validateProperty(propertyPath, propertyValue, schema.items, callback);
-              }, callback);
-            }
-
-          } else {
-            return callback();
-          } 
+          return self.validateItems(instance, schema, path, callback);
 
         /**
          * {
