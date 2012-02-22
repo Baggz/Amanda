@@ -3,6 +3,8 @@
   /**
    * IsObject
    *
+   * Returns true if the passed-in object is an object.
+   *
    * @param {object} input
    */
   var isObject = function(input) {
@@ -11,6 +13,8 @@
 
   /**
    * IsArray
+   *
+   * Returns true if the passed-in object is an array.
    *
    * @param {object} input
    */
@@ -21,23 +25,21 @@
   /**
    * IsEmpty
    *  
-   * Returns true if the input is empty.
+   * Returns true if the passed-in object is empty.
    *
    * @param {object} input
    */
   var isEmpty = function(input) {
-    
-    // Arrays and strings
-    if (isArray(input)) {
+
+    // If the passed-in object is an array or a string
+    if (isArray(input) || typeof input === 'string') {
       return input.length === 0;
     }
 
-    // Objects
+    // If the passed-in object is an object
     if (isObject(input)) {
       for (var key in input) {
-        if (hasOwnProperty.call(input, key)) {
-          return false;
-        }
+        if (hasOwnProperty.call(input, key)) return false;
       }
     }
 
@@ -55,7 +57,9 @@
    */
   var merge = function(obj1, obj2) {
     for (var key in obj2) {
-      if (obj2.hasOwnProperty(key) && !obj1.hasOwnProperty(key)) obj1[key] = obj2[key];
+      if (obj2.hasOwnProperty(key) && !obj1.hasOwnProperty(key)) {
+        obj1[key] = obj2[key];
+      }
     }
     return obj1;
   };
@@ -193,15 +197,19 @@
     this.length = 0;
   };
 
+  /**
+   * Error
+   *
+   * Adds a new error to the ‘Error’ instance.
+   *
+   * @param {object} error
+   */
   Error.prototype.addError = function(error) {
     this[this.length] = error;
     this.length++;
   };
 
-  /**
-   * Error.getProperties
-   * Error.getMessages
-   */
+  // Generates the ‘getProperties’ and the ‘getMessages’ method
   each({
     getProperties: 'property',
     getMessages: 'message'
@@ -212,6 +220,34 @@
   });
 
   /**
+   * Messages
+   */
+  var messages = {
+
+    // Basic
+    'required': 'The ‘{{property}}’ property is required.',
+    'minLength': 'The ‘{{property}}’ property must be at least {{validator}} characters.',
+    'maxLength': 'The ‘{{property}}’ property must not exceed {{validator}} characters.',
+    'length': 'The ‘{{property}}’ property must be exactly {{validator}} characters.',
+    'format': 'The ‘{{property}}’ property must be a/an {{validator}}.',
+    'type': 'The ‘{{property}}’ property must be a/an {{validator}}.',
+    'except': 'The ‘{{property}}’ property must not be {{propertyValue}}',
+    'minimum': 'The minimum value of the ‘{{property}}’ must be {{validator}}',
+    'maximum': 'The maximum value of the ‘{{property}}’ must be {{validator}}',
+    'pattern': 'The `{{property}}` does not match the ‘{{validator}}’ pattern.',
+    'maxItems': 'The `{{property}}` property must not contain more than {{validator}} items.',
+    'minItems': 'The `{{property}}` property must contain at least {{validator}} items.',
+    'divisibleBy': 'The ‘{{property}}’ property is not divisible by {{validator}}.',
+    'uniqueItems': 'All items in the ‘{{property}}’ property must be unique.',
+
+    // Advanced
+    'enum': function(property, propertyValue, validator) {
+      return 'Value of the ‘' + property + '’ must be ' + validator.join(' or ') + '.';
+    }
+
+  };
+
+  /**
    * Validation
    *
    * @constructor
@@ -219,19 +255,16 @@
    */
   var Validation = function(options) {
 
+    // Save a reference to the ‘this’
     var self = this;
 
-    // Errors
-    this.Errors = new Error();
-
     // Options
-    each([
-      'singleError',
-      'validators',
-      'messages'
-    ], function(key, value) {
-      self[value] = options[value];
-    });
+    this.singleError = options.hasOwnProperty('singleError') ? options.singleError : true;
+    this.validators = validators;
+    this.messages = (options.messages) ? merge(options.messages, messages) : messages;
+
+    // Initializes a new instance of the ‘Error’ object
+    this.Errors = new Error();
 
   };
 
@@ -262,6 +295,8 @@
       });
       return errorMessage.replace(/\s+/g, ' ');
     }
+
+    return '';
 
   }
 
@@ -301,7 +336,7 @@
           property: property,
           propertyValue: propertyValue,
           validator: propertyValidators[validatorName]
-        }) || error;
+        });
 
         // Add a new error
         self.Errors.addError({
@@ -814,34 +849,6 @@
   };
 
   /**
-   * Messages
-   */
-  var messages = {
-
-    // Basic
-    'required': 'The ‘{{property}}’ property is required.',
-    'minLength': 'The ‘{{property}}’ property must be at least {{validator}} characters.',
-    'maxLength': 'The ‘{{property}}’ property must not exceed {{validator}} characters.',
-    'length': 'The ‘{{property}}’ property must be exactly {{validator}} characters.',
-    'format': 'The ‘{{property}}’ property must be a/an {{validator}}.',
-    'type': 'The ‘{{property}}’ property must be a/an {{validator}}.',
-    'except': 'The ‘{{property}}’ property must not be {{propertyValue}}',
-    'minimum': 'The minimum value of the ‘{{property}}’ must be {{validator}}',
-    'maximum': 'The maximum value of the ‘{{property}}’ must be {{validator}}',
-    'pattern': 'The `{{property}}` does not match the ‘{{validator}}’ pattern.',
-    'maxItems': 'The `{{property}}` property must not contain more than {{validator}} items.',
-    'minItems': 'The `{{property}}` property must contain at least {{validator}} items.',
-    'divisibleBy': 'The ‘{{property}}’ property is not divisible by {{validator}}.',
-    'uniqueItems': 'All items in the ‘{{property}}’ property must be unique.',
-
-    // Advanced
-    'enum': function(property, propertyValue, validator) {
-      return 'Value of the ‘' + property + '’ must be ' + validator.join(' or ') + '.';
-    }
-
-  };
-
-  /**
    * Amanda
    */
   var amanda = {
@@ -851,20 +858,12 @@
      *
      * @param {object} structure
      */
-    validate: function(data, schema, options, callback) {
-
-      if ( typeof options === 'function') {
+    validate: function(instance, schema, options, callback) {
+      if (typeof options === 'function') {
         callback = options;
-        options = {
-          singleError: true
-        };
+        options = {};
       }
-
-      options.messages = (options.messages) ? merge(options.messages, messages) : messages;
-      options.validators = validators;
-
-      return (new Validation(options)).validate(data, schema, callback);
-
+      return (new Validation(options)).validate(instance, schema, callback);
     },
 
     /**
