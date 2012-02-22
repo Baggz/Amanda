@@ -591,7 +591,7 @@
      * Required
      */
     'required': function(property, propertyValue, validator, propertyValidators, callback) {
-      if (validator && !propertyValue) {
+      if (validator && propertyValue === undefined) {
         return callback(true);
       } else {
         return callback();
