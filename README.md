@@ -38,7 +38,7 @@ var schema = {
     name: {
       required: true,
       type: 'string',
-      length: [2, 45]
+      length: 7
     },
     email: {
       required: true,
