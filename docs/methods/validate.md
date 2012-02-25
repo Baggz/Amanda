@@ -1,4 +1,4 @@
-← [Documentation](https://github.com/Baggz/Amanda/tree/master/docs/README.md)
+[&larr Documentation](https://github.com/Baggz/Amanda/tree/master/docs/README.md)
 
 <a name="validate"></a>
 # Validate
