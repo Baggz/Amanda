@@ -3,7 +3,9 @@
 <a name="validate"></a>
 # Validate
 
-### validate(data, schema[, options], callback)
+```javascript
+validate(data, schema[, options], callback)
+```
 
 ### Parameters
 
