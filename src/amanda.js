@@ -733,7 +733,7 @@
         'port': function(input) {
           return /\:\d+/.test(input);
         },
-        'regexp': function(input) {
+        'regex': function(input) {
           return input && input.test && input.exec;
         },
         'unsignedInt': function(input) {
