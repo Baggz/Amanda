@@ -298,7 +298,7 @@
 
     return '';
 
-  }
+  };
 
   /**
    * Validation.validateProperty
@@ -843,7 +843,6 @@
       var isNumber = typeof propertyValue === 'number',
           isDivisible = propertyValue % validator === 0;
       return (isNumber && isDivisible) ? callback() : callback(true);
-
     }
 
   };
