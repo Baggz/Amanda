@@ -169,3 +169,22 @@ exports['Test #5'] = function(test) {
 
 };
 
+
+/**
+ * Test #6
+ *
+ * Allow object to be empty as the user value is not required
+ */
+exports['Test #6'] = function(test) {
+
+  var data = {};
+
+  amanda.validate(data, schema, { singleError: false }, function(error) {
+
+    test.equal(error, undefined);
+
+  });
+
+  test.done();
+
+};
