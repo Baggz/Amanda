@@ -31,7 +31,7 @@ exports['Test #1'] = function(test) {
   };
 
   amanda.validate(data, schema, { singleError: false }, function(error) {
-    
+
     test.equal(error, undefined);
 
   });
@@ -41,37 +41,6 @@ exports['Test #1'] = function(test) {
 };
 
 exports['Test #2'] = function(test) {
-
-  var data = {};
-
-  amanda.validate(data, schema, { singleError: false }, function(error) {
-
-    delete error[0].message;
-    delete error[1].message;
-
-    test.deepEqual(error[0], {
-      property: 'user.name',
-      propertyValue: undefined,
-      validator: 'required',
-      validatorValue: true
-    });
-
-    test.deepEqual(error[1], {
-      property: 'user.surname',
-      propertyValue: undefined,
-      validator: 'required',
-      validatorValue: true
-    });
-
-    test.equal(error.length, 2);
-
-  });
-
-  test.done();
-
-};
-
-exports['Test #3'] = function(test) {
 
   var data = {
     user: 123
@@ -112,14 +81,14 @@ exports['Test #3'] = function(test) {
 
 };
 
-exports['Test #4'] = function(test) {
+exports['Test #3'] = function(test) {
 
   var data = {
     user: {}
   };
 
   amanda.validate(data, schema, { singleError: false }, function(error) {
-    
+
     delete error[0].message;
     delete error[1].message;
 
@@ -146,7 +115,7 @@ exports['Test #4'] = function(test) {
 
 };
 
-exports['Test #5'] = function(test) {
+exports['Test #4'] = function(test) {
 
   var data = {
     user: {
@@ -155,7 +124,7 @@ exports['Test #5'] = function(test) {
   };
 
   amanda.validate(data, schema, { singleError: false }, function(error) {
-    
+
     delete error[0].message;
 
     test.deepEqual(error[0], {
@@ -173,7 +142,7 @@ exports['Test #5'] = function(test) {
 
 };
 
-exports['Test #6'] = function(test) {
+exports['Test #5'] = function(test) {
 
   var data = {
     user: {
@@ -182,7 +151,7 @@ exports['Test #6'] = function(test) {
   };
 
   amanda.validate(data, schema, { singleError: false }, function(error) {
-    
+
     delete error[0].message;
 
     test.deepEqual(error[0], {
@@ -201,9 +170,9 @@ exports['Test #6'] = function(test) {
 };
 
 /**
- * Test #7
+ * Test #6
  */
-exports['Test #7'] = function(test) {
+exports['Test #6'] = function(test) {
 
   var schema = {
     type: 'object',
@@ -229,7 +198,7 @@ exports['Test #7'] = function(test) {
 
 
   amanda.validate({}, schema, { singleError: false }, function(error) {
-    
+
     delete error[0].message;
     delete error[1].message;
 
@@ -239,7 +208,7 @@ exports['Test #7'] = function(test) {
       validator: 'required',
       validatorValue: true
     });
-  
+
     test.deepEqual(error[1], {
       property: 'information.user.surname',
       propertyValue: undefined,
