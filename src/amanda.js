@@ -433,20 +433,27 @@
        *   }
        * }
        */
-      if (isObject || isArray)  {
-        return self.validateSchema(
-          propertyValue,
-          schema.properties[property],
-          propertyPath,
-          callback
-        );
+      if (instance || property == "required") {
+        // only do work if the instance itself exists
+        if (isObject || isArray)  {
+          return self.validateSchema(
+            propertyValue,
+            schema.properties[property],
+            propertyPath,
+            callback
+          );
+        } else {
+          return self.validateProperty(
+            propertyPath,
+            propertyValue,
+            propertyValidators,
+            callback
+          );
+        }
+
       } else {
-        return self.validateProperty(
-          propertyPath,
-          propertyValue,
-          propertyValidators,
-          callback
-        );
+        // not required... carry on
+        callback();
       }
 
     }, callback);
