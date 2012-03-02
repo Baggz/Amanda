@@ -24,7 +24,7 @@
 
   /**
    * IsEmpty
-   *  
+   *
    * Returns true if the passed-in object is empty.
    *
    * @param {object} input
@@ -96,7 +96,7 @@
           if (list.hasOwnProperty(key)) {
             iterator.apply(list, [key, list[key]]);
           }
-        } 
+        }
       }
 
     };
@@ -216,7 +216,7 @@
   }, function(key, value) {
     Error.prototype[key] = function() {
       return pluck(this, value);
-    };    
+    };
   });
 
   /**
@@ -275,10 +275,10 @@
    * @param {object} templateData
    */
   Validation.prototype.renderErrorMessage = function(validatorName, templateData) {
-    
+
     // Gets an error message
     var errorMessage = this.messages[validatorName];
-    
+
     // If the error message is a function
     if (typeof errorMessage === 'function') {
       return errorMessage(
@@ -403,7 +403,7 @@
    * @param {function} callback
    */
   Validation.prototype.validateProperties = function(instance, schema, path, callback) {
-    
+
     // Save a reference to the ‘this’
     var self = this;
 
@@ -544,7 +544,7 @@
      * {
      *   type: 'object',
      *   properties: {
-     *     ... 
+     *     ...
      *   }
      * }
      * — or —
@@ -561,7 +561,7 @@
          * {
          *   type: 'object',
          *   properties: {
-         *     ... 
+         *     ...
          *   }
          * }
          */
@@ -573,7 +573,7 @@
          *   type: 'array',
          *   items: {
          *     type: 'string'
-         *     ... 
+         *     ...
          *   }
          * }
          */
@@ -637,7 +637,7 @@
      * Type
      */
     'type': (function() {
-      
+
       var types = {
         'object': function(input) {
           return Object.prototype.toString.call(input) === '[object Object]';
