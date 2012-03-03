@@ -109,7 +109,18 @@
      */
     var asyncEach = function(list, iterator, callback) {
 
-      var queue = [];
+      var finished    = 0;
+      var started     = 0;
+      var hasCalled   = false;
+      var mayCallback = false;
+
+      var tryCallback = function() {
+        if (mayCallback && finished == started) {
+          // finished all functions, celebrate!
+          callback();
+          return;
+        }
+      }
 
       /**
        * AddToQueue
@@ -118,24 +129,28 @@
        * @param {string|object} value
        */
       var addToQueue = function(key, value) {
-        var index = queue.length + 1;
-        queue.push(function() {
+        var cb = function(error) {
+          // return early if already called back
+          if (hasCalled) return;
 
-          var next = function(error) {
-            var fn = queue[index];
-            if (!error && fn) {
-              return fn();
-            } else if (!error && !fn) {
-              return callback();
-            } else {
-              return callback(error);
-            }
-          };
+          if (error) {
+            // if error, fail fast
+            hasCalled = true;
+            callback(error);
+            return;
+          }
 
-          return iterator(key, value, next);
+          finished++;
+          tryCallback();
+          return;
+        };
 
-        });
-      };
+        // execute right away
+        started++;
+        iterator(key, value, cb);
+        return;
+      }
+
 
       // If the list is an array
       if (isArray(list) && !isEmpty(list)) {
@@ -156,9 +171,10 @@
         return callback();
       }
 
-      // And go!
-      return queue[0]();
-
+      // Done adding items. Allow callback to fire
+      mayCallback = true
+      tryCallback();
+      return;
     };
 
     if (typeof callback === 'undefined') {
