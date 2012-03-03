@@ -328,7 +328,7 @@
        * @param {object} error
        */
       var onComplete = function(error) {
-        if (error) console.log("error: ", error);
+
         if (!error) return callback();
 
         // Renders an error messaage
