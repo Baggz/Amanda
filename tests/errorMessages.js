@@ -89,3 +89,39 @@ exports['Test #1'] = function(test) {
   test.done();
 
 };
+
+
+/**
+ * Test #2
+ */
+exports['Test #2'] = function(test) {
+  var count = 0;
+
+  amanda.addValidator("willFail", function(property, propertyValue, validator, propertyValidators, callback) {
+    callback("I_failed");
+    return;
+  });
+
+  amanda.validate({
+    name: "validString"
+  }, {
+    type: 'object',
+    properties: {
+      name: {
+        type: 'string',
+        willFail: true
+      }
+    }
+  }, {
+    singleError: true
+  }, function(error) {
+    count += 1;
+    test.equal(error[0].message, 'I_failed');
+  });
+
+  test.equal(count, 1);
+  test.done();
+
+};
+
+
