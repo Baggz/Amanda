@@ -4,4 +4,7 @@ node_js:
 
 notifications:
   email:
-    - hello+travis@frantisekhaba.com
+    recipients:
+      - notifications+travis@frantisekhaba.com
+    on_success: always
+    on_failure: always
