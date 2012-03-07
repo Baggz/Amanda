@@ -24,7 +24,7 @@
 
   /**
    * IsEmpty
-   *  
+   *
    * Returns true if the passed-in object is empty.
    *
    * @param {object} input
@@ -96,7 +96,7 @@
           if (list.hasOwnProperty(key)) {
             iterator.apply(list, [key, list[key]]);
           }
-        } 
+        }
       }
 
     };
@@ -109,7 +109,18 @@
      */
     var asyncEach = function(list, iterator, callback) {
 
-      var queue = [];
+      var finished    = 0;
+      var started     = 0;
+      var hasCalled   = false;
+      var mayCallback = false;
+
+      var tryCallback = function() {
+        if (mayCallback && finished == started) {
+          // finished all functions, celebrate!
+          callback();
+          return;
+        }
+      }
 
       /**
        * AddToQueue
@@ -118,24 +129,28 @@
        * @param {string|object} value
        */
       var addToQueue = function(key, value) {
-        var index = queue.length + 1;
-        queue.push(function() {
+        var cb = function(error) {
+          // return early if already called back
+          if (hasCalled) return;
 
-          var next = function(error) {
-            var fn = queue[index];
-            if (!error && fn) {
-              return fn();
-            } else if (!error && !fn) {
-              return callback();
-            } else {
-              return callback(error);
-            }
-          };
+          if (error) {
+            // if error, fail fast
+            hasCalled = true;
+            callback(error);
+            return;
+          }
 
-          return iterator(key, value, next);
+          finished++;
+          tryCallback();
+          return;
+        };
 
-        });
-      };
+        // execute right away
+        started++;
+        iterator(key, value, cb);
+        return;
+      }
+
 
       // If the list is an array
       if (isArray(list) && !isEmpty(list)) {
@@ -156,9 +171,10 @@
         return callback();
       }
 
-      // And go!
-      return queue[0]();
-
+      // Done adding items. Allow callback to fire
+      mayCallback = true
+      tryCallback();
+      return;
     };
 
     if (typeof callback === 'undefined') {
@@ -216,7 +232,7 @@
   }, function(key, value) {
     Error.prototype[key] = function() {
       return pluck(this, value);
-    };    
+    };
   });
 
   /**
@@ -275,10 +291,10 @@
    * @param {object} templateData
    */
   Validation.prototype.renderErrorMessage = function(validatorName, templateData) {
-    
+
     // Gets an error message
     var errorMessage = this.messages[validatorName];
-    
+
     // If the error message is a function
     if (typeof errorMessage === 'function') {
       return errorMessage(
@@ -403,7 +419,7 @@
    * @param {function} callback
    */
   Validation.prototype.validateProperties = function(instance, schema, path, callback) {
-    
+
     // Save a reference to the ‘this’
     var self = this;
 
@@ -544,7 +560,7 @@
      * {
      *   type: 'object',
      *   properties: {
-     *     ... 
+     *     ...
      *   }
      * }
      * — or —
@@ -561,7 +577,7 @@
          * {
          *   type: 'object',
          *   properties: {
-         *     ... 
+         *     ...
          *   }
          * }
          */
@@ -573,7 +589,7 @@
          *   type: 'array',
          *   items: {
          *     type: 'string'
-         *     ... 
+         *     ...
          *   }
          * }
          */
@@ -637,7 +653,7 @@
      * Type
      */
     'type': (function() {
-      
+
       var types = {
         'object': function(input) {
           return Object.prototype.toString.call(input) === '[object Object]';
