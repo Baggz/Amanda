@@ -3,7 +3,7 @@
 
 [![Build Status](https://secure.travis-ci.org/Baggz/Amanda.png)](http://travis-ci.org/Baggz/Amanda)
 
-[Amanda](https://github.com/Baggz/Amanda) validates data against JSON Schema. 
+[Amanda](https://github.com/Baggz/Amanda) validates data against JSON Schema. It's fully compliant with the [JSON Schema Internet Draft](http://tools.ietf.org/html/draft-zyp-json-schema-03).
 
 #### Features
 
@@ -14,6 +14,18 @@
 * Lightweight
 * Fully **documented**
 * Tested
+
+### Contents
+
+* Example
+* Download
+* Usage
+* Documentation
+* Compatibility
+* Tests
+* Versioning
+* Contributors
+* License
 
 <a name="example"></a>
 ## Example [&uarr;](#contents)
@@ -34,11 +46,6 @@ var schema = {
       required: true,
       type: 'string',
       format: 'email'
-    },
-    username: {
-      required: true,
-      type: 'string',
-      format: 'alphanumeric'
     }
   }
 };
@@ -48,8 +55,7 @@ var schema = {
  */
 var data = {
   name: 'Kenneth',
-  email: 'kenneth@gmail.com',
-  username: 'kenneth'
+  email: 'kenneth@gmail.com'
 };
 
 // Validate the data against the schema
@@ -57,8 +63,6 @@ amanda.validate(data, schema, function(error) {
   // Do something...
 });
 ```
-
-*You can find more examples in the [/examples/](https://github.com/Baggz/Amanda/tree/master/examples) folder.*
 
 <a name="download"></a>
 ## Download [&uarr;](#contents)
@@ -121,6 +125,8 @@ All documentation is available in the [/docs/](https://github.com/Baggz/Amanda/t
 
 From version **0.6.0**.
 
+*Earlier versions might work OK, but are not tested.*
+
 ### Browsers
 
 **Desktop**
@@ -142,13 +148,32 @@ From version **0.6.0**.
 $ npm test
 ```
 
+## Versioning
+
+Releases will be numbered with the following format.
+
+```
+<major>.<minor>.<patch>
+```
+
+And constructed with the following guidelines.
+
+* Breaking backwards compatibility bumps the major
+* New additions without breaking backwards compatibility bumps the minor
+* Bug fixes and misc changes bump the patch
+
+For more information on *semantic versioning*, please visit http://semver.org/.
+
 <a name="contributors"></a>
 ## Contributors [&uarr;](#contents)
 
-The following are the major contributors of Amanda (in alphabetical order).
+The following are the major contributors of Amanda (in random order).
 
-* František Hába ([@Baggz](https://github.com/Baggz)) &lt;hello@frantisekhaba.com&gt;
-* Iain Carsberg ([@iaincarsberg](https://github.com/iaincarsberg))
+* **František Hába** ([@Baggz](https://github.com/Baggz))
+* **Jakub Nešetřil** ([@zzen](https://github.com/zzen))
+* **Iain Carsberg** ([@iaincarsberg](https://github.com/iaincarsberg))
+* **Adrian Rossouw** ([@Vertice](https://github.com/Vertice))
+* **Leon de Almeida** ([@leondealmeida](https://github.com/leondealmeida))
 
 <a name="license"></a>
 ## License [&uarr;](#contents)
