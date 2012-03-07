@@ -31,7 +31,7 @@ exports['Test #1'] = function(test) {
   };
 
   amanda.validate(data, schema, function(error) {
-    
+
     test.equal(error, undefined);
 
   });
@@ -41,29 +41,6 @@ exports['Test #1'] = function(test) {
 };
 
 exports['Test #2'] = function(test) {
-
-  var data = {};
-
-  amanda.validate(data, schema, function(error) {
-
-    delete error[0].message;
-
-    test.deepEqual(error[0], {
-      property: 'user.name',
-      propertyValue: undefined,
-      validator: 'required',
-      validatorValue: true
-    });
-
-    test.equal(error.length, 1);
-
-  });
-
-  test.done();
-
-};
-
-exports['Test #3'] = function(test) {
 
   var data = {
     user: 123
@@ -96,14 +73,14 @@ exports['Test #3'] = function(test) {
 
 };
 
-exports['Test #4'] = function(test) {
+exports['Test #3'] = function(test) {
 
   var data = {
     user: {}
   };
 
   amanda.validate(data, schema, function(error) {
-    
+
     delete error[0].message;
 
     test.deepEqual(error[0], {
@@ -121,7 +98,7 @@ exports['Test #4'] = function(test) {
 
 };
 
-exports['Test #5'] = function(test) {
+exports['Test #4'] = function(test) {
 
   var data = {
     user: {
@@ -130,7 +107,7 @@ exports['Test #5'] = function(test) {
   };
 
   amanda.validate(data, schema, function(error) {
-    
+
     delete error[0].message;
 
     test.deepEqual(error[0], {
@@ -148,7 +125,7 @@ exports['Test #5'] = function(test) {
 
 };
 
-exports['Test #6'] = function(test) {
+exports['Test #5'] = function(test) {
 
   var data = {
     user: {
@@ -157,7 +134,7 @@ exports['Test #6'] = function(test) {
   };
 
   amanda.validate(data, schema, function(error) {
-    
+
     delete error[0].message;
 
     test.deepEqual(error[0], {
@@ -168,6 +145,25 @@ exports['Test #6'] = function(test) {
     });
 
     test.equal(error.length, 1);
+
+  });
+
+  test.done();
+
+};
+
+/**
+ * Test #6
+ *
+ * Allow object to be empty as the user value is not required
+ */
+exports['Test #6'] = function(test) {
+
+  var data = {};
+
+  amanda.validate(data, schema, function(error) {
+
+    test.equal(error, undefined);
 
   });
 

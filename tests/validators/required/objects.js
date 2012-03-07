@@ -31,7 +31,7 @@ exports['Test #1'] = function(test) {
   };
 
   amanda.validate(data, schema, { singleError: false }, function(error) {
-    
+
     test.equal(error, undefined);
 
   });
@@ -41,37 +41,6 @@ exports['Test #1'] = function(test) {
 };
 
 exports['Test #2'] = function(test) {
-
-  var data = {};
-
-  amanda.validate(data, schema, { singleError: false }, function(error) {
-
-    delete error[0].message;
-    delete error[1].message;
-
-    test.deepEqual(error[0], {
-      property: 'user.name',
-      propertyValue: undefined,
-      validator: 'required',
-      validatorValue: true
-    });
-
-    test.deepEqual(error[1], {
-      property: 'user.surname',
-      propertyValue: undefined,
-      validator: 'required',
-      validatorValue: true
-    });
-
-    test.equal(error.length, 2);
-
-  });
-
-  test.done();
-
-};
-
-exports['Test #3'] = function(test) {
 
   var data = {
     user: 123
@@ -112,14 +81,14 @@ exports['Test #3'] = function(test) {
 
 };
 
-exports['Test #4'] = function(test) {
+exports['Test #3'] = function(test) {
 
   var data = {
     user: {}
   };
 
   amanda.validate(data, schema, { singleError: false }, function(error) {
-    
+
     delete error[0].message;
     delete error[1].message;
 
@@ -139,6 +108,33 @@ exports['Test #4'] = function(test) {
 
 
     test.equal(error.length, 2);
+
+  });
+
+  test.done();
+
+};
+
+exports['Test #4'] = function(test) {
+
+  var data = {
+    user: {
+      name: 'František'
+    }
+  };
+
+  amanda.validate(data, schema, { singleError: false }, function(error) {
+
+    delete error[0].message;
+
+    test.deepEqual(error[0], {
+      property: 'user.surname',
+      propertyValue: undefined,
+      validator: 'required',
+      validatorValue: true
+    });
+
+    test.equal(error.length, 1);
 
   });
 
@@ -150,39 +146,12 @@ exports['Test #5'] = function(test) {
 
   var data = {
     user: {
-      name: 'František'
-    }
-  };
-
-  amanda.validate(data, schema, { singleError: false }, function(error) {
-    
-    delete error[0].message;
-
-    test.deepEqual(error[0], {
-      property: 'user.surname',
-      propertyValue: undefined,
-      validator: 'required',
-      validatorValue: true
-    });
-
-    test.equal(error.length, 1);
-
-  });
-
-  test.done();
-
-};
-
-exports['Test #6'] = function(test) {
-
-  var data = {
-    user: {
       surname: 'Hába'
     }
   };
 
   amanda.validate(data, schema, { singleError: false }, function(error) {
-    
+
     delete error[0].message;
 
     test.deepEqual(error[0], {
@@ -200,54 +169,19 @@ exports['Test #6'] = function(test) {
 
 };
 
+
 /**
- * Test #7
+ * Test #6
+ *
+ * Allow object to be empty as the user value is not required
  */
-exports['Test #7'] = function(test) {
+exports['Test #6'] = function(test) {
 
-  var schema = {
-    type: 'object',
-    properties: {
-      information: {
-        type: 'object',
-        properties: {
-          user: {
-            type: 'object',
-            properties: {
-              name: {
-                required: true
-              },
-              surname: {
-                required: true,
-              }
-            }
-          }
-        }
-      }
-    }
-  };
+  var data = {};
 
+  amanda.validate(data, schema, { singleError: false }, function(error) {
 
-  amanda.validate({}, schema, { singleError: false }, function(error) {
-    
-    delete error[0].message;
-    delete error[1].message;
-
-    test.deepEqual(error[0], {
-      property: 'information.user.name',
-      propertyValue: undefined,
-      validator: 'required',
-      validatorValue: true
-    });
-  
-    test.deepEqual(error[1], {
-      property: 'information.user.surname',
-      propertyValue: undefined,
-      validator: 'required',
-      validatorValue: true
-    });
-
-    test.equal(error.length, 2);
+    test.equal(error, undefined);
 
   });
 
