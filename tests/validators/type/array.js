@@ -1,5 +1,5 @@
 // Load dependencies
-var amanda = require('../../../src/amanda.js');
+var amanda = require('../../../dist/latest.js');
 
 /**
  * Schema
