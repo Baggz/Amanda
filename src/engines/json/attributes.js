@@ -177,7 +177,7 @@ Validation.prototype.attributes = {
    */
   minimum: function minimumConstructor() {
     return function minimum(property, propertyValue, attributeValue, propertyAttributes, callback) {
-      if (typeof propertyValue === 'number') {
+      if (isNumber(propertyValue)) {
         var condition = (propertyAttributes.exclusiveMinimum) ? propertyValue > attributeValue : propertyValue >= attributeValue;
         return (condition) ? callback() : callback(true);
       } else {
