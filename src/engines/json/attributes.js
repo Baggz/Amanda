@@ -243,10 +243,12 @@ Validation.prototype.attributes = {
    */
   divisibleBy: function divisibleByConstructor() {
     return function divisibleBy(property, propertyValue, attributeValue, propertyAttributes, callback) {
-      var isNumber = typeof propertyValue === 'number',
-          isDivisible = propertyValue % attributeValue === 0;
-      return (isNumber && isDivisible) ? callback() : callback(true);
-    }
+      if (isNumber(propertyValue) && (propertyValue % attributeValue === 0)) {
+        return callback();
+      } else {
+        return callback(true);
+      }
+    };
   }
 
 };
