@@ -191,7 +191,7 @@ Validation.prototype.attributes = {
    */
   maximum: function maximumConstructor() {
     return function maximum(property, propertyValue, attributeValue, propertyAttributes, callback) {
-      if (typeof propertyValue === 'number') {
+      if (isNumber(propertyValue)) {
         var condition = (propertyAttributes.exclusiveMaximum) ? propertyValue < attributeValue : propertyValue <= attributeValue;
         return (condition) ? callback() : callback(true);
       } else {
