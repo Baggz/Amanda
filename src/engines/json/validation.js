@@ -11,7 +11,7 @@ var Validation = function(options) {
 
   // Options
   this.singleError = options.hasOwnProperty('singleError') ? options.singleError : true;
-  this.validators = validators;
+  this.attributes = attributes;
   this.messages = (options.messages) ? merge(options.messages, messages) : messages;
 
   // Initializes a new instance of the ‘Error’ object
@@ -22,20 +22,20 @@ var Validation = function(options) {
 /**
  * RenderErrorMessage
  *
- * @param {string} validatorName
+ * @param {string} attributeName
  * @param {object} templateData
  */
-Validation.prototype.renderErrorMessage = function(validatorName, templateData) {
+Validation.prototype.renderErrorMessage = function(attributeName, templateData) {
   
   // Gets an error message
-  var errorMessage = this.messages[validatorName];
+  var errorMessage = this.messages[attributeName];
   
   // If the error message is a function
   if (typeof errorMessage === 'function') {
     return errorMessage(
       templateData.property,
       templateData.propertyValue,
-      templateData.validator
+      templateData.attribute
     );
   }
 
@@ -55,12 +55,12 @@ Validation.prototype.renderErrorMessage = function(validatorName, templateData) 
  * Validation.validateProperty
  *
  * @param {string} property
- * @param {object} propertyValidators
+ * @param {object} propertyAttributes
  * @param {string|object} propertyValue
  * @param {boolean} singleError
  * @param {function} callback
  */
-Validation.prototype.validateProperty = function(property, propertyValue, propertyValidators, callback) {
+Validation.prototype.validateProperty = function(property, propertyValue, propertyAttributes, callback) {
 
   // Save a reference to the ‘this’
   var self = this;
@@ -68,10 +68,10 @@ Validation.prototype.validateProperty = function(property, propertyValue, proper
   /**
    * Iterator
    *
-   * @param {string} validatorName
+   * @param {string} attributeName
    * @param {function} callback
    */
-  var iterator = function(validatorName, validatorFn, callback) {
+  var iterator = function(attributeName, attributeFn, callback) {
 
     /**
      * OnComplete
@@ -83,18 +83,18 @@ Validation.prototype.validateProperty = function(property, propertyValue, proper
       if (!error) return callback();
 
       // Renders an error messaage
-      var errorMessage = self.renderErrorMessage(validatorName, {
+      var errorMessage = self.renderErrorMessage(attributeName, {
         property: property,
         propertyValue: propertyValue,
-        validator: propertyValidators[validatorName]
+        attribute: propertyAttributes[attributeName]
       });
 
       // Add a new error
       self.Errors.addError({
         property: property,
         propertyValue: propertyValue,
-        validator: validatorName,
-        validatorValue: propertyValidators[validatorName],
+        attribute: attributeName,
+        attributeValue: propertyAttributes[attributeName],
         message: errorMessage
       });
 
@@ -103,12 +103,12 @@ Validation.prototype.validateProperty = function(property, propertyValue, proper
 
     };
 
-    if (propertyValidators[validatorName]) {
-      return validatorFn(
+    if (propertyAttributes[attributeName]) {
+      return attributeFn(
         property,
         propertyValue,
-        propertyValidators[validatorName],
-        propertyValidators,
+        propertyAttributes[attributeName],
+        propertyAttributes,
         onComplete
       );
     } else {
@@ -118,10 +118,10 @@ Validation.prototype.validateProperty = function(property, propertyValue, proper
   };
 
   // If it's not a required param and it's empty, skip
-  if (propertyValidators.required !== true && typeof propertyValue === 'undefined') {
+  if (propertyAttributes.required !== true && typeof propertyValue === 'undefined') {
     return callback();
   } else {
-    return each(self.validators, iterator, callback);
+    return each(self.attributes, iterator, callback);
   }
 
 };
@@ -159,10 +159,10 @@ Validation.prototype.validateProperties = function(instance, schema, path, callb
   var self = this;
 
   // Goes
-  return each(schema.properties, function(property, propertyValidators, callback) {
+  return each(schema.properties, function(property, propertyAttributes, callback) {
 
-    var isObject = propertyValidators.type === 'object' && propertyValidators.properties,
-        isArray =  propertyValidators.type === 'array';
+    var isObject = propertyAttributes.type === 'object' && propertyAttributes.properties,
+        isArray =  propertyAttributes.type === 'array';
 
     // Get the value of property (instance[property])
     var propertyValue = self.getProperty(instance, property);
@@ -195,7 +195,7 @@ Validation.prototype.validateProperties = function(instance, schema, path, callb
       return self.validateProperty(
         propertyPath,
         propertyValue,
-        propertyValidators,
+        propertyAttributes,
         callback
       );
     }

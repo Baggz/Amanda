@@ -1,13 +1,14 @@
 /**
- * Validators
+ * Attributes
+ * --------------------
  */
-var validators = {
+var attributes = {
 
   /**
    * Required
    */
-  'required': function(property, propertyValue, validator, propertyValidators, callback) {
-    if (validator && propertyValue === undefined) {
+  required: function(property, propertyValue, attributeValue, propertyAttributes, callback) {
+    if (attributeValue && propertyValue === undefined) {
       return callback(true);
     } else {
       return callback();
@@ -43,15 +44,15 @@ var validators = {
       };
     });
 
-    return function(property, propertyValue, validator, propertyValidators, callback) {
+    return function(property, propertyValue, attributeValue, propertyAttributes, callback) {
 
       /**
        * {
        *   type: ['string', 'number']
        * }
        */
-      if (Object.prototype.toString.call(validator) === '[object Array]') {
-        var noError = validator.some(function(type) {
+      if (Object.prototype.toString.call(attributeValue) === '[object Array]') {
+        var noError = attributeValue.some(function(type) {
           return types[type](propertyValue);
         });
         return (noError) ? callback() : callback(true);
@@ -62,7 +63,7 @@ var validators = {
        * }
        */
       } else {
-        return (types[validator](propertyValue)) ? callback() : callback(true);
+        return (types[attributeValue](propertyValue)) ? callback() : callback(true);
       }
 
     };
@@ -146,8 +147,8 @@ var validators = {
       }
     };
 
-    return function(property, propertyValue, validator, propertyValidators, callback) {
-      return (formats[validator](propertyValue)) ? callback() : callback(true);
+    return function(property, propertyValue, attributeValue, propertyAttributes, callback) {
+      return (formats[attributeValue](propertyValue)) ? callback() : callback(true);
     };
 
   }()),
@@ -155,44 +156,44 @@ var validators = {
   /**
    * MinLength
    */
-  'minLength': function(property, propertyValue, validator, propertyValidators, callback) {
-    return (typeof propertyValue === 'string' && propertyValue.length >= validator) ? callback() : callback(true);
+  'minLength': function(property, propertyValue, attributeValue, propertyAttributes, callback) {
+    return (typeof propertyValue === 'string' && propertyValue.length >= attributeValue) ? callback() : callback(true);
   },
 
   /**
    * MaxLength
    */
-  'maxLength': function(property, propertyValue, validator, propertyValidators, callback) {
-    return (typeof propertyValue === 'string' && propertyValue.length <= validator) ? callback() : callback(true);
+  'maxLength': function(property, propertyValue, attributeValue, propertyAttributes, callback) {
+    return (typeof propertyValue === 'string' && propertyValue.length <= attributeValue) ? callback() : callback(true);
   },
 
   /**
    * Length
    */
-  'length': function(property, propertyValue, validator, propertyValidators, callback) {
-    return (typeof propertyValue === 'string' && propertyValue.length === validator) ? callback() : callback(true);
+  'length': function(property, propertyValue, attributeValue, propertyAttributes, callback) {
+    return (typeof propertyValue === 'string' && propertyValue.length === attributeValue) ? callback() : callback(true);
   },
 
   /**
    * Enum
    */
-  'enum': function(property, propertyValue, validator, propertyValidators, callback) {
-    return (validator.indexOf(propertyValue) === -1) ? callback(true) : callback();
+  'enum': function(property, propertyValue, attributeValue, propertyAttributes, callback) {
+    return (attributeValue.indexOf(propertyValue) === -1) ? callback(true) : callback();
   },
 
   /**
    * Except
    */
-  'except': function(property, propertyValue, validator, propertyValidators, callback) {
-    return (validator.indexOf(propertyValue) !== -1) ? callback(true) : callback();
+  'except': function(property, propertyValue, attributeValue, propertyAttributes, callback) {
+    return (attributeValue.indexOf(propertyValue) !== -1) ? callback(true) : callback();
   },
 
   /**
    * Minimum
    */
-  'minimum': function(property, propertyValue, validator, propertyValidators, callback) {
+  'minimum': function(property, propertyValue, attributeValue, propertyAttributes, callback) {
     if (typeof propertyValue === 'number') {
-      var condition = (propertyValidators.exclusiveMinimum) ? propertyValue > validator : propertyValue >= validator;
+      var condition = (propertyAttributes.exclusiveMinimum) ? propertyValue > attributeValue : propertyValue >= attributeValue;
       return (condition) ? callback() : callback(true);
     } else {
       return callback(true);
@@ -202,9 +203,9 @@ var validators = {
   /**
    * Maximum
    */
-  'maximum': function(property, propertyValue, validator, propertyValidators, callback) {
+  'maximum': function(property, propertyValue, attributeValue, propertyAttributes, callback) {
     if (typeof propertyValue === 'number') {
-      var condition = (propertyValidators.exclusiveMaximum) ? propertyValue < validator : propertyValue <= validator;
+      var condition = (propertyAttributes.exclusiveMaximum) ? propertyValue < attributeValue : propertyValue <= attributeValue;
       return (condition) ? callback() : callback(true);
     } else {
       return callback(true);
@@ -214,28 +215,28 @@ var validators = {
   /**
    * Pattern
    */
-  'pattern': function(property, propertyValue, validator, propertyValidators, callback) {
-    return (typeof propertyValue === 'string' && !propertyValue.match(validator)) ? callback(true) : callback();
+  'pattern': function(property, propertyValue, attributeValue, propertyAttributes, callback) {
+    return (typeof propertyValue === 'string' && !propertyValue.match(attributeValue)) ? callback(true) : callback();
   },
 
   /**
    * MinItems
    */
-  'minItems': function(property, propertyValue, validator, propertyValidators, callback) {
-    return (isArray(propertyValue) && propertyValue.length >= validator) ? callback() : callback(true);
+  'minItems': function(property, propertyValue, attributeValue, propertyAttributes, callback) {
+    return (isArray(propertyValue) && propertyValue.length >= attributeValue) ? callback() : callback(true);
   },
 
   /**
    * MaxItems
    */
-  'maxItems': function(property, propertyValue, validator, propertyValidators, callback) {
-    return (isArray(propertyValue) && propertyValue.length <= validator) ? callback() : callback(true);
+  'maxItems': function(property, propertyValue, attributeValue, propertyAttributes, callback) {
+    return (isArray(propertyValue) && propertyValue.length <= attributeValue) ? callback() : callback(true);
   },
 
   /**
    * UniqueItems
    */
-  'uniqueItems': function(property, propertyValue, validator, propertyValidators, callback) {
+  'uniqueItems': function(property, propertyValue, attributeValue, propertyAttributes, callback) {
     return each(propertyValue, function(index, value, callback) {
       return (propertyValue.indexOf(value) < index) ? callback(true) : callback();
     }, callback);
@@ -244,9 +245,9 @@ var validators = {
   /**
    * DivisibleBy
    */
-  'divisibleBy': function(property, propertyValue, validator, propertyValidators, callback) {
+  'divisibleBy': function(property, propertyValue, attributeValue, propertyAttributes, callback) {
     var isNumber = typeof propertyValue === 'number',
-        isDivisible = propertyValue % validator === 0;
+        isDivisible = propertyValue % attributeValue === 0;
     return (isNumber && isDivisible) ? callback() : callback(true);
   }
 

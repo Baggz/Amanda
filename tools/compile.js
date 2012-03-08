@@ -14,7 +14,7 @@ var files = [
   './src/engines/json/intro.js',
   './src/engines/json/messages.js',
   './src/engines/json/error.js',
-  './src/engines/json/validators.js',
+  './src/engines/json/attributes.js',
   './src/engines/json/validation.js',
   './src/engines/json/outro.js',
   './src/amanda.js',
