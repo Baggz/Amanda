@@ -37,8 +37,7 @@ suite('JSON/Attribute/format#date', function() {
       [],
       {},
       function() {},
-      null,
-      undefined
+      null
     ].forEach(function(data) {
       Validator.validate(data, schema, function(error) {
         count += 1;
@@ -47,8 +46,8 @@ suite('JSON/Attribute/format#date', function() {
     });
   });
 
-  test('should run 14 times', function() {
-    expect(count).to.be.eql(14);
+  test('should run 13 times', function() {
+    expect(count).to.be.eql(13);
   });
 
 });
