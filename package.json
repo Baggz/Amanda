@@ -6,7 +6,8 @@
   "author": "František Hába <hello@frantisekhaba.com>",
 
   "devDependencies": {
-    "nodeunit": "0.6.4"
+    "mocha": "0.14.0",
+    "expect.js": "0.1.2"
   },
 
   "keywords": [
@@ -47,7 +48,7 @@
   ],
 
   "scripts": {
-    "test" : "nodeunit tests/addValidator.js tests/errorMessages.js tests/errorObject.js tests/validation/* tests/validators/*"
+    "test" : "mocha --ui tdd --reporter spec ./tests/json/attributes/format/*.js ./tests/json/attributes/type/*.js ./tests/json/attributes/*.js"
   }
 
 }
