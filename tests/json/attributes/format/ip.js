@@ -48,4 +48,4 @@ suite('JSON/Attribute/format#ip', function() {
     expect(count).to.be.eql(11);
   });
 
-};
+});
