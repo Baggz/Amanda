@@ -205,7 +205,11 @@ Validation.prototype.attributes = {
    */
   pattern: function patternConstructor() {
     return function pattern(property, propertyValue, attributeValue, propertyAttributes, callback) {
-      return (typeof propertyValue === 'string' && !propertyValue.match(attributeValue)) ? callback(true) : callback();
+      if (isString(propertyValue) && !propertyValue.match(attributeValue)) {
+        return callback(true);
+      } else {
+        return callback();
+      }
     };
   },
 
