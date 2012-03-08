@@ -2,26 +2,33 @@
  * Attributes
  * --------------------
  */
-var attributes = {
+Validation.prototype.attributes = {
 
   /**
    * Required
    */
-  required: function(property, propertyValue, attributeValue, propertyAttributes, callback) {
-    if (attributeValue && propertyValue === undefined) {
-      return callback(true);
-    } else {
-      return callback();
-    }
+  required: function requiredConstructor() {
+
+    return function required(property, propertyValue, attributeValue, propertyAttributes, callback) {
+      if (attributeValue && propertyValue === undefined) {
+        return callback(true);
+      } else {
+        return callback();
+      }
+    };
+
   },
 
   /**
    * Type
-   * --------------------
    */
-  type: (function() {
+  type: function typeConstructor() {
     
     var types = {
+      'string': isString,
+      'number': isNumber,
+      'function': isFunction,
+      'boolean': isBoolean,
       'object': isObject,
       'array': isArray,
       'integer': isInteger,
@@ -30,18 +37,7 @@ var attributes = {
       'any': returnTrue
     };
 
-    each([
-      'string',
-      'number',
-      'function',
-      'boolean'
-    ], function(index, type) {
-      types[type] = function(input) {
-        return typeof input === type;
-      };
-    });
-
-    return function(property, propertyValue, attributeValue, propertyAttributes, callback) {
+    return function type(property, propertyValue, attributeValue, propertyAttributes, callback) {
 
       /**
        * {
@@ -70,36 +66,12 @@ var attributes = {
 
     };
 
-  }()),
+  },
 
   /**
    * Format
    */
-  'format': (function() {
-
-    /**
-     * Aliases
-     *
-     * Amanda allows you to use alases for format
-     */
-    var aliases = {
-
-    };
-
-    /**
-     * CustomFormats
-     */
-    var customFormats = {
-      'alpha': {
-        type: 'string',
-        regex: /^[a-zA-Z]+$/
-      },
-      'alphanumeric': {
-        type: 'string',
-        allowedType: 'number',
-        regex: /^[a-zA-Z0-9]+$/
-      },
-    };
+  format: function formatConstructor() {
 
     /**
      * Formats
@@ -153,104 +125,129 @@ var attributes = {
       return (formats[attributeValue](propertyValue)) ? callback() : callback(true);
     };
 
-  }()),
+  },
 
   /**
    * MinLength
    */
-  'minLength': function(property, propertyValue, attributeValue, propertyAttributes, callback) {
-    return (typeof propertyValue === 'string' && propertyValue.length >= attributeValue) ? callback() : callback(true);
+  minLength: function minLengthConstructor() {
+    return function minLength(property, propertyValue, attributeValue, propertyAttributes, callback) {
+      return (typeof propertyValue === 'string' && propertyValue.length >= attributeValue) ? callback() : callback(true);
+    };
   },
 
   /**
    * MaxLength
    */
-  'maxLength': function(property, propertyValue, attributeValue, propertyAttributes, callback) {
-    return (typeof propertyValue === 'string' && propertyValue.length <= attributeValue) ? callback() : callback(true);
+  maxLength: function maxLengthConstructor() {
+    return function maxLength(property, propertyValue, attributeValue, propertyAttributes, callback) {
+      return (typeof propertyValue === 'string' && propertyValue.length <= attributeValue) ? callback() : callback(true);
+    };
   },
 
   /**
    * Length
    */
-  'length': function(property, propertyValue, attributeValue, propertyAttributes, callback) {
-    return (typeof propertyValue === 'string' && propertyValue.length === attributeValue) ? callback() : callback(true);
+  length: function lengthConstructor() {
+    return function length(property, propertyValue, attributeValue, propertyAttributes, callback) {
+      return (typeof propertyValue === 'string' && propertyValue.length === attributeValue) ? callback() : callback(true);
+    };
   },
 
   /**
    * Enum
    */
-  'enum': function(property, propertyValue, attributeValue, propertyAttributes, callback) {
-    return (attributeValue.indexOf(propertyValue) === -1) ? callback(true) : callback();
+  enum: function enumConstructor() {
+    return function enum(property, propertyValue, attributeValue, propertyAttributes, callback) {
+      return (attributeValue.indexOf(propertyValue) === -1) ? callback(true) : callback();
+    };
   },
 
   /**
    * Except
    */
-  'except': function(property, propertyValue, attributeValue, propertyAttributes, callback) {
-    return (attributeValue.indexOf(propertyValue) !== -1) ? callback(true) : callback();
+  except: function exceptConstructor() {
+    return function except(property, propertyValue, attributeValue, propertyAttributes, callback) {
+      return (attributeValue.indexOf(propertyValue) !== -1) ? callback(true) : callback();
+    };
   },
 
   /**
    * Minimum
    */
-  'minimum': function(property, propertyValue, attributeValue, propertyAttributes, callback) {
-    if (typeof propertyValue === 'number') {
-      var condition = (propertyAttributes.exclusiveMinimum) ? propertyValue > attributeValue : propertyValue >= attributeValue;
-      return (condition) ? callback() : callback(true);
-    } else {
-      return callback(true);
-    }
+  minimum: function minimumConstructor() {
+    return function minimum(property, propertyValue, attributeValue, propertyAttributes, callback) {
+      if (typeof propertyValue === 'number') {
+        var condition = (propertyAttributes.exclusiveMinimum) ? propertyValue > attributeValue : propertyValue >= attributeValue;
+        return (condition) ? callback() : callback(true);
+      } else {
+        return callback(true);
+      }
+    };
   },
 
   /**
    * Maximum
    */
-  'maximum': function(property, propertyValue, attributeValue, propertyAttributes, callback) {
-    if (typeof propertyValue === 'number') {
-      var condition = (propertyAttributes.exclusiveMaximum) ? propertyValue < attributeValue : propertyValue <= attributeValue;
-      return (condition) ? callback() : callback(true);
-    } else {
-      return callback(true);
-    }
+  maximum: function maximumConstructor() {
+    return function maximum(property, propertyValue, attributeValue, propertyAttributes, callback) {
+      if (typeof propertyValue === 'number') {
+        var condition = (propertyAttributes.exclusiveMaximum) ? propertyValue < attributeValue : propertyValue <= attributeValue;
+        return (condition) ? callback() : callback(true);
+      } else {
+        return callback(true);
+      }
+    };
   },
 
   /**
    * Pattern
    */
-  'pattern': function(property, propertyValue, attributeValue, propertyAttributes, callback) {
-    return (typeof propertyValue === 'string' && !propertyValue.match(attributeValue)) ? callback(true) : callback();
+  pattern: function patternConstructor() {
+    return function pattern(property, propertyValue, attributeValue, propertyAttributes, callback) {
+      return (typeof propertyValue === 'string' && !propertyValue.match(attributeValue)) ? callback(true) : callback();
+    };
   },
 
   /**
    * MinItems
    */
-  'minItems': function(property, propertyValue, attributeValue, propertyAttributes, callback) {
-    return (isArray(propertyValue) && propertyValue.length >= attributeValue) ? callback() : callback(true);
+  minItems: function minItemsConstructor() {
+    return function minItems(property, propertyValue, attributeValue, propertyAttributes, callback) {
+      return (isArray(propertyValue) && propertyValue.length >= attributeValue) ? callback() : callback(true);
+    };
   },
 
   /**
    * MaxItems
    */
-  'maxItems': function(property, propertyValue, attributeValue, propertyAttributes, callback) {
-    return (isArray(propertyValue) && propertyValue.length <= attributeValue) ? callback() : callback(true);
+  maxItems: function maxItemsConstructor() {
+    return function maxItems(property, propertyValue, attributeValue, propertyAttributes, callback) {
+      return (isArray(propertyValue) && propertyValue.length <= attributeValue) ? callback() : callback(true);
+    };
   },
 
   /**
    * UniqueItems
    */
-  'uniqueItems': function(property, propertyValue, attributeValue, propertyAttributes, callback) {
-    return each(propertyValue, function(index, value, callback) {
-      return (propertyValue.indexOf(value) < index) ? callback(true) : callback();
-    }, callback);
+  uniqueItems: function uniqueItemsConstructor() {
+    return function uniqueItems(property, propertyValue, attributeValue, propertyAttributes, callback) {
+      return each(propertyValue, function(index, value, callback) {
+        return (propertyValue.indexOf(value) < index) ? callback(true) : callback();
+      }, callback);
+    };
   },
 
   /**
    * DivisibleBy
    */
-  'divisibleBy': function(property, propertyValue, attributeValue, propertyAttributes, callback) {
-    var isNumber = typeof propertyValue === 'number',
-        isDivisible = propertyValue % attributeValue === 0;
-    return (isNumber && isDivisible) ? callback() : callback(true);
+  divisibleBy: function divisibleByConstructor() {
+    return function divisibleBy(property, propertyValue, attributeValue, propertyAttributes, callback) {
+      var isNumber = typeof propertyValue === 'number',
+          isDivisible = propertyValue % attributeValue === 0;
+      return (isNumber && isDivisible) ? callback() : callback(true);
+    }
   }
 
 };
+
