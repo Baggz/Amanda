@@ -31,13 +31,13 @@ suite('JSON/Attribute/format#array', function() {
     ].forEach(function(data) {
       Validator.validate(data, schema, function(error) {
         count += 1;
-        expect(error).to.be.not.ok();
+        expect(error).to.not.be.ok();
       });  
     });
   });
 
   test('should run 3 times', function() {
-    expect(count).to.be.eql(3;
+    expect(count).to.be.eql(3);
   });
 
-};
+});
