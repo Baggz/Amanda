@@ -17,30 +17,27 @@ var attributes = {
 
   /**
    * Type
+   * --------------------
    */
-  'type': (function() {
+  type: (function() {
     
     var types = {
-      'object': function(input) {
-        return Object.prototype.toString.call(input) === '[object Object]';
-      },
-      'array': function(input) {
-        return Object.prototype.toString.call(input) === '[object Array]';
-      },
-      'integer': function(input) {
-        return (typeof input === 'number') && input % 1 === 0;
-      }
+      'object': isObject,
+      'array': isArray,
+      'integer': isInteger,
+      'int': isInteger,
+      'null': isNull,
+      'any': returnTrue
     };
 
-    // Generate the rest of type checkers
-    [
+    each([
       'string',
       'number',
       'function',
       'boolean'
-    ].forEach(function(type) {
-      types[type] = function() {
-        return typeof arguments[0] === type;
+    ], function(index, type) {
+      types[type] = function(input) {
+        return typeof input === type;
       };
     });
 
@@ -51,10 +48,12 @@ var attributes = {
        *   type: ['string', 'number']
        * }
        */
-      if (Object.prototype.toString.call(attributeValue) === '[object Array]') {
+      if (isArray(attributeValue)) {
+
         var noError = attributeValue.some(function(type) {
           return types[type](propertyValue);
         });
+
         return (noError) ? callback() : callback(true);
 
       /**
@@ -63,7 +62,10 @@ var attributes = {
        * }
        */
       } else {
-        return (types[attributeValue](propertyValue)) ? callback() : callback(true);
+        if (!hasProperty(type, attributeValue)) {
+          return callback('Type ‘' + type + '’ is not supported.');
+        }
+        return types[attributeValue](propertyValue) ? callback() : callback(true);
       }
 
     };
