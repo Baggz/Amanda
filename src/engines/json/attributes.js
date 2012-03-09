@@ -10,7 +10,7 @@ Validation.prototype.attributes = {
   required: function requiredConstructor() {
 
     return function required(property, propertyValue, attributeValue, propertyAttributes, callback) {
-      if (attributeValue && propertyValue === undefined) {
+      if (attributeValue && isUndefined(propertyValue)) {
         return callback(true);
       } else {
         return callback();
@@ -132,7 +132,11 @@ Validation.prototype.attributes = {
    */
   minLength: function minLengthConstructor() {
     return function minLength(property, propertyValue, attributeValue, propertyAttributes, callback) {
-      return (typeof propertyValue === 'string' && propertyValue.length >= attributeValue) ? callback() : callback(true);
+      if (isString(propertyValue) && propertyValue.length >= attributeValue) {
+        return callback();
+      } else {
+        return callback(true);
+      }
     };
   },
 
