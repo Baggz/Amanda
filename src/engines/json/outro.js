@@ -22,14 +22,24 @@
     },
 
     /**
-     * AddValidator
+     * AddAttribute
      *
-     * @param {string} validatorName
-     * @param {function} validatorFn
+     * @param {string} attributeName
+     * @param {function} attributeFn
      */
-    addValidator: function(validatorName, validatorFn) {
-      validators[validatorName] = validatorFn;
-    }
+    addAttribute: function(attributeName, attributeFn) {
+      return Validation.prototype.addAttribute.apply(Validation, argument);
+    },
+
+    /**
+     * AddAttributeConstructor
+     *Constructor
+     * @param {string} attributeName
+     * @param {function} attributeConstructor
+     */
+    addAttributeConstructor: function(attributeName, attributeConstructor) {
+      return Validation.prototype.addAttributeConstructor.apply(Validation, argument);
+    },
 
   };
 
