@@ -1,9 +1,9 @@
 /**
- * AmandaError
+ * ValidationError
  *
  * @constructor
  */
-var AmandaError = function() {
+var ValidationError = function() {
   this.length = 0;
 };
 
@@ -14,7 +14,7 @@ var AmandaError = function() {
  *
  * @param {object} error
  */
-AmandaError.prototype.addError = function(error) {
+ValidationError.prototype.addError = function(error) {
   this[this.length] = error;
   this.length++;
 };
@@ -24,7 +24,8 @@ each({
   getProperties: 'property',
   getMessages: 'message'
 }, function(key, value) {
-  AmandaError.prototype[key] = function() {
+  ValidationError.prototype[key] = function() {
     return pluck(this, value);
   };    
 });
+ 
