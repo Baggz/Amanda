@@ -25,7 +25,6 @@ suite('JSON/Attribute/format#ip', function() {
 
   test('should not return an error', function() {
     [
-      '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
       '210.232.115.79',
       '18.239.245.96',
       '15.138.29.10',
@@ -44,8 +43,8 @@ suite('JSON/Attribute/format#ip', function() {
     });
   });
 
-  test('should run 11 times', function() {
-    expect(count).to.be.eql(11);
+  test('should run 10 times', function() {
+    expect(count).to.be.eql(10);
   });
 
 });
