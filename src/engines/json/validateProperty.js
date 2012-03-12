@@ -59,7 +59,7 @@ Validation.prototype.validateProperty = function(property, propertyValue, proper
       }
     };
 
-    if (propertyAttributes[attributeName]) {
+    if (isDefined(propertyAttributes[attributeName])) {
       return attributeFn.apply(context, [
         property,
         propertyValue,
