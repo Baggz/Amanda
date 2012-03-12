@@ -19,7 +19,9 @@ Validation.prototype.validateProperty = function(property, propertyValue, proper
     'validateProperties',
     'validateSchema',
     'validateProperty',
-    'getProperty'
+    'getProperty',
+    'attributes',
+    'errors'
   ].forEach(function(key) {
     context[key] = this[key];
   }, self);
