@@ -67,7 +67,7 @@ Validation.prototype.validate = function(instance, schema, callback) {
       try {
         instance = JSON.parse(instance);
       } catch(parseError) {
-        throw new Error(parseError);
+
       }
     }
     return this.validateSchema(instance, schema, '', callbackProxy);
