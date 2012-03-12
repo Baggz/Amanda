@@ -5,30 +5,8 @@
 
 [Amanda](https://github.com/Baggz/Amanda) validates data against JSON Schema. It's fully compliant with the [JSON Schema Internet Draft](http://tools.ietf.org/html/draft-zyp-json-schema-03).
 
-#### Features
-
-* **Extendable**, you can create **your own validators**
-* Can be used with **Node.js** and **in the browser**
-* Amanda has **no dependencies**
-* **AMD compatible**, you can load it via [RequireJS](https://github.com/jrburke/requirejs)
-* Lightweight
-* Fully **documented**
-* Tested
-
-### Contents
-
-* Example
-* Download
-* Usage
-* Documentation
-* Compatibility
-* Tests
-* Versioning
-* Contributors
-* License
-
 <a name="example"></a>
-## Example [&uarr;](#contents)
+#### Example
 
 ```javascript
 /**
@@ -58,11 +36,46 @@ var data = {
   email: 'kenneth@gmail.com'
 };
 
+
+var JsonValidator = amanda('json');
+
 // Validate the data against the schema
-amanda.validate(data, schema, function(error) {
+JsonValidator.validate(data, schema, function(error) {
   // Do something...
 });
 ```
+
+<a name="features"></a>
+#### Features
+
+* **Extendable**, you can create **your own validators**
+* Can be used with **Node.js** and **in the browser**
+* Amanda has **no dependencies**
+* **AMD compatible**, you can load it via [RequireJS](https://github.com/jrburke/requirejs)
+* Lightweight
+* Fully **documented**
+* Tested
+
+<a name="status"></a>
+#### Status
+
+| **Branch** | **Status** |
+|:-----------|:----------|
+| master | [![Build Status](https://secure.travis-ci.org/Baggz/Amanda.png?branch=master)](http://travis-ci.org/Baggz/Amanda) |
+| dev | [![Build Status](https://secure.travis-ci.org/Baggz/Amanda.png?branch=dev)](http://travis-ci.org/Baggz/Amanda) |
+
+<a name="contents"></a>
+### Contents
+
+* [Example](#Example)
+* [Download](#Download)
+* [Usage](#Usage)
+* [Documentation](#Documentation)
+* [Compatibility](#Compatibility)
+* [Tests](#Tests)
+* [Versioning](#Versioning)
+* [Contributors](#Contributors)
+* [License](#License)
 
 <a name="download"></a>
 ## Download [&uarr;](#contents)
