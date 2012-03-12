@@ -12,7 +12,7 @@ var errorMessages = {
    * @param {string} attributeValue
    */
   required: function(property, propertyValue, attributeValue) {
-    return 'The ‘' + property + '’ property is required.',
+    return 'The ‘' + property + '’ property is required.';
   },
 
   /**
@@ -182,7 +182,7 @@ var errorMessages = {
    * @param {string} attributeValue
    */
   uniqueItems: function(property, propertyValue, attributeValue) {
-    return 'All items in the ‘' + property + '’ property must be unique.',
+    return 'All items in the ‘' + property + '’ property must be unique.';
   },
 
   /**
