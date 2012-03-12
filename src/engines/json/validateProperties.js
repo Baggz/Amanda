@@ -18,7 +18,7 @@ Validation.prototype.validateProperties = function(instance, schema, path, callb
         isArray =  propertyAttributes.type === 'array';
 
     // Get the value of property (instance[property])
-    var propertyValue = self.getProperty(instance, property);
+    var propertyValue = self.getProperty(property, instance);
 
     // Compose the property path
     var propertyName = property.indexOf(' ') !== -1 ? '[\'' + property + '\']' : '.' + property,

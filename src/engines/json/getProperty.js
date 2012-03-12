@@ -1,9 +1,12 @@
 /**
  * GetProperty
  *
+ * @param {string} property 
  * @param {object} source
- * @param {string} property
  */
-Validation.prototype.getProperty = function(source, property) {
-  return (!source) ? undefined : source[property];
+Validation.prototype.getProperty = function(property, source) {
+  var tree = property.match(/([a-zA-Z0-9\s]+)/g);
+  return tree.reduce(function(previousValue, currentValue, index) {
+    return (previousValue && previousValue[currentValue]) ? previousValue[currentValue] : undefined;
+  }, source);
 };
