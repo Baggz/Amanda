@@ -1,6 +1,6 @@
 if (typeof module !== 'undefined' && module.exports) {
   var expect = require('expect.js');
-  var Amanda = require('../../../dist/latest.js');
+  var amanda = require('../../../dist/latest.js');
 }
 
 /**
@@ -22,7 +22,7 @@ suite('JSON/Attribute/pattern', function() {
   /**
    * Validator
    */
-  var Validator = new Amanda('json');
+  var Validator = amanda('json');
 
   test('should not return an error', function() {
     Validator.validate('hola', schema, function(error) {

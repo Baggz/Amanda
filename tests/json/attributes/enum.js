@@ -1,6 +1,6 @@
 if (typeof module !== 'undefined' && module.exports) {
   var expect = require('expect.js');
-  var Amanda = require('../../../dist/latest.js');
+  var amanda = require('../../../dist/latest.js');
 }
 
 /**
@@ -25,7 +25,7 @@ suite('JSON/Attribute/enum', function() {
   /**
    * Validator
    */
-  var Validator = new Amanda('json');
+  var Validator = amanda('json');
 
   test('should return an error when an instance equals ‘superadmin’', function() {
     Validator.validate('superadmin', schema, function(error) {

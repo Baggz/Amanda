@@ -1,6 +1,6 @@
 if (typeof module !== 'undefined' && module.exports) {
   var expect = require('expect.js');
-  var Amanda = require('../../../../dist/latest.js');
+  var amanda = require('../../../../dist/latest.js');
   var domains = require('../../../resources/domains.js');
   var domainNames = require('../../../resources/domainNames.js');
   var params = require('../../../resources/params.js');
@@ -24,7 +24,7 @@ suite('JSON/Attribute/format#url', function() {
   /**
    * Validator
    */
-  var Validator = new Amanda('json');
+  var Validator = amanda('json');
 
   test('should not return an error', function() {
 
