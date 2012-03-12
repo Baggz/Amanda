@@ -9,12 +9,26 @@ var Validation = function(options) {
   // Save a reference to the ‘this’
   var self = this;
 
-  // Options
-  this.singleError = options.hasOwnProperty('singleError') ? options.singleError : true;
-  this.attributes = attributes;
-  this.messages = (options.messages) ? merge(options.messages, messages) : messages;
+  var defaultOptions = {
+    singleError: true,
+    errorMessages: errorMessages,
+    cache: false
+  };
 
-  // Initializes a new instance of the ‘Error’ object
-  this.Errors = new AmandaError();
+  each(defaultOptions, function(key, value) {
+
+    if (isObject(value) && options[key]) {
+      self[key] = merge(options[key], defaultOptions[key]);
+
+    } else if (isObject(value) && !options[key]) {
+      self[key] = merge ({}, defaultOptions[key]);
+
+    } else {
+      self[key] = options[key] || defaultOptions[key];
+    }
+
+  });
+
+  this.errors = new ValidationError();
 
 };
