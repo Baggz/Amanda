@@ -2,9 +2,13 @@
  * Enum
  */
 Validation.prototype.addAttributeConstructor('enum', function enumConstructor() {
+  return function(property, propertyValue, attributeValue, propertyAttributes, callback) {
+    
+    if (attributeValue.indexOf(propertyValue) === -1) {
+      this.addError();
+    }
+    
+    return callback();
 
-  return function enum(property, propertyValue, attributeValue, propertyAttributes, callback) {
-    return (attributeValue.indexOf(propertyValue) === -1) ? callback(true) : callback();
   };
-
 });
