@@ -1,14 +1,12 @@
 /**
  * MaxItems
  */
-Validation.prototype.addAttributeConstructor('maxItems', function maxItemsConstructor() {
-  return function maxItems(property, propertyValue, attributeValue, propertyAttributes, callback) {
+var maxItemsAttribute = function maxItems(property, propertyValue, attributeValue, propertyAttributes, callback) {
+  if (isArray(propertyValue) && propertyValue.length > attributeValue) {
+    this.addError();
+  }
+  return callback();
+};
 
-    if (isArray(propertyValue) && propertyValue.length > attributeValue) {
-      this.addError();
-    }
-
-    return callback();
-
-  };
-});
+// Export
+Validation.prototype.addAttribute('maxItems', maxItemsAttribute);
