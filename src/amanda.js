@@ -1,40 +1,9 @@
-var tmpValidators = {};
-
 var Amanda = function(engine) {
 
-  this.engine = engine;
-  this.validate = Amanda.validate;
-  this.addValidator = Amanda.addValidator;
-
-};
-
-/**
- * Amanda
- *
- * @constructor
- * @param {string} engine
- */
-Amanda.validate = function(instance, schema, options, callback) {
-
-  if (typeof options === 'function') {
-    callback = options;
-    options = {};
+  if (!hasProperty(engines, engine)) {
+    throw new Error('The ‘' + engine + '’ engine is not supported. Please use a different one.');
   }
 
-  each(tmpValidators, engines.json.addValidator);
+  return engines[engine];
 
-  this.engine = this.engine || 'json';
-
-  return engines[this.engine].validate(instance, schema, options, callback);  
-
-};
-
-/**
- * AddValidator
- *
- * @param {string} validatorName
- * @param {function} validatorFn
- */
-Amanda.addValidator = function(validatorName, validatorFn) {
-  tmpValidators[validatorName] = validatorFn;
 };
