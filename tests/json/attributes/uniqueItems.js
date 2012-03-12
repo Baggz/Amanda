@@ -1,4 +1,4 @@
-<if (typeof module !== 'undefined' && module.exports) {
+if (typeof module !== 'undefined' && module.exports) {
   var expect = require('expect.js');
   var amanda = require('../../../dist/latest.js');
 }
