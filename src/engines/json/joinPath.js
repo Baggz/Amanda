@@ -6,10 +6,10 @@
  */
 Validation.prototype.joinPath = function(path, property) {
   if (property.match(/^[a-zA-Z]+$/)) {
-    return (path) ? (path + '.' + key) : property;
-  } else if (key.match(/\d+/)) {
-    return path + '[' + key + ']';
+    return (path) ? (path + '.' + property) : property;
+  } else if (property.match(/\d+/)) {
+    return path + '[' + property + ']';
   } else  {
-    return path + '["' + key + '"]';
+    return path + '["' + property + '"]';
   }
 };
