@@ -19,10 +19,7 @@ Validation.prototype.validateProperties = function(instance, schema, path, callb
 
     // Get the value of property (instance[property])
     var propertyValue = self.getProperty(property, instance);
-
-    // Compose the property path
-    var propertyName = property.indexOf(' ') !== -1 ? '[\'' + property + '\']' : '.' + property,
-        propertyPath = path.length === 0 ? property : path + propertyName;
+    var propertyPath = self.joinPath(path, property);
 
     /**
      * {
