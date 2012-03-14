@@ -1,9 +1,7 @@
 <a name="amanda"></a>
 # Amanda
 
-[![Build Status](https://secure.travis-ci.org/Baggz/Amanda.png)](http://travis-ci.org/Baggz/Amanda)
-
-[Amanda](https://github.com/Baggz/Amanda) validates data against JSON Schema. It's fully compliant with the [JSON Schema Internet Draft](http://tools.ietf.org/html/draft-zyp-json-schema-03).
+Amanda is aiming to be an universal validation library. Currently it supports only the [JSON Schema Internet Draft](http://tools.ietf.org/html/draft-zyp-json-schema-03), but I'm planning to add [Orderly](http://orderly-json.org/), [Relax NG](http://relaxng.org/) and others very soon.
 
 <a name="example"></a>
 #### Example
@@ -19,11 +17,6 @@ var schema = {
       required: true,
       type: 'string',
       length: 7
-    },
-    email: {
-      required: true,
-      type: 'string',
-      format: 'email'
     }
   }
 };
@@ -32,15 +25,14 @@ var schema = {
  * Data
  */
 var data = {
-  name: 'Kenneth',
-  email: 'kenneth@gmail.com'
+  name: 'Kenneth'
 };
 
-
-var JsonValidator = amanda('json');
+// Initialize a JSON Schema validator
+var jsonSchemaValidator = amanda('json');
 
 // Validate the data against the schema
-JsonValidator.validate(data, schema, function(error) {
+jsonSchemaValidator.validate(data, schema, function(error) {
   // Do something...
 });
 ```
@@ -48,8 +40,8 @@ JsonValidator.validate(data, schema, function(error) {
 <a name="features"></a>
 #### Features
 
-* **Extendable**, you can create **your own validators**
-* Can be used with **Node.js** and **in the browser**
+* **Extendable**, you can create **your own attributes**
+* Can be used with **Node.js** and **in a browser**
 * Amanda has **no dependencies**
 * **AMD compatible**, you can load it via [RequireJS](https://github.com/jrburke/requirejs)
 * Lightweight
@@ -67,18 +59,19 @@ JsonValidator.validate(data, schema, function(error) {
 <a name="contents"></a>
 ### Contents
 
-* [Example](#Example)
 * [Download](#Download)
 * [Usage](#Usage)
 * [Documentation](#Documentation)
 * [Compatibility](#Compatibility)
+* [Building](#Building)
 * [Tests](#Tests)
 * [Versioning](#Versioning)
+* [Release Notes](#ReleaseNotes)
 * [Contributors](#Contributors)
 * [License](#License)
 
-<a name="download"></a>
-## Download [&uarr;](#contents)
+<a name="Download"></a>
+## Download [&uarr;](#Contents)
 
 To install **Amanda**, use [NPM](http://npmjs.org/).
 
@@ -90,11 +83,11 @@ Releases are available for download from GitHub.
 
 | **Version** | **Description** | **Size** | **Action** |
 |:------------|:----------------|:---------|:-----------|
-| `amanda.js` | *uncompressed, with comments* | 15.06 KB (3.42 KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/src/amanda.js) |
-| `amanda.min.js` | *compressed, without comments* | 6.2 KB (2.09 KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/dist/amanda.min.js) |
+| `amanda.js` | *uncompressed, with comments* | 32.57 KB (6.46 KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/dist/latest.js) |
+| `amanda.min.js` | *compressed, without comments* | 11.98 KB (3.53 KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/dist/latest.min.js) |
 
-<a name="usage"></a>
-## Usage [&uarr;](#contents)
+<a name="Uage"></a>
+## Usage [&uarr;](#Contents)
 
 ### Browser
 
@@ -126,13 +119,13 @@ require(['amanda'], function(amanda) {
 });
 ```
 
-<a name="documentation"></a>
-## Documentation [&uarr;](#contents)
+<a name="Documentation"></a>
+## Documentation [&uarr;](#Contents)
 
 All documentation is available in the [/docs/](https://github.com/Baggz/Amanda/tree/master/examples) folder.
 
-<a name="compatibility"></a>
-## Compatibility [&uarr;](#contents)
+<a name="Compatibility"></a>
+## Compatibility [&uarr;](#Contents)
 
 ### Node.js
 
@@ -154,14 +147,33 @@ From version **0.6.0**.
 
 *Testing in progress...*
 
-<a name="tests"></a>
-## Tests [&uarr;](#tests)
+<a name="Building"></a>
+## Building [&uarr;](#Contents)
+
+I have included a `Makefile` with convenience methods for working with the Amanda library.
+
+* `make` Builds the library
+* `make watch` Automatically builds the library whenever you change a file
+
+To include just specific engines run...
+
+```
+ENGINES=json make
+```
+
+```
+ENGINES=json,orderly make
+```
+
+<a name="Tests"></a>
+## Tests [&uarr;](#Contents)
 
 ```
 $ npm test
 ```
 
-## Versioning
+<a name="Versioning"></a>
+## Versioning [&uarr;](#Contents
 
 Releases will be numbered with the following format.
 
@@ -177,8 +189,17 @@ And constructed with the following guidelines.
 
 For more information on *semantic versioning*, please visit http://semver.org/.
 
-<a name="contributors"></a>
-## Contributors [&uarr;](#contents)
+<a name="ReleaseNotes"></a>
+## Release Notes [&uarr;](#Contents)
+
+* [v0.3.0](https://github.com/Baggz/Amanda/pull/26)
+* [v0.2.2](https://github.com/Baggz/Amanda/pull/15)
+* [v0.2.1](https://github.com/Baggz/Amanda/pull/3)
+* [v0.2.0](https://github.com/Baggz/Amanda/pull/2)
+* [v0.0.2](https://github.com/Baggz/Amanda/pull/1)
+
+<a name="Contributors"></a>
+## Contributors [&uarr;](#Contents)
 
 The following are the major contributors of Amanda (in random order).
 
@@ -188,8 +209,8 @@ The following are the major contributors of Amanda (in random order).
 * **Adrian Rossouw** ([@Vertice](https://github.com/Vertice))
 * **Leon de Almeida** ([@leondealmeida](https://github.com/leondealmeida))
 
-<a name="license"></a>
-## License [&uarr;](#contents)
+<a name="License"></a>
+## License [&uarr;](#Contents)
 
 (The MIT License)
 
