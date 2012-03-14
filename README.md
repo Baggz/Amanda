@@ -1,7 +1,7 @@
 <a name="amanda"></a>
 # Amanda
 
-Amanda is aiming to be an universal validation library. Currently it supports only the [JSON Schema Internet Draft](http://tools.ietf.org/html/draft-zyp-json-schema-03), but I'm planning to add [Orderly](http://orderly-json.org/), [Relax NG](http://relaxng.org/) and others very soon.
+[Amanda](https://github.com/Baggz/Amanda) is aiming to be **an universal validation library**. Currently it supports only the [JSON Schema Internet Draft](http://tools.ietf.org/html/draft-zyp-json-schema-03), but I'm planning to add [Orderly](http://orderly-json.org/), [Relax NG](http://relaxng.org/) and others very soon.
 
 <a name="example"></a>
 #### Example
@@ -59,16 +59,19 @@ jsonSchemaValidator.validate(data, schema, function(error) {
 <a name="contents"></a>
 ### Contents
 
-* [Download](#Download)
-* [Usage](#Usage)
-* [Documentation](#Documentation)
-* [Compatibility](#Compatibility)
-* [Building](#Building)
-* [Tests](#Tests)
-* [Versioning](#Versioning)
-* [Release Notes](#ReleaseNotes)
-* [Contributors](#Contributors)
-* [License](#License)
+<ul>
+  <li><a href="#Download">Download</a></li>
+  <li><a href="#Usage">Usage</a></li>
+  <li><a href="#Documentation">Documentation</a></li>
+  <li><a href="#Compatibility">Compatibility</a></li>
+  <li><a href="#Building">Building</a></li>
+  <li><a href="#Tests">Tests</a></li>
+  <li><a href="#Versioning">Versioning</a></li>
+  <li><a href="#Tests">Tests</a></li>
+  <li><a href="#Release Notes">Release Notes</a></li>
+  <li><a href="#Contributors">Contributors</a></li>
+  <li><a href="#License">License</a></li>
+</ul>
 
 <a name="Download"></a>
 ## Download [&uarr;](#Contents)
@@ -79,7 +82,7 @@ To install **Amanda**, use [NPM](http://npmjs.org/).
 $ npm install amanda
 ```
 
-Releases are available for download from GitHub.
+Releases for a browser are available for download from GitHub.
 
 | **Version** | **Description** | **Size** | **Action** |
 |:------------|:----------------|:---------|:-----------|
@@ -131,19 +134,9 @@ All documentation is available in the [/docs/](https://github.com/Baggz/Amanda/t
 
 From version **0.6.0**.
 
-*Earlier versions might work OK, but are not tested.*
+***Note:** Earlier versions might work OK, but are not tested.*
 
 ### Browsers
-
-**Desktop**
-
-| **Browser** | **Supported** | **Version** |
-|:------------|:-----------:|:------------|
-| Google Chrome | ✔ | 12+ |
-| Safari | n/a | *Not tested* |
-| Firefox | n/a | *Not tested* |
-| Opera | n/a | *Not tested* |
-| Internet Explorer | ✕ | *Not tested* |
 
 *Testing in progress...*
 
@@ -152,8 +145,10 @@ From version **0.6.0**.
 
 I have included a `Makefile` with convenience methods for working with the Amanda library.
 
-* `make` Builds the library
-* `make watch` Automatically builds the library whenever you change a file
+<ul>
+  <li><code>make</code> Builds the library</li>
+  <li><code>make watch</code> Automatically builds the library whenever you change a file</li>
+</ul>
 
 To include just specific engines run...
 
@@ -173,7 +168,7 @@ $ npm test
 ```
 
 <a name="Versioning"></a>
-## Versioning [&uarr;](#Contents
+## Versioning [&uarr;](#Contents)
 
 Releases will be numbered with the following format.
 
