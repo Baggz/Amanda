@@ -21,7 +21,8 @@ Validation.prototype.validateProperty = function(property, propertyValue, proper
     'validateProperty',
     'getProperty',
     'attributes',
-    'errors'
+    'errors',
+    'joinPath'
   ].forEach(function(key) {
     context[key] = this[key];
   }, self);
