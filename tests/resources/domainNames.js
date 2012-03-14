@@ -1,4 +1,4 @@
-module.exports = [
+var domainNames = [
   'http://www.example',
   'https://www.example',
   'http://example',
@@ -7,3 +7,7 @@ module.exports = [
   'www.example',
   'example'
 ];
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = domainNames;
+}
