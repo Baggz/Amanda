@@ -32,7 +32,7 @@ Validation.prototype.validateItems = function(instance, schema, path, callback) 
     if (['object', 'array'].indexOf(schema.items.type) !== -1) {
       return each(instance, function(index, propertyValue, callback) {
 
-        var propertyPath = path + '[' + index + ']';
+        var propertyPath = self.joinPath(path, index);
 
         return self.validateSchema(
           propertyValue,
@@ -54,7 +54,7 @@ Validation.prototype.validateItems = function(instance, schema, path, callback) 
     } else {
       return each(instance, function(index, propertyValue, callback) {
 
-        var propertyPath = path + '[' + index + ']';
+        var propertyPath = self.joinPath(path, index);
 
         return self.validateProperty(
           propertyPath,
