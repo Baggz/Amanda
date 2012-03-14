@@ -34,7 +34,7 @@
       return self.validateSchema(
         propertyValue[propertyName],
         propertySchema,
-        property + '.' + propertyName, // Fix Me!
+        self.joinPath(property, propertyName),
         callback
       );
     }, callback);
