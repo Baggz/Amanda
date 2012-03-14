@@ -1,4 +1,4 @@
-module.exports = [
+var domains = [
   '.ac',
   '.ad',
   '.ae',
@@ -270,3 +270,7 @@ module.exports = [
   '.travel',
   '.xxx'
 ];
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = domains;
+}
