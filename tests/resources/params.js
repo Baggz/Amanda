@@ -1,4 +1,4 @@
-module.exports = [
+var params = [
   '/?foo',
   '/?foo=bar',
   '/path/to/file/',
@@ -9,3 +9,7 @@ module.exports = [
   '/my-Page.html',
   '/my_Page_hello.htm'
 ];
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = params;
+}
