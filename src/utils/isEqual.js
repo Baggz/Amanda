@@ -11,12 +11,12 @@ var isEqual = function(obj1, obj2) {
    */
   if (isArray(obj1, obj2)) {
 
-    if (arr1.length !== arr2.length) {
+    if (obj1.length !== obj2.length) {
       return false;
     }
 
-    return every(arr1, function(value, index, context) {
-      return arr2[index] === value;
+    return every(obj1, function(value, index, context) {
+      return obj2[index] === value;
     });
 
   }
