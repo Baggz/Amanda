@@ -1,4 +1,4 @@
-module.exports = [
+var emails = [
   'info',
   'myEmail',
   'myEmail+notifications',
@@ -7,3 +7,7 @@ module.exports = [
   'my-email',
   'my.email.my.email'
 ];
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = emails;
+}
