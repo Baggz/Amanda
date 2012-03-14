@@ -1,4 +1,4 @@
-module.exports = [
+var percentage = [
   96,
   78,
   55,
@@ -102,3 +102,7 @@ module.exports = [
   2,
   25
 ];
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = percentage;
+}
