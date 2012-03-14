@@ -40,6 +40,17 @@ Validation.prototype.validateProperty = function(property, propertyValue, proper
 
     // Overwrite the ‘addError’ method
     context.addError = function(message) {
+
+      if (isObject(message)) {
+        return self.errors.push({
+          property: message.property || property,
+          propertyValue: message.propertyValue || propertyValue,
+          attributeName: message.attributeName || attributeName,
+          attributeValue: message.attributeValue || propertyAttributes[attributeName],
+          message: message.message || undefined
+        });
+      }
+
       return self.errors.push({
         property: property,
         propertyValue: propertyValue,
@@ -47,6 +58,7 @@ Validation.prototype.validateProperty = function(property, propertyValue, proper
         attributeValue: propertyAttributes[attributeName],
         message: message
       });
+
     };
 
     /**
