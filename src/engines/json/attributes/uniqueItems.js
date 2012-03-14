@@ -1,19 +1,39 @@
-/**
- * UniqueItems
- */
-var uniqueItemsAttribute = function uniqueItems(property, propertyValue, attributeValue, propertyAttributes, callback) {
+(function() {
 
-  var self =  this;
+  /**
+   * UniqueItems
+   */
+  var attribute = function uniqueItems(property, propertyValue, attributeValue, propertyAttributes, callback) {
 
-  each(propertyValue, function(index, value) {
-    if ((propertyValue.indexOf(value) < index)) {
-      self.addError();
-    }
-  });
+    var self =  this;
 
-  return callback();
+    each(propertyValue, function(index, value) {
 
-};
+      if (isString(value)) {
+        if ((propertyValue.indexOf(value) < index)) {
+          self.addError();
+        }
+      }
 
-// Export
-Validation.prototype.addAttribute('uniqueItems', uniqueItemsAttribute);
+      if (isObject(value) || isArray(value)) {
+        propertyValue.forEach(function(subValue, subIndex) {
+
+          if (subIndex !== index) {
+            if (isEqual(value, subValue)) {
+              self.addError();
+            }
+          }
+
+        });
+      }
+
+    });
+
+    return callback();
+
+  };
+
+  // Export
+  Validation.prototype.addAttribute('uniqueItems', attribute);
+
+}());
