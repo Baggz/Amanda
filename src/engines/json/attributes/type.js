@@ -1,8 +1,7 @@
 /**
  * Type
- * --------------------
  */
-Validation.prototype.addAttributeConstructor('type', function typeConstructor() {
+var typeConstructor = function typeConstructor() {
 
   /**
    * Types
@@ -31,7 +30,13 @@ Validation.prototype.addAttributeConstructor('type', function typeConstructor() 
     if (isArray(attributeValue)) {
 
       var noError = attributeValue.some(function(type) {
+
+        if (!hasProperty(types, attributeValue)) {
+          throw new Error('Type ‘' + attributeValue + '’ is not supported.');
+        }
+
         return types[type](propertyValue);
+
       });
 
       if (!noError) {
@@ -61,4 +66,7 @@ Validation.prototype.addAttributeConstructor('type', function typeConstructor() 
 
   };
 
-});
+};
+
+// Export
+Validation.prototype.addAttributeConstructor('type', typeConstructor);
