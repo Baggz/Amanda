@@ -20,7 +20,9 @@
 
           if (subIndex !== index) {
             if (isEqual(value, subValue)) {
-              self.addError();
+              self.addError({
+                property: self.joinPath(property, subIndex)
+              });
             }
           }
 
