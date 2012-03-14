@@ -63,6 +63,7 @@ Validation.prototype.validate = function(instance, schema, callback) {
    * }
    */
   if (objectTypes.indexOf(schema.type) !== -1) {
+
     if (isString(instance)) {
       try {
         instance = JSON.parse(instance);
@@ -70,7 +71,9 @@ Validation.prototype.validate = function(instance, schema, callback) {
 
       }
     }
+
     return this.validateSchema(instance, schema, '', callbackProxy);
+
   }
 
   /**
