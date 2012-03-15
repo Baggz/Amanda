@@ -4,9 +4,11 @@
  * @constructor
  */
 var ValidationError = function(parent) {
+
   this.length = 0;
-  this.parent = parent;
-  this.errorMessages = this.parent.errorMessages;
+  
+  this.errorMessages = parent.errorMessages;
+
 };
 
 ValidationError.prototype.renderErrorMessage = function(error) {
