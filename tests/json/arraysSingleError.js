@@ -7,14 +7,7 @@ if (typeof module !== 'undefined' && module.exports) {
  * Maximum
  * --------------------
  */
-suite('JSON/Arrays (without the ‘singleError’ flag)', function() {
-
-  /**
-   * Options
-   */
-  var options = {
-    singleError: false
-  };
+suite('JSON/Arrays (with the ‘singleError’ flag)', function() {
 
   /**
    * Validator
@@ -35,7 +28,7 @@ suite('JSON/Arrays (without the ‘singleError’ flag)', function() {
       }
     };
 
-    jsonSchemaValidator.validate([], schema, options, function(error) {
+    jsonSchemaValidator.validate([], schema, function(error) {
       count += 1;
       expect(error).to.be(undefined);
     });
@@ -45,7 +38,7 @@ suite('JSON/Arrays (without the ‘singleError’ flag)', function() {
       'b',
       'c',
       'd'
-    ], schema, options, function(error) {
+    ], schema, function(error) {
       count += 1;
       expect(error).to.be(undefined);
     });
@@ -55,7 +48,7 @@ suite('JSON/Arrays (without the ‘singleError’ flag)', function() {
       2,
       3,
       4
-    ], schema, options, function(error) {
+    ], schema, function(error) {
 
       count += 1;
 
@@ -74,7 +67,7 @@ suite('JSON/Arrays (without the ‘singleError’ flag)', function() {
       'b',
       'c',
       'd'
-    ], schema, options, function(error) {
+    ], schema, function(error) {
 
       count += 1;
 
@@ -93,7 +86,7 @@ suite('JSON/Arrays (without the ‘singleError’ flag)', function() {
       2,
       'c',
       'd'
-    ], schema, options, function(error) {
+    ], schema, function(error) {
 
       count += 1;
 
@@ -112,7 +105,7 @@ suite('JSON/Arrays (without the ‘singleError’ flag)', function() {
       'b',
       3,
       'd'
-    ], schema, options, function(error) {
+    ], schema, function(error) {
 
       count += 1;
 
@@ -131,7 +124,7 @@ suite('JSON/Arrays (without the ‘singleError’ flag)', function() {
       'b',
       'c',
       4
-    ], schema, options, function(error) {
+    ], schema, function(error) {
 
       count += 1;
 
@@ -146,37 +139,11 @@ suite('JSON/Arrays (without the ‘singleError’ flag)', function() {
     });
 
     jsonSchemaValidator.validate([
-      1,
-      'b',
-      'c',
-      4
-    ], schema, options, function(error) {
-
-      count += 1;
-
-      expect(error).to.be.ok();
-      expect(error).to.have.property('0');
-      expect(error).to.have.property('1');
-      expect(error).to.have.property('length', 2);
-
-      expect(error[0]).to.have.property('property', '[0]');
-      expect(error[0]).to.have.property('propertyValue', 1);
-      expect(error[0]).to.have.property('attributeName', 'type');
-      expect(error[0]).to.have.property('attributeValue', 'string');
-
-      expect(error[1]).to.have.property('property', '[3]');
-      expect(error[1]).to.have.property('propertyValue', 4);
-      expect(error[1]).to.have.property('attributeName', 'type');
-      expect(error[1]).to.have.property('attributeValue', 'string');
-
-    });
-
-    jsonSchemaValidator.validate([
       undefined,
       undefined,
       undefined,
       1
-    ], schema, options, function(error) {
+    ], schema, function(error) {
 
       count += 1;
 
@@ -190,7 +157,7 @@ suite('JSON/Arrays (without the ‘singleError’ flag)', function() {
 
     });
 
-    expect(count).to.be.eql(9);
+    expect(count).to.be.eql(8);
 
   });
 
@@ -211,22 +178,22 @@ suite('JSON/Arrays (without the ‘singleError’ flag)', function() {
       }
     };
 
-    jsonSchemaValidator.validate([], schema, options, function(error) {
+    jsonSchemaValidator.validate([], schema, function(error) {
       count += 1;
       expect(error).to.be(undefined);
     });
 
-    jsonSchemaValidator.validate([[]], schema, options, function(error) {
+    jsonSchemaValidator.validate([[]], schema, function(error) {
       count += 1;
       expect(error).to.be(undefined);
     });
 
-    jsonSchemaValidator.validate([[], []], schema, options, function(error) {
+    jsonSchemaValidator.validate([[], []], schema, function(error) {
       count += 1;
       expect(error).to.be(undefined);
     });
 
-    jsonSchemaValidator.validate([[], undefined, []], schema, options, function(error) {
+    jsonSchemaValidator.validate([[], undefined, []], schema, function(error) {
       count += 1;
       expect(error).to.be(undefined);
     });
@@ -235,7 +202,7 @@ suite('JSON/Arrays (without the ‘singleError’ flag)', function() {
       ['a', 'b', 'c', 'd', 'e'],
       ['a', 'b', 'c', 'd', 'e'],
       ['a', 'b', 'c', 'd', 'e']
-    ], schema, options, function(error) {
+    ], schema, function(error) {
       count += 1;
       expect(error).to.be(undefined);
     });
@@ -244,7 +211,7 @@ suite('JSON/Arrays (without the ‘singleError’ flag)', function() {
       [1, 'b', 'c', 'd', 'e'],
       ['a', 'b', 'c', 'd', 'e'],
       ['a', 'b', 'c', 'd', 'e']
-    ], schema, options, function(error) {
+    ], schema, function(error) {
 
       count += 1;
       
@@ -262,7 +229,7 @@ suite('JSON/Arrays (without the ‘singleError’ flag)', function() {
       ['a', 'b', 'c', 'd', 'e'],
       [1, 'b', 'c', 'd', 'e'],
       ['a', 'b', 'c', 'd', 'e']
-    ], schema, options, function(error) {
+    ], schema, function(error) {
 
       count += 1;
       
@@ -280,7 +247,7 @@ suite('JSON/Arrays (without the ‘singleError’ flag)', function() {
       ['a', 'b', 'c', 'd', 'e'],
       ['a', 'b', 'c', 'd', 'e'],
       [1, 'b', 'c', 'd', 'e']
-    ], schema, options, function(error) {
+    ], schema, function(error) {
 
       count += 1;
       
@@ -295,33 +262,20 @@ suite('JSON/Arrays (without the ‘singleError’ flag)', function() {
     });
 
     jsonSchemaValidator.validate([
-      [1, 'b', 'c', 'd', 'e'],
+      ['a', 'b', 'c', 'd', 'e'],
       ['a', 'b', 1, 'd', 'e'],
-      ['a', 'b', 'c', 'd', 1]
-    ], schema, options, function(error) {
+      ['a', 'b', 'c', 'd', 'e']
+    ], schema, function(error) {
 
       count += 1;
       
       expect(error).to.be.ok();
       expect(error).to.have.property('0');
-      expect(error).to.have.property('1');
-      expect(error).to.have.property('2');
-      expect(error).to.have.property('length', 3);
 
-      expect(error[0]).to.have.property('property', '[0][0]');
+      expect(error[0]).to.have.property('property', '[1][2]');
       expect(error[0]).to.have.property('propertyValue', 1);
       expect(error[0]).to.have.property('attributeName', 'type');
       expect(error[0]).to.have.property('attributeValue', 'string');
-
-      expect(error[1]).to.have.property('property', '[1][2]');
-      expect(error[1]).to.have.property('propertyValue', 1);
-      expect(error[1]).to.have.property('attributeName', 'type');
-      expect(error[1]).to.have.property('attributeValue', 'string');
-
-      expect(error[2]).to.have.property('property', '[2][4]');
-      expect(error[2]).to.have.property('propertyValue', 1);
-      expect(error[2]).to.have.property('attributeName', 'type');
-      expect(error[2]).to.have.property('attributeValue', 'string');
 
     });
 
