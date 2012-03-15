@@ -3,13 +3,13 @@
    * --------------------
    */
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = Amanda;
+    module.exports = amanda;
   } else if (typeof define !== 'undefined') {
     define(function() {
-      return Amanda;
+      return amanda;
     });
   } else {
-    this.amanda = this.Amanda = Amanda;
+    this.amanda = amanda;
   }
 
 }());
