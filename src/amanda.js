@@ -1,4 +1,4 @@
-var Amanda = function(engine) {
+var amanda = function(engine) {
 
   if (!hasProperty(engines, engine)) {
     throw new Error('The ‘' + engine + '’ engine is not supported. Please use a different one.');
@@ -13,7 +13,7 @@ var Amanda = function(engine) {
  *
  * This method is deprecated, please use ‘amanda('json').validate’ instead.
  */
-Amanda.validate = function(instance, schema, options, callback) {
+amanda.validate = function(instance, schema, options, callback) {
   var json = engines.json;
   return json.validate.apply(json, arguments);
 };
@@ -23,17 +23,20 @@ Amanda.validate = function(instance, schema, options, callback) {
  *
  * This method is deprecated, please use ‘amanda('json').addValidator’ instead.
  */
-Amanda.addValidator = function(attributeName, attributeFn) {
+amanda.addValidator = function(attributeName, attributeFn) {
   var json = engines.json;
   return json.addAttribute.apply(json, arguments);
 };
+
+amanda.getVersion = '';
+amanda.getValidators = '';
 
 /**
  * Amanda.addAttribute
  *
  * This method is deprecated, please use ‘amanda('json').addAttribute’ instead.
  */
-Amanda.addAttribute = function(attributeName, attributeFn) {
+amanda.addAttribute = function(attributeName, attributeFn) {
   var json = engines.json;
   return json.addAttribute.apply(json, arguments);
 };
@@ -43,7 +46,7 @@ Amanda.addAttribute = function(attributeName, attributeFn) {
  *
  * This method is deprecated, please use ‘amanda('json').addAttributeConstructor’ instead.
  */
-Amanda.addAttributeConstructor = function(attributeName, attributeConstructor) {
+amanda.addAttributeConstructor = function(attributeName, attributeConstructor) {
   var json = engines.json;
   return json.addAttributeConstructor.apply(json, arguments);
 };
