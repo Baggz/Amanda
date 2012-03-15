@@ -7,6 +7,14 @@
  */
 var isEmpty = function(input) {
 
+  if (isNumber(input)) {
+    return false;
+  }
+
+  if (input === null) {
+    return true;
+  }
+
   // If the passed-in object is an array or a string
   if (isArray(input) || typeof input === 'string') {
     return input.length === 0;
