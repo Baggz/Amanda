@@ -36,7 +36,7 @@
        * @param {function} attributeFn
        */
       addAttribute: function(attributeName, attributeFn) {
-        return Validation.prototype.addAttribute.apply(Validation, argument);
+        return Validation.prototype.addAttribute.apply(Validation, arguments);
       },
 
       /**
@@ -46,7 +46,7 @@
        * @param {function} attributeConstructor
        */
       addAttributeConstructor: function(attributeName, attributeConstructor) {
-        return Validation.prototype.addAttributeConstructor.apply(Validation, argument);
+        return Validation.prototype.addAttributeConstructor.apply(Validation, arguments);
       }
 
     };
