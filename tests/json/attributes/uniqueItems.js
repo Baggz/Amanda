@@ -15,7 +15,6 @@ suite('JSON/Attribute/uniqueItems', function() {
    * Schema
    */
   var schema = {
-    required: true,
     type: 'array',
     uniqueItems: true,
     items: {
