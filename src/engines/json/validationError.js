@@ -57,7 +57,7 @@ ValidationError.prototype.push = function(error) {
     // Deprecated
     validator: error.attributeName,
     validatorName: error.attributeName,
-    validatoValue: error.attributeValue
+    validatorValue: error.attributeValue
 
   };
 
