@@ -432,4 +432,92 @@ suite('JSON/Objects (without the ‘singleError’ flag)', function() {
 
   });
 
+  /**
+   * Example #3
+   */
+  test('Test #3', function() {
+
+    var count = 0;
+
+    var schema = {
+      type: 'object',
+      properties: {
+        user: {
+          type: 'object',
+          properties: {
+            name: {
+              type: 'string'
+            }
+          }
+        },
+        message: {
+          type: 'string'
+        }
+      }
+    };
+
+    jsonSchemaValidator.validate({
+      user: {
+        name: 'František'
+      },
+      message: 'Lorem ipsum'
+    }, schema, options, function(error) {
+      count += 1;
+      expect(error).to.not.be.ok();
+    });
+
+    jsonSchemaValidator.validate({
+      user: 123,
+      message: 123
+    }, schema, options, function(error) {
+
+      count += 1;
+
+      expect(error).to.be.ok();
+      expect(error).to.have.property('0');
+      expect(error).to.have.property('1');
+      expect(error).to.have.property('length', 2);
+
+      expect(error[0]).to.have.property('property', 'user');
+      expect(error[0]).to.have.property('propertyValue', 123);
+      expect(error[0]).to.have.property('attributeName', 'type');
+      expect(error[0]).to.have.property('attributeValue', 'object');
+
+      expect(error[1]).to.have.property('property', 'message');
+      expect(error[1]).to.have.property('propertyValue', 123);
+      expect(error[1]).to.have.property('attributeName', 'type');
+      expect(error[1]).to.have.property('attributeValue', 'string');
+
+    });
+
+    jsonSchemaValidator.validate({
+      user: {
+        name: 123
+      },
+      message: 123
+    }, schema, options, function(error) {
+
+      count += 1;
+
+      expect(error).to.be.ok();
+      expect(error).to.have.property('0');
+      expect(error).to.have.property('1');
+      expect(error).to.have.property('length', 2);
+
+      expect(error[0]).to.have.property('property', 'user.name');
+      expect(error[0]).to.have.property('propertyValue', 123);
+      expect(error[0]).to.have.property('attributeName', 'type');
+      expect(error[0]).to.have.property('attributeValue', 'string');
+
+      expect(error[1]).to.have.property('property', 'message');
+      expect(error[1]).to.have.property('propertyValue', 123);
+      expect(error[1]).to.have.property('attributeName', 'type');
+      expect(error[1]).to.have.property('attributeValue', 'string');
+
+    });
+
+    expect(count).to.be.eql(3);
+
+  });
+
 });
