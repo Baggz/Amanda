@@ -192,7 +192,7 @@ var errorMessages = {
    * @param {any} propertyValue
    * @param {string} attributeValue
    */
-  enum: function(property, propertyValue, attributeValue) {
+  'enum': function(property, propertyValue, attributeValue) {
     return 'Value of the ‘' + property + '’ must be ' + attributeValue.join(' or ') + '.';
   }
 

@@ -64,12 +64,20 @@ Validation.prototype.validateProperty = function(property, propertyValue, proper
     /**
      * OnComplete
      */
-    var onComplete = function() {
+    var onComplete = function(error) {
+
+      // Deprecated
+      if (error === true || isString(error)) {
+        context.addError(error);
+        return callback(true);
+      };
+
       if (self.errors.length > lastLength && self.singleError) {
         return callback(true);
       } else {
         return callback();
       }
+
     };
 
     if (isDefined(propertyAttributes[attributeName])) {

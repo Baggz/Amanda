@@ -51,14 +51,6 @@ suite('JSON/Backward Compatibility', function() {
     expect(amanda).to.have.property('addValidator');
   });
 
-  test('Amanda has the ‘getValidators’ method', function() {
-    expect(amanda).to.have.property('getValidators');
-  });
-
-  test('Amanda has the ‘getVersion’ method', function() {
-    expect(amanda).to.have.property('getVersion');
-  });
-
   test('Amanda has the ‘validate’ method', function() {
     expect(amanda).to.have.property('validate');
   });

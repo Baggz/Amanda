@@ -28,9 +28,6 @@ amanda.addValidator = function(attributeName, attributeFn) {
   return json.addAttribute.apply(json, arguments);
 };
 
-amanda.getVersion = '';
-amanda.getValidators = '';
-
 /**
  * Amanda.addAttribute
  *

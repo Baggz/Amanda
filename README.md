@@ -86,8 +86,8 @@ Releases for a browser are available for download from GitHub.
 
 | **Version** | **Description** | **Size** | **Action** |
 |:------------|:----------------|:---------|:-----------|
-| `amanda.js` | *uncompressed, with comments* | 32.57 KB (6.46 KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/dist/latest.js) |
-| `amanda.min.js` | *compressed, without comments* | 11.98 KB (3.53 KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/dist/latest.min.js) |
+| `amanda.js` | *uncompressed, with comments* | 35.8 KB (7.11 KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/releases/latest/amanda.js) |
+| `amanda.min.js` | *compressed, without comments* | 13.6 KB (3.97 KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/releases/latest/amanda.min.js) |
 
 <a name="Uage"></a>
 ## Usage [&uarr;](#Contents)
@@ -147,18 +147,7 @@ I have included a `Makefile` with convenience methods for working with the Amand
 
 <ul>
   <li><code>make</code> Builds the library</li>
-  <li><code>make watch</code> Automatically builds the library whenever you change a file</li>
 </ul>
-
-To include just specific engines run...
-
-```
-ENGINES=json make
-```
-
-```
-ENGINES=json,orderly make
-```
 
 <a name="Tests"></a>
 ## Tests [&uarr;](#Contents)
@@ -187,6 +176,7 @@ For more information on *semantic versioning*, please visit http://semver.org/.
 <a name="ReleaseNotes"></a>
 ## Release Notes [&uarr;](#Contents)
 
+* [v0.4.0](https://github.com/Baggz/Amanda/pull/35)
 * [v0.3.0](https://github.com/Baggz/Amanda/pull/26)
 * [v0.2.2](https://github.com/Baggz/Amanda/pull/15)
 * [v0.2.1](https://github.com/Baggz/Amanda/pull/3)
