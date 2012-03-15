@@ -3,8 +3,43 @@
  *
  * @constructor
  */
-var ValidationError = function() {
+var ValidationError = function(super) {
   this.length = 0;
+  this.super = super;
+  this.errorMessages = this.super.errorMessages;
+};
+
+ValidationError.prototype.renderErrorMessage = function(error) {
+
+  var errorMessage = this.errorMessages[error.attributeName];
+
+  if (errorMessage && isFunction(errorMessage) {
+    return errorMessage(
+      error.property,
+      error.propertyValue,
+      error.attributeValue
+    );
+  }
+
+  if (errorMessage && isString(errorMessage) {
+
+    [
+      'property',
+      'propertyValue',
+      'attributeValue'
+    ].forEach(function(placeholder) {
+      errorMessage = errorMessage.replace(new RegExp('{{' + placeholder + '}}', 'g'), error[placeholder]);
+    });
+
+    // Deprecated
+    errorMessage = errorMessage.replace(/{{validator}}/, 'g'), error['attributeValue']);
+
+    return errorMessage.replace(/\s+/g, ' ');
+
+  }
+
+  return error.message;
+
 };
 
 ValidationError.prototype.push = function(error) {
@@ -15,7 +50,7 @@ ValidationError.prototype.push = function(error) {
     propertyValue: error.propertyValue,
     attributeName: error.attributeName,
     attributeValue: error.attributeValue,
-    message: error.message,
+    message: this.renderErrorMessage(error),
 
     // Deprecated
     validator: error.attributeName,
