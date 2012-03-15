@@ -50,8 +50,11 @@ var data = {
   }
 };
 
+
+var jsonSchemaValidator = amanda('json');
+
 // Stop the validation process after a first error
-amanda.validate(data, schema, function(error) {
+jsonSchemaValidator.validate(data, schema, function(error) {
   if (error) {
     // Do something...
   } else {
@@ -60,7 +63,7 @@ amanda.validate(data, schema, function(error) {
 });
 
 // Validate the whole schema
-amanda.validate(data, schema, { singleError: false }, function(error) {
+jsonSchemaValidator.validate(data, schema, { singleError: false }, function(error) {
   if (error) {
     // Do something...
   } else {

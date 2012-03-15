@@ -3,11 +3,6 @@
 <a name="error"></a>
 # Error
 
-### Methods
-
-* [getProperties](#getProperties)
-* [getMessages](#getMessages)
-
 **Example**
 
 ```javascript
@@ -15,15 +10,18 @@
   {
     property: 'users[0].username'
     propertyValue: 123
-    validator: 'type'
-    validatorValue: 'string',
-    message: 'Only string is allowed'
+    attributeName: 'type'
+    attributeValue: 'string',
+    message: 'Lorem ipsum dolor isamet pide quidu delime.'
   },
-  {
-    // ...
-  }
+  ...
 ]
 ```
+
+### Methods
+
+* [getProperties](#getProperties)
+* [getMessages](#getMessages)
 
 <a name="getProperties"></a>
 ## getProperties [#](#getProperties)

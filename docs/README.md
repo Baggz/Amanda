@@ -1,16 +1,33 @@
 <a name="documentation"></a>
 # Documentation
 
-<a name="methods"></a>
-## Methods
+### Engines
 
-* [validate](#validate)
-* [addValidator](#addValidator)
+* [JSON Schema](#jsonSchema)
+
+<a name="jsonSchema"></a>
+## JSON Schema
+
+diff.md
+
+### Example
+
+```
+// Initialize a JSON Schema validator
+var jsonSchemaValidator = amanda('json');
+```
+
+<a name="methods"></a>
+### Methods
+
+* [validate](https://github.com/Baggz/Amanda/tree/master/docs/json/methods/validate.md#validate)
+* [addAttribute](https://github.com/Baggz/Amanda/tree/master/docs/json/methods/validate.md#addAttribute)
+* [addAttributeConstructor](https://github.com/Baggz/Amanda/tree/master/docs/json/methods/validate.md#addAttributeConstructor)
 
 <a name="objects"></a>
-## Objects
+### Objects
 
-* [Schema]((https://github.com/Baggz/Amanda/tree/master/docs/objects/schema.md#schema)
+* [Schema](https://github.com/Baggz/Amanda/tree/master/docs/objects/schema.md#schema)
   * [required](https://github.com/Baggz/Amanda/tree/master/docs/objects/schema.md#required)
   * [minLength](https://github.com/Baggz/Amanda/tree/master/docs/objects/schema.md#minLength)
   * [maxLength](https://github.com/Baggz/Amanda/tree/master/docs/objects/schema.md#maxLength)
