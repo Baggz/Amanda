@@ -9,7 +9,8 @@
     "mocha": "0.14.0",
     "expect.js": "0.1.2",
     "debug": "0.5.0",
-    "async": "0.1.18"
+    "async": "0.1.18",
+    "uglify-js": "1.2.5"
   },
 
   "keywords": [
@@ -31,7 +32,7 @@
     "url": "git://github.com/Baggz/Amanda.git"
   },
 
-  "main": "./src/amanda.js",
+  "main": "./releases/latest/amanda.js",
 
   "engines": {
     "node": ">= 0.6.0"
@@ -50,7 +51,7 @@
   ],
 
   "scripts": {
-    "test" : "mocha --ui tdd --reporter spec ./tests/json/attributes/format/*.js ./tests/json/attributes/type/*.js ./tests/json/attributes/*.js"
+    "test" : "mocha --ui tdd --reporter spec ./tests/json/attributes/required/*.js ./tests/json/attributes/format/*.js ./tests/json/attributes/type/*.js ./tests/json/attributes/*.js ./tests/json/*.js"
   }
 
 }
