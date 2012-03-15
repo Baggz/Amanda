@@ -24,7 +24,7 @@ var Validation = function(options) {
       self[key] = merge ({}, defaultOptions[key]);
 
     } else {
-      self[key] = options[key] || defaultOptions[key];
+      self[key] = (isDefined(options[key])) ? options[key] : defaultOptions[key];
     }
 
   });
