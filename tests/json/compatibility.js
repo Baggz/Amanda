@@ -4,7 +4,7 @@ if (typeof module !== 'undefined' && module.exports) {
 }
 
 /**
- * Enum
+ * Backward Compatibility
  * --------------------
  */
 suite('JSON/Backward Compatibility', function() {
