@@ -1,6 +1,6 @@
 if (typeof module !== 'undefined' && module.exports) {
   var expect = require('expect.js');
-  var amanda = require('../../../../dist/latest.js');
+  var amanda = require('../../../../releases/latest/amanda.js');
 }
 
 /**
