@@ -32,8 +32,16 @@ var additionalPropertiesAttribute = function additionalProperties(property, prop
    * }
    */
   if (attributeValue === false) {
-    this.addError();
+
+    forbiddenProperties.forEach(function(forbiddenProperty) {
+      this.addError({
+        property: this.joinPath(property, forbiddenProperty),
+        propertyValue: propertyValue[forbiddenProperty]
+      });
+    }, this);
+
     return callback();
+
   }
 
   /**
