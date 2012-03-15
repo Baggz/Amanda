@@ -3,17 +3,17 @@
  *
  * @constructor
  */
-var ValidationError = function(super) {
+var ValidationError = function(parent) {
   this.length = 0;
-  this.super = super;
-  this.errorMessages = this.super.errorMessages;
+  this.parent = parent;
+  this.errorMessages = this.parent.errorMessages;
 };
 
 ValidationError.prototype.renderErrorMessage = function(error) {
 
   var errorMessage = this.errorMessages[error.attributeName];
 
-  if (errorMessage && isFunction(errorMessage) {
+  if (errorMessage && isFunction(errorMessage)) {
     return errorMessage(
       error.property,
       error.propertyValue,
@@ -21,7 +21,7 @@ ValidationError.prototype.renderErrorMessage = function(error) {
     );
   }
 
-  if (errorMessage && isString(errorMessage) {
+  if (errorMessage && isString(errorMessage)) {
 
     [
       'property',
@@ -32,7 +32,7 @@ ValidationError.prototype.renderErrorMessage = function(error) {
     });
 
     // Deprecated
-    errorMessage = errorMessage.replace(/{{validator}}/, 'g'), error['attributeValue']);
+    errorMessage = errorMessage.replace(/{{validator}}/g, error['attributeValue']);
 
     return errorMessage.replace(/\s+/g, ' ');
 
