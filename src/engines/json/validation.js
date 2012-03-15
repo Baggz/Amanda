@@ -29,6 +29,6 @@ var Validation = function(options) {
 
   });
 
-  this.errors = new ValidationError();
+  this.errors = new ValidationError(this);
 
 };
