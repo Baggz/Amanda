@@ -143,7 +143,7 @@ From version **0.6.0**.
 <a name="Building"></a>
 ## Building [&uarr;](#Contents)
 
-I have included a `Makefile` with convenience methods for working with the Amanda library.
+I have included a `Makefile` with convenience methods for working with the library.
 
 <ul>
   <li><code>make</code> Builds the library</li>
