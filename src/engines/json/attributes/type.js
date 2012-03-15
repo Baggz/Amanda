@@ -31,7 +31,7 @@ var typeConstructor = function typeConstructor() {
 
       var noError = attributeValue.some(function(type) {
 
-        if (!hasProperty(types, attributeValue)) {
+        if (!hasProperty(types, type)) {
           throw new Error('Type ‘' + attributeValue + '’ is not supported.');
         }
 
