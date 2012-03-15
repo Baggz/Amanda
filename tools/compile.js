@@ -4,9 +4,8 @@ var fs = require('fs');
 
 console.log('\nCompiling...');
 
-
-
 var files = [
+
   './src/intro.js',
   
   // Utils
@@ -19,6 +18,7 @@ var files = [
   './src/utils/isBoolean.js',
   './src/utils/isDefined.js',
   './src/utils/isEmpty.js',
+  './src/utils/isEqual.js',
   './src/utils/isFunction.js',
   './src/utils/isInteger.js',
   './src/utils/isNull.js',
@@ -27,7 +27,6 @@ var files = [
   './src/utils/isString.js',
   './src/utils/isUndefined.js',
   './src/utils/keys.js',
-  //'./src/utils/md5.js',
   './src/utils/merge.js',
   './src/utils/pluck.js',
   './src/utils/returnTrue.js',
@@ -54,6 +53,7 @@ var files = [
   './src/engines/json/attributes/minItems.js',
   './src/engines/json/attributes/minLength.js',
   './src/engines/json/attributes/pattern.js',
+  './src/engines/json/attributes/patternProperties.js',
   './src/engines/json/attributes/required.js',
   './src/engines/json/attributes/type.js',
   './src/engines/json/attributes/uniqueItems.js',
@@ -61,6 +61,7 @@ var files = [
   './src/engines/json/validationError.js',
   './src/engines/json/errorMessages.js',
   './src/engines/json/getProperty.js',
+  './src/engines/json/joinPath.js',
 
   './src/engines/json/validate.js',
   './src/engines/json/validateItems.js',
@@ -86,7 +87,7 @@ async.mapSeries(files, function(fileName, callback) {
 
   if (error) return handleError(error);
 
-  fs.writeFile('./dist/latest.js', content.join('\n\n'), 'utf8', function(error) {
+  fs.writeFile('./releases/latest/amanda.js', content.join('\n\n'), 'utf8', function(error) {
     if (error) return handleError(error);
     console.log('Done.\n');
   });
