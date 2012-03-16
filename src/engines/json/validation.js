@@ -11,7 +11,7 @@ var Validation = function(options) {
 
   var defaultOptions = {
     singleError: true,
-    errorMessages: errorMessages,
+    messages: errorMessages,
     cache: false
   };
 

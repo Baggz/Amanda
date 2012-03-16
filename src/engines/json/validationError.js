@@ -7,7 +7,7 @@ var ValidationError = function(parent) {
 
   this.length = 0;
   
-  this.errorMessages = parent.errorMessages;
+  this.errorMessages = parent.messages;
 
 };
 
