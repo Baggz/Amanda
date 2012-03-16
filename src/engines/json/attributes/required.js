@@ -3,8 +3,15 @@
  */
 var requiredAttribute = function required(property, propertyValue, attributeValue, propertyAttributes, callback) {
 
-  if (attributeValue && (isUndefined(propertyValue) || isEmpty(propertyValue))) {
-    this.addError();
+  if (attributeValue) {
+
+    var undefinedCondition = isUndefined(propertyValue);
+    var emptyCondition = (isArray(propertyValue) || isObject(propertyValue)) && isEmpty(propertyValue);
+
+    if (undefinedCondition || emptyCondition) {
+      this.addError();
+    }
+
   }
 
   return callback();
