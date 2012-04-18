@@ -27,6 +27,6 @@ var jsonSchemaValidator = amanda('json');
 <a name="objects"></a>
 ### Objects
 
-* [Schema](https://github.com/Baggz/Amanda/tree/master/docs/objects/schema.md#schema)
-* [Error](https://github.com/Baggz/Amanda/tree/master/docs/objects/error.md#error)
-* [Options](https://github.com/Baggz/Amanda/tree/master/docs/objects/options.md#options)
+* [Schema](https://github.com/Baggz/Amanda/tree/master/docs/json/objects/schema.md#schema)
+* [Error](https://github.com/Baggz/Amanda/tree/master/docs/json/objects/error.md#error)
+* [Options](https://github.com/Baggz/Amanda/tree/master/docs/json/objects/options.md#options)
