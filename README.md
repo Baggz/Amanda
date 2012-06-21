@@ -1,7 +1,7 @@
 <a name="amanda"></a>
 # Amanda
 
-[Amanda](https://github.com/Baggz/Amanda) is aiming to be **an universal validation library**. Currently it supports only the [JSON Schema Internet Draft](http://tools.ietf.org/html/draft-zyp-json-schema-03), but I'm planning to add [Orderly](http://orderly-json.org/), [Relax NG](http://relaxng.org/) and others very soon.
+[Amanda](https://github.com/Baggz/Amanda) is aiming to be **a universal validation library**. Currently it supports only the [JSON Schema Internet Draft](http://tools.ietf.org/html/draft-zyp-json-schema-03), but I'm planning to add [Orderly](http://orderly-json.org/), [Relax NG](http://relaxng.org/) and others very soon.
 
 <a name="example"></a>
 #### Example
