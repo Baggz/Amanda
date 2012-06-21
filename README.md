@@ -85,7 +85,7 @@ $ npm install amanda
 Or use use [JAM](http://groundcomputing.co.uk/code/jam).
 
 ```
-$ jma install amanda
+$ jam install amanda
 ```
 
 Releases for a browser are available for download from GitHub.
