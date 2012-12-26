@@ -2,7 +2,8 @@
  * Messages
  * --------------------
  */
-var errorMessages = {
+var vowels = "aeiou",
+errorMessages = {
 
   /**
    * Maximum
@@ -38,7 +39,7 @@ var errorMessages = {
    */
   maxLength: function(property, propertyValue, attributeValue) {
     return [
-      'The ' + property + ' property must not exceed ' + attributeValue + ' characters.',
+      'The ' + property + ' property must not exceed ' + attributeValue + ' character' + (attributeValue > 1 ? 's' : '')  + '.',
       'The length of the property is ' + propertyValue.length + '.'
     ].join(' ');
   },
@@ -52,7 +53,7 @@ var errorMessages = {
    */
   length: function(property, propertyValue, attributeValue) {
     return [
-      'The ' + property + ' property must be exactly ' + attributeValue + ' characters.',
+      'The ' + property + ' property must be exactly ' + attributeValue + ' character' + (attributeValue > 1 ? 's' : '')  + '.',
       'The length of the property is ' + propertyValue.length + '.'
     ].join(' ');
   },
@@ -80,7 +81,7 @@ var errorMessages = {
    */
   type: function(property, propertyValue, attributeValue) {
     return [
-      'The ‘' + property + '’ property must be a/an ‘' + attributeValue + '’.',
+      'The ‘' + property + '’ property must be ' + (vowels.indexOf(attributeValue[0]) > -1 ? 'an' : 'a') + ' ‘' + attributeValue + '’.',
       'The type of the property is ‘' + detectType(propertyValue)  + '’'
     ].join(' ');
   },
@@ -142,7 +143,7 @@ var errorMessages = {
    * @param {any} propertyValue
    * @param {string} attributeValue
    */
-  maxItems: function(property, propertyValue, attributeValue) {    
+  maxItems: function(property, propertyValue, attributeValue) {
     return [
       'The ‘' + property + '’ property must not contain more than ‘' + attributeValue + '’ items.',
       'Currently it contains ‘' + propertyValue.items  + '’ items.'

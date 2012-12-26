@@ -1,7 +1,7 @@
 <a name="amanda"></a>
 # Amanda
 
-[Amanda](https://github.com/Baggz/Amanda) is aiming to be **an universal validation library**. Currently it supports only the [JSON Schema Internet Draft](http://tools.ietf.org/html/draft-zyp-json-schema-03), but I'm planning to add [Orderly](http://orderly-json.org/), [Relax NG](http://relaxng.org/) and others very soon.
+[Amanda](https://github.com/Baggz/Amanda) is aiming to be **a universal validation library**. Currently it supports only the [JSON Schema Internet Draft](http://tools.ietf.org/html/draft-zyp-json-schema-03), but I'm planning to add [Orderly](http://orderly-json.org/), [Relax NG](http://relaxng.org/) and others very soon.
 
 <a name="example"></a>
 #### Example
@@ -80,6 +80,12 @@ To install **Amanda**, use [NPM](http://npmjs.org/).
 
 ```
 $ npm install amanda
+```
+
+Or use use [JAM](http://groundcomputing.co.uk/code/jam).
+
+```
+$ jam install amanda
 ```
 
 Releases for a browser are available for download from GitHub.
@@ -206,3 +212,4 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
