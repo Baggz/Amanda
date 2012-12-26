@@ -12,7 +12,7 @@ Validation.prototype.joinPath = function(path, property) {
   // Converts the ‘property’ to a string
   property = property + '';
 
-  if (property.match(/^[a-zA-Z]+$/)) {
+  if (property.match(/^[a-zA-Z][a-zA-Z0-9]*$/)) {
     return (path) ? (path + '.' + property) : property;
   } else if (property.match(/\d+/)) {
     return path + '[' + property + ']';
