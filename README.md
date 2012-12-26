@@ -1,10 +1,10 @@
 <a name="amanda"></a>
 # Amanda
 
-[Amanda](https://github.com/Baggz/Amanda) is aiming to be **a universal validation library**. Currently it supports only the [JSON Schema Internet Draft](http://tools.ietf.org/html/draft-zyp-json-schema-03), but I'm planning to add [Orderly](http://orderly-json.org/), [Relax NG](http://relaxng.org/) and others very soon.
+[Amanda](https://github.com/Baggz/Amanda) is aiming to be **a universal schema validation library**. Currently it supports only the [JSON Schema Internet Draft](http://tools.ietf.org/html/draft-zyp-json-schema-03), but I'm planning to add [Orderly](http://orderly-json.org/), [Relax NG](http://relaxng.org/) and others very soon.
 
 <a name="example"></a>
-#### Example
+### Example
 
 ```javascript
 /**
@@ -15,8 +15,7 @@ var schema = {
   properties: {
     name: {
       required: true,
-      type: 'string',
-      length: 7
+      type: 'string'
     }
   }
 };
@@ -28,53 +27,52 @@ var data = {
   name: 'Kenneth'
 };
 
-// Initialize a JSON Schema validator
+// Initialize a JSON Schema validator.
 var jsonSchemaValidator = amanda('json');
 
-// Validate the data against the schema
+// Validate the data against the schema.
 jsonSchemaValidator.validate(data, schema, function(error) {
+
   // Do something...
+
 });
 ```
 
+# Contents
+
+<ul>
+  <li><a href="#features">Features</a></li>
+  <li><a href="#download">Download</a></li>
+  <li><a href="#status">Status</a></li>
+  <li><a href="#documentation">Documentation</a></li>
+  <li><a href="#compatibility">compatibility</a></li>
+  <li><a href="#building">Building</a></li>
+  <li><a href="#tests">Tests</a></li>
+  <li><a href="#versioning">Versioning</a></li>
+  <li><a href="#release-notes">Release Notes</a></li>
+  <li><a href="#authors">authors</a></li>
+  <li><a href="#license">License</a></li>
+</ul>
+
 <a name="features"></a>
-#### Features
+## Features
 
 * **Extendable**, you can create **your own attributes**
 * Can be used with **Node.js** and **in a browser**
 * Amanda has **no dependencies**
-* **AMD compatible**, you can load it via [RequireJS](https://github.com/jrburke/requirejs)
+* **AMD compatible**, you can load it via [RequireJS](http://requirejs.org/)
 * Lightweight
 * Fully **documented**
 * Tested
 
-<a name="status"></a>
-#### Status
-
-| **Branch** | **Status** |
-|:-----------|:----------|
-| master | [![Build Status](https://secure.travis-ci.org/Baggz/Amanda.png?branch=master)](http://travis-ci.org/Baggz/Amanda) |
-| dev | [![Build Status](https://secure.travis-ci.org/Baggz/Amanda.png?branch=dev)](http://travis-ci.org/Baggz/Amanda) |
-
-<a name="contents"></a>
-### Contents
+## Download
 
 <ul>
-  <li><a href="#Download">Download</a></li>
-  <li><a href="#Usage">Usage</a></li>
-  <li><a href="#Documentation">Documentation</a></li>
-  <li><a href="#Compatibility">Compatibility</a></li>
-  <li><a href="#Building">Building</a></li>
-  <li><a href="#Tests">Tests</a></li>
-  <li><a href="#Versioning">Versioning</a></li>
-  <li><a href="#Tests">Tests</a></li>
-  <li><a href="#Release Notes">Release Notes</a></li>
-  <li><a href="#Contributors">Contributors</a></li>
-  <li><a href="#License">License</a></li>
+  <li><a href="#node.js">Node.js</a></li>
+  <li><a href="#browser">Browser</a></li>
 </ul>
 
-<a name="Download"></a>
-## Download [&uarr;](#Contents)
+### Node.js
 
 To install **Amanda**, use [NPM](http://npmjs.org/).
 
@@ -82,41 +80,19 @@ To install **Amanda**, use [NPM](http://npmjs.org/).
 $ npm install amanda
 ```
 
-Or use use [JAM](http://groundcomputing.co.uk/code/jam).
-
-```
-$ jam install amanda
-```
-
-Releases for a browser are available for download from GitHub.
-
-| **Version** | **Description** | **Size** | **Action** |
-|:------------|:----------------|:---------|:-----------|
-| `amanda.js` | *uncompressed, with comments* | 36.01 KB (7.11 KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/releases/latest/amanda.js) |
-| `amanda.min.js` | *compressed, without comments* | 13.62 KB (3.99 KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/releases/latest/amanda.min.js) |
-
-<a name="Uage"></a>
-## Usage [&uarr;](#Contents)
-
-### Browser
-
-```
-<script src="amanda.js"></script>
-```
-
-### Node.js, RingoJS, Narwhal
+Then you can load the library via `require`.
 
 ```javascript
 var amanda = require('amanda');
 ```
 
-### RequireJS
+If you prefer [RequireJS](http://requirejs.org/), go ahead.
 
 ```javascript
-// Configuration options, the path should not include the .js extension
+// Configuration options, the path should not include the .js extension.
 require.config({
   paths: {
-    "robb": "path/to/amanda"
+    'amanda': 'path/to/amanda'
   }
 });
 
@@ -128,26 +104,67 @@ require(['amanda'], function(amanda) {
 });
 ```
 
-<a name="Documentation"></a>
-## Documentation [&uarr;](#Contents)
+### Browser
+
+Releases for the browser are available for download from GitHub.
+
+| **Version** | **Description** | **Size** | **Action** |
+|:------------|:----------------|:---------|:-----------|
+| `amanda.js` | *uncompressed, with comments* | 36.01 KB (7.11 KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/releases/latest/amanda.js) |
+| `amanda.min.js` | *compressed, without comments* | 13.62 KB (3.99 KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/releases/latest/amanda.min.js) |
+
+Or you can use [JAM](http://jamjs.org/).
+
+```
+$ jam install amanda
+```
+
+Then you can load the library via the `<script>` tag.
+
+```html
+<script src="/path/to/amanda.js"></script>
+```
+
+...or via [RequireJS](http://requirejs.org/).
+
+```javascript
+// Configuration options, the path should not include the .js extension.
+require.config({
+  paths: {
+    'amanda': 'path/to/amanda'
+  }
+});
+
+// Load Amanda
+require(['amanda'], function(amanda) {
+
+  // Do something...
+
+});
+```
+
+## Status
+
+| **Branch** | **Status** |
+|:-----------|:----------|
+| master | [![Build Status](https://secure.travis-ci.org/Baggz/Amanda.png?branch=master)](http://travis-ci.org/Baggz/Amanda) |
+| dev | [![Build Status](https://secure.travis-ci.org/Baggz/Amanda.png?branch=dev)](http://travis-ci.org/Baggz/Amanda) |
+
+## Documentation
 
 All documentation is available in the [/docs/](https://github.com/Baggz/Amanda/tree/master/examples) folder.
 
-<a name="Compatibility"></a>
-## Compatibility [&uarr;](#Contents)
+## Compatibility
 
 ### Node.js
 
 From version **0.6.0**.
 
-***Note:** Earlier versions might work OK, but are not tested.*
-
 ### Browsers
 
 *Testing in progress...*
 
-<a name="Building"></a>
-## Building [&uarr;](#Contents)
+## Building
 
 I have included a `Makefile` with convenience methods for working with the library.
 
@@ -155,15 +172,13 @@ I have included a `Makefile` with convenience methods for working with the libra
   <li><code>make</code> Builds the library</li>
 </ul>
 
-<a name="Tests"></a>
-## Tests [&uarr;](#Contents)
+## Tests
 
 ```
 $ npm test
 ```
 
-<a name="Versioning"></a>
-## Versioning [&uarr;](#Contents)
+## Versioning
 
 Releases will be numbered with the following format.
 
@@ -179,8 +194,7 @@ And constructed with the following guidelines.
 
 For more information on *semantic versioning*, please visit http://semver.org/.
 
-<a name="ReleaseNotes"></a>
-## Release Notes [&uarr;](#Contents)
+## Release Notes
 
 * [v0.4.0](https://github.com/Baggz/Amanda/pull/35)
 * [v0.3.0](https://github.com/Baggz/Amanda/pull/26)
@@ -189,27 +203,10 @@ For more information on *semantic versioning*, please visit http://semver.org/.
 * [v0.2.0](https://github.com/Baggz/Amanda/pull/2)
 * [v0.0.2](https://github.com/Baggz/Amanda/pull/1)
 
-<a name="Contributors"></a>
-## Contributors [&uarr;](#Contents)
+## Authors
 
-The following are the major contributors of Amanda (in random order).
+František Hába ([@Baggz](https://github.com/Baggz)) created [Amanda](https://github.com/Baggz/Amanda) and [these people](https://github.com/Baggz/Amanda/graphs/contributors) have contributed.
 
-* **František Hába** ([@Baggz](https://github.com/Baggz))
-* **Jakub Nešetřil** ([@zzen](https://github.com/zzen))
-* **Iain Carsberg** ([@iaincarsberg](https://github.com/iaincarsberg))
-* **Adrian Rossouw** ([@Vertice](https://github.com/Vertice))
-* **Leon de Almeida** ([@leondealmeida](https://github.com/leondealmeida))
+## License
 
-<a name="License"></a>
-## License [&uarr;](#Contents)
-
-(The MIT License)
-
-Copyright (c) 2011 František Hába &lt;hello@frantisekhaba.com&gt;
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
+Please see the [LICENSE](https://github.com/Baggz/Amanda/blob/master/LICENSE) file.
