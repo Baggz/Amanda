@@ -35,7 +35,7 @@
   "main": "./releases/latest/amanda.js",
 
   "engines": {
-    "node": ">= 0.6.0"
+    "node": "*"
   },
 
   "bugs": {
@@ -43,7 +43,7 @@
     "email": "hello@frantisekhaba.com"
   },
 
-  "licenses": [ 
+  "licenses": [
     {
       "type": "MIT",
       "url": "https://github.com/Baggz/Amanda/blob/master/README.md"
