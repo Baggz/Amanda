@@ -23,6 +23,10 @@ suite('JSON/Attribute/required#objects', function() {
           },
           surname: {
             required: true
+          },
+          age: {
+            required: true,
+            type: 'number'
           }
         }
       }
@@ -41,7 +45,8 @@ suite('JSON/Attribute/required#objects', function() {
     jsonSchemaValidator.validate({
       user: {
         name: 'František',
-        surname: 'Hába'
+        surname: 'Hába',
+        age: 0,
       }
     }, schema, function(error) {
       count += 1;
