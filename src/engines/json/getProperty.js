@@ -6,7 +6,7 @@
  */
 Validation.prototype.getProperty = function(property, source) {
   if (source) {
-    return (source[property]) ? source[property] : undefined;
+    return (source[property] !== undefined) ? source[property] : undefined;
   } else {
     return undefined;
   }
