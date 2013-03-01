@@ -1,6 +1,3 @@
-[← Documentation](https://github.com/Baggz/Amanda/tree/master/docs/README.md)
-
-<a name="schema"></a>
 # Schema
 
 ### Attributes
@@ -28,8 +25,7 @@
 * [type](#type)
 * [uniqueItems](#uniqueItems)
 
-<a name="additionalProperties"></a>
-## AdditionalProperties [#](#additionalProperties)
+## AdditionalProperties
 
 **Description**
 
@@ -55,8 +51,7 @@ var schema = {
 };
 ```
 
-<a name="dependencies"></a>
-## Dependencies [#](#dependencies)
+## Dependencies
 
 **Description**
 
@@ -72,15 +67,13 @@ The dependency value can take one of two forms:
 
     If the dependency value is a schema, then the instance object MUST be valid against the schema.
 
-<a name="description"></a>
-## Description [#](#description)
+## Description
 
 **Description**
 
 This attribute is a string that provides a full description of the of purpose the instance property.
 
-<a name="divisibleBy"></a>
-## DivisibleBy [#](#divisibleBy)
+## DivisibleBy
 
 **Description**
 
@@ -95,8 +88,7 @@ var schema = {
 };
 ```
 
-<a name="enum"></a>
-## Enum [#](#enum)
+## Enum
 
 **Description**
 
@@ -116,8 +108,7 @@ var schema = {
 };
 ```
 
-<a name="except"></a>
-## Except [#](#except)
+## Except
 
 **Example**
 
@@ -133,8 +124,7 @@ var schema = {
 };
 ```
 
-<a name="exclusiveMinimum"></a>
-## ExclusiveMinimum [#](#exclusiveMinimum)
+## ExclusiveMinimum
 
 **Description**
 
@@ -150,8 +140,7 @@ var schema = {
 };
 ```
 
-<a name="exclusiveMaximum"></a>
-## ExclusiveMaximum [#](#exclusiveMaximum)
+## ExclusiveMaximum
 
 **Description**
 
@@ -167,8 +156,7 @@ var schema = {
 };
 ```
 
-<a name="format"></a>
-## Format [#](#format)
+## Format
 
 **Description**
 
@@ -182,8 +170,7 @@ var schema = {
 };
 ```
 
-<a name="length"></a>
-## Length [#](#length)
+## Length
 
 **Description**
 
@@ -198,8 +185,7 @@ When the instance value is a string, this defines the length of the string.
 }
 ```
 
-<a name="maximum"></a>
-## Maximum [#](#maximum)
+## Maximum
 
 **Description**
 
@@ -214,9 +200,7 @@ var schema = {
 };
 ```
 
-
-<a name="maxItems"></a>
-## MaxItems [#](#maxItems)
+## MaxItems
 
 **Description**
 
@@ -231,8 +215,7 @@ var schema = {
 };
 ```
 
-<a name="maxLength"></a>
-## MaxLength [#](#maxLength)
+## MaxLength
 
 **Description**
 
@@ -247,8 +230,7 @@ When the instance value is a string, this defines the maximum length of the stri
 }
 ```
 
-<a name="minimum"></a>
-## Minimum [#](#minimum)
+## Minimum
 
 **Description**
 
@@ -263,8 +245,7 @@ var schema = {
 };
 ```
 
-<a name="minItems"></a>
-## MinItems [#](#minItems)
+## MinItems
 
 **Description**
 
@@ -279,8 +260,7 @@ var schema = {
 };
 ```
 
-<a name="minLength"></a>
-## MinLength [#](#minLength)
+## MinLength
 
 **Description**
 
@@ -295,8 +275,7 @@ When the instance value is a string, this defines the minimum length of the stri
 }
 ```
 
-<a name="pattern"></a>
-## Pattern [#](#pattern)
+## Pattern
 
 **Description**
 
@@ -311,11 +290,9 @@ var schema = {
 };
 ```
 
-<a name="patternProperties"></a>
-## PatternProperties [#](#patternProperties)
+## PatternProperties
 
-<a name="required"></a>
-## Required [#](#required)
+## Required
 
 **Description**
 
@@ -334,11 +311,9 @@ var schema = {
 };
 ```
 
-<a name="title"></a>
-## Title [#](#title)
+## Title
 
-<a name="type"></a>
-## Type [#](#type)
+## Type
 
 **Description**
 
@@ -380,8 +355,7 @@ var schema = {
 };
 ```
 
-<a name="uniqueItems"></a>
-## UniqueItems [#](#uniqueItems)
+## UniqueItems
 
 **Description**
 
