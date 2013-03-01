@@ -19,11 +19,20 @@ suite('JSON/Attribute/type#boolean', function() {
   };
 
   /**
+   * Schema
+   */
+  var schemaWithRequired = {
+    required: true,
+    type: 'boolean'
+  };
+
+  /**
    * Validator
    */
   var Validator = amanda('json');
 
   test('should not return an error', function() {
+
     [
       true,
       false
@@ -33,9 +42,21 @@ suite('JSON/Attribute/type#boolean', function() {
         expect(error).to.not.be.ok();
       });
     });
+
+    [
+      true,
+      false
+    ].forEach(function(instance) {
+      Validator.validate(instance, schemaWithRequired, function(error) {
+        count += 1;
+        expect(error).to.not.be.ok();
+      });
+    });
+
   });
 
   test('should return an error', function() {
+
     [
       'Hello',
       123,
@@ -48,10 +69,25 @@ suite('JSON/Attribute/type#boolean', function() {
         expect(error).to.be.ok();
       });
     });
+
+    [
+      undefined,
+      'Hello',
+      123,
+      {},
+      [],
+      function() {}
+    ].forEach(function(instance) {
+      Validator.validate(instance, schemaWithRequired, function(error) {
+        count += 1;
+        expect(error).to.be.ok();
+      });
+    });
+
   });
 
-  test('should run 7 times', function() {
-    expect(count).to.be.eql(7);
+  test('should run 15 times', function() {
+    expect(count).to.be.eql(15);
   });
 
 });

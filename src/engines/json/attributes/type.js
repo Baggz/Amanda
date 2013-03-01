@@ -40,7 +40,7 @@ var typeConstructor = function typeConstructor() {
       });
 
       if (!noError) {
-        this.errors.addError();
+        this.addError();
       }
 
       return callback();

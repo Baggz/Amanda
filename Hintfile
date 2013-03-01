@@ -1,0 +1,40 @@
+{
+
+  // This option prohibits the use of bitwise operators such as ^ (XOR), | (OR) and others. Bitwise operators
+  // are very rare in JavaScript programs and very often & is simply a mistyped &&.
+  "bitwise": true,
+
+  // This option allows you to force all variable names to use either camelCase
+  // style or UPPER_CASE with underscores.
+  "camelcase": false,
+
+  // This option requires you to always put curly braces around blocks in loops and conditionals. JavaScript
+  // allows you to omit curly braces when the block consists of only one statement.
+  "curly": true,
+
+  // This options prohibits the use of == and != in favor of === and !==. The former try to coerce values
+  // before comparing them which can lead to some unexpected results. The latter don't do any
+  // coercion so they are generally safer.
+  "eqeqeq": true,
+
+  // (...)
+
+  "strict": false,
+  
+
+  //"indent": 2,
+
+  "browser": false,
+  "couch": false,
+  "devel": true,
+  "dojo": false,
+  "jquery": false,
+  "mootools": false,
+  "node": true,
+  "prototypejs": false,
+  "rhino": false,
+  "worker": false,
+  "wsh": false,
+  "yui": false
+
+}

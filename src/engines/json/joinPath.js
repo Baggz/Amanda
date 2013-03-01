@@ -1,7 +1,7 @@
 /**
  * JoinPath
  *
- * @param {string} path 
+ * @param {string} path
  * @param {string} property
  */
 Validation.prototype.joinPath = function(path, property) {

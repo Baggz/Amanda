@@ -1,6 +1,3 @@
-[← Documentation](https://github.com/Baggz/Amanda/tree/master/docs/README.md)
-
-<a name="addAttribute"></a>
 # addAttribute
 
 ```javascript
