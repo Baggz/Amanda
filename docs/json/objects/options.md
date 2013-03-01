@@ -1,6 +1,3 @@
-[← Documentation](https://github.com/Baggz/Amanda/tree/master/docs/README.md)
-
-<a name="options"></a>
 # Options
 
 ### Properties
@@ -8,8 +5,7 @@
 * [singleError](#singleError)
 * [messages](#messages)
 
-<a name="singleError"></a>
-## singleError [#](#singleError)
+## singleError
 
 If you set the `singleError` flag to `false`, validation continues even after a first error occurred. By default the `singleError` flag is set to `true`.
 
@@ -23,8 +19,7 @@ amanda.validate(data, schema, { singleError: false }, function(error) {
 });
 ```
 
-<a name="messages"></a>
-## messages [#](#messages)
+## messages
 
 This property allows you to set custom error messages. If you want to use more ambitious messages, you can pass a function.
 
