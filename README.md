@@ -111,7 +111,7 @@ Releases for the browser are available for download from GitHub.
 | **Version** | **Description** | **Size** | **Action** |
 |:------------|:----------------|:---------|:-----------|
 | `amanda.js` | *uncompressed, with comments* | 36 KB (7.16 KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/releases/latest/amanda.js) |
-| `amanda.min.js` | *compressed, without comments* | 13.58 KB (3.94 KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/releases/latest/amanda.min.js) |
+| `amanda.min.js` | *compressed, without comments* | 13.59 KB (3.95 KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/releases/latest/amanda.min.js) |
 
 Or you can use [JAM](http://jamjs.org/).
 
