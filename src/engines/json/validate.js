@@ -31,7 +31,7 @@ Validation.prototype.validate = function(instance, schema, callback) {
    * Object Types
    */
   var objectTypes = [
-    'object', 
+    'object',
     'array'
   ];
 
