@@ -29,14 +29,20 @@ var typeConstructor = function typeConstructor() {
      */
     if (isArray(attributeValue)) {
 
+      var typesSupported;
+
+      typesSupported = every(attributeValue, function(type) {
+        return hasProperty(types, type);
+      });
+
+      if (!typesSupported) {
+        this.addError('One of the following types ‘' + attributeValue.join(',') + '’ is not supported.');
+        return callback();
+      }
+
+
       var noError = attributeValue.some(function(type) {
-
-        if (!hasProperty(types, type)) {
-          throw new Error('Type ‘' + attributeValue + '’ is not supported.');
-        }
-
         return types[type](propertyValue);
-
       });
 
       if (!noError) {
@@ -53,11 +59,12 @@ var typeConstructor = function typeConstructor() {
     } else {
 
       if (!hasProperty(types, attributeValue)) {
-        throw new Error('Type ‘' + attributeValue + '’ is not supported.');
-      }
-
-      if (!types[attributeValue](propertyValue)) {
-        this.addError();
+        this.addError('Type ‘' + attributeValue + '’ is not supported.');
+      } else {
+        var testSuccess = types[attributeValue](propertyValue);
+        if (!testSuccess) {
+          this.addError();
+        }
       }
 
       return callback();

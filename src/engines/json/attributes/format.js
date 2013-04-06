@@ -2,7 +2,7 @@
  * Format
  */
 Validation.prototype.addAttributeConstructor('format', function formatConstructor() {
-  
+
   // Uložíme si referenci na this
   var self = this;
 
@@ -206,7 +206,7 @@ Validation.prototype.addAttributeConstructor('format', function formatConstructo
      *   format: {
      *     type: 'string',
      *     pattern: /abc/
-     *     ... 
+     *     ...
      *   }
      *   ...
      * }
@@ -222,7 +222,8 @@ Validation.prototype.addAttributeConstructor('format', function formatConstructo
      * }
      */
     if (isString(attributeValue) && !hasProperty(formats, attributeValue)) {
-      throw new Error('The format ‘' + attributeValue + '’ is not supported.');
+      this.addError('The format ‘' + attributeValue + '’ is not supported.');
+      return callback();
     }
 
     /**
