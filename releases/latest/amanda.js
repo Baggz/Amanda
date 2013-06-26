@@ -1460,14 +1460,17 @@ Validation.prototype.getProperty = function(property, source) {
  */
 Validation.prototype.joinPath = function(path, property) {
 
-  path = path || [];
+    path = path || [];
 
-  // Converts the ‘property’ to a string
-  property = property + '';
+    //copy to avoid sharing 1 instance
+    path = JSON.parse(JSON.stringify(path))
 
-  path.push(property);
+    // Converts the ‘property’ to a string
+    property = property + '';
 
-  return path;
+    path.push(property);
+
+    return path;
 
 };
 
