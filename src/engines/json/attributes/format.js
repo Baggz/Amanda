@@ -221,7 +221,7 @@ Validation.prototype.addAttributeConstructor('format', function formatConstructo
      *   ...
      * }
      */
-    if (isString(attributeValue) && !hasProperty(formats, attributeValue)) {
+    if (isString(attributeValue) && !hasProperty(formats, attributeValue)) {
       this.addError('The format ‘' + attributeValue + '’ is not supported.');
       return callback();
     }
