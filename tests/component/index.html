@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title>Amanda test</title>
+    <link rel="stylesheet" href="../../build/build.css">
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <script src="../../build/build.js"></script>
+    <script>
+      require('mocha');
+      mocha.setup('bdd');
+    </script>
+    <script>
+      var amanda = require('amanda')
+        , should = require('chaijs-chai').should();
+      describe('Amanda', function() {
+        it('should exist', function() {
+          should.exist(amanda('json').validate);
+        });
+      });
+    </script>
+    <script>
+      mocha.run();
+    </script>
+  </body>
+</html>
