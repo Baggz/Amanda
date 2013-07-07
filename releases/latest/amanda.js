@@ -797,7 +797,7 @@ Validation.prototype.addAttributeConstructor('format', function formatConstructo
      *   ...
      * }
      */
-    if (isString(attributeValue) && !hasProperty(formats, attributeValue)) {
+    if (isString(attributeValue) && !hasProperty(formats, attributeValue)) {
       this.addError('The format ‘' + attributeValue + '’ is not supported.');
       return callback();
     }
@@ -829,6 +829,7 @@ Validation.prototype.addAttributeConstructor('format', function formatConstructo
   };
 
 });
+
 
 /**
  * Length
@@ -1135,7 +1136,7 @@ Validation.prototype.addAttributeConstructor('type', typeConstructor);
         propertyValue.forEach(function(subValue, subIndex) {
 
           if (subIndex !== index) {
-            if (isEqual(value, subValue)) {
+            if (isEqual(value, subValue)) {
               self.addError({
                 property: self.joinPath(property, subIndex)
               });
@@ -1155,6 +1156,7 @@ Validation.prototype.addAttributeConstructor('type', typeConstructor);
   Validation.prototype.addAttribute('uniqueItems', attribute);
 
 }());
+
 
 /**
  * Error
