@@ -152,7 +152,7 @@ require(['amanda'], function(amanda) {
 
 ## Documentation
 
-All documentation is available in the [/docs/](https://github.com/Baggz/Amanda/tree/master/examples) folder.
+All documentation is available in the [/docs/](https://github.com/Baggz/Amanda/tree/master/docs) folder.
 
 ## Compatibility
 
