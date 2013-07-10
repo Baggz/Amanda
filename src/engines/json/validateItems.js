@@ -26,6 +26,11 @@ Validation.prototype.validateItems = function(instance, schema, path, callback) 
    *   ...
    * }
    */
+
+  if (isUndefined(instance)) {
+    instance = []
+  }
+
   if (isArray(schema.items)) {
 
     // Additional items are allowed
