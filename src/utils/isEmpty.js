@@ -23,7 +23,7 @@ var isEmpty = function(input) {
   // If the passed-in object is an object
   if (isObject(input)) {
     for (var key in input) {
-      if (hasProperty.call(input, key)) return false;
+      if (hasProperty(input, key)) return false;
     }
   }
 
