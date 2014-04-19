@@ -1387,7 +1387,7 @@ errorMessages = {
   maxItems: function(property, propertyValue, attributeValue) {
     return [
       'The ‘' + property + '’ property must not contain more than ‘' + attributeValue + '’ items.',
-      'Currently it contains ‘' + propertyValue.items  + '’ items.'
+      'Currently it contains ‘' + propertyValue.length  + '’ items.'
     ].join(' ');
   },
 
@@ -1401,7 +1401,7 @@ errorMessages = {
   minItems: function(property, propertyValue, attributeValue) {
     return [
       'The ‘' + property + '’ property must contain at least ‘' + attributeValue + '’ items.',
-      'Currently it contains ‘' + propertyValue.items  + '’ items.'
+      'Currently it contains ‘' + propertyValue.length  + '’ items.'
     ].join(' ');
   },
 
@@ -1435,7 +1435,7 @@ errorMessages = {
    * @param {string} attributeValue
    */
   additionalProperties: function(property, propertyValue, attributeValue) {
-    return 'Additional properties on ‘' + property + '’ are not allowed.';
+    return 'Additional property ‘' + property + '’ is not allowed.';
   },
 
   /**
@@ -1446,7 +1446,7 @@ errorMessages = {
    * @param {string} attributeValue
    */
   additionalItems: function(property, propertyValue, attributeValue) {
-    return 'Additional items on ‘' + property + '’ are not allowed.';
+    return 'Additional item ‘' + property + '’ is not allowed.';
   },
 
   /**
