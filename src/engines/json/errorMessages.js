@@ -6,7 +6,7 @@ var vowels = "aeiou",
 errorMessages = {
 
   /**
-   * Maximum
+   * Required
    *
    * @param {string} property
    * @param {any} propertyValue
@@ -45,7 +45,7 @@ errorMessages = {
   },
 
   /**
-   * MaxLength
+   * Length
    *
    * @param {string} property
    * @param {any} propertyValue
@@ -94,7 +94,7 @@ errorMessages = {
    * @param {string} attributeValue
    */
   except: function(property, propertyValue, attributeValue) {
-    return;
+      return 'The ‘' + property + '’ cannot equal ‘' + attributeValue + '’.';
   },
 
   /**
@@ -126,7 +126,7 @@ errorMessages = {
   },
 
   /**
-   * Maximum
+   * Pattern
    *
    * @param {string} property
    * @param {any} propertyValue
@@ -165,7 +165,7 @@ errorMessages = {
   },
 
   /**
-   * Maximum
+   * DivisibleBy
    *
    * @param {string} property
    * @param {any} propertyValue
@@ -176,7 +176,7 @@ errorMessages = {
   },
 
   /**
-   * Maximum
+   * UniqueItems
    *
    * @param {string} property
    * @param {any} propertyValue
@@ -184,6 +184,28 @@ errorMessages = {
    */
   uniqueItems: function(property, propertyValue, attributeValue) {
     return 'All items in the ‘' + property + '’ property must be unique.';
+  },
+
+  /**
+   * AdditionalProperties
+   *
+   * @param {string} property
+   * @param {any} propertyValue
+   * @param {string} attributeValue
+   */
+  additionalProperties: function(property, propertyValue, attributeValue) {
+    return 'Additional properties on ‘' + property + '’ are not allowed.';
+  },
+
+  /**
+   * AdditionalItems
+   *
+   * @param {string} property
+   * @param {any} propertyValue
+   * @param {string} attributeValue
+   */
+  additionalItems: function(property, propertyValue, attributeValue) {
+    return 'Additional items on ‘' + property + '’ are not allowed.';
   },
 
   /**
