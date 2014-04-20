@@ -94,7 +94,7 @@ errorMessages = {
    * @param {string} attributeValue
    */
   except: function(property, propertyValue, attributeValue) {
-      return 'The ‘' + property + '’ cannot equal ‘' + attributeValue + '’.';
+      return 'The property ‘' + property + '’ cannot equal ‘' + propertyValue + '’.';
   },
 
   /**

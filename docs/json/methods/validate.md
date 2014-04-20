@@ -7,9 +7,9 @@ validate(data, schema[, options], callback)
 ### Parameters
 
 * `data`
-* `schema` The *Schema* object, see [Schema](https://github.com/Baggz/Amanda/tree/master/docs/objects/schema.md).
-* `options` The *Options* object, see [Options](https://github.com/Baggz/Amanda/tree/master/docs/objects/options.md).
-* `callback` The `callback` gets one argument which is an *Error* object (see [Error](https://github.com/Baggz/Amanda/tree/master/docs/objects/error.md). for more information).
+* `schema` The *Schema* object, see [Schema](../objects/error.md).
+* `options` The *Options* object, see [Options](../objects/options.md).
+* `callback` The `callback` gets one argument which is an *Error* object (see [Error](../objects/error.md). for more information).
 
 ### Example
 
