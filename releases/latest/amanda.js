@@ -457,6 +457,12 @@ var additionalPropertiesAttribute = function additionalProperties(property, prop
 
   var self = this;
 
+  // If an object is expected but something else was given that Object.keys() can't be called on.
+  // Use Object.prototype.toString() because typeof [] === 'object' and we dont want to consider arrays.
+  if (Object.prototype.toString.call(propertyValue) !== '[object Object]') {
+    return callback();
+  }
+
   /**
    * {
    *   additionalProperties: true,
@@ -520,6 +526,7 @@ var additionalPropertiesAttribute = function additionalProperties(property, prop
 
 // Export
 Validation.prototype.addAttribute('additionalProperties', additionalPropertiesAttribute);
+
 
 /**
  * DivisibleBy
@@ -1335,7 +1342,7 @@ errorMessages = {
    * @param {string} attributeValue
    */
   except: function(property, propertyValue, attributeValue) {
-      return 'The ‘' + property + '’ cannot equal ‘' + attributeValue + '’.';
+      return 'The property ‘' + property + '’ cannot equal ‘' + propertyValue + '’.';
   },
 
   /**
