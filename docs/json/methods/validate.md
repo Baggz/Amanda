@@ -7,7 +7,7 @@ validate(data, schema[, options], callback)
 ### Parameters
 
 * `data`
-* `schema` The *Schema* object, see [Schema](../objects/error.md).
+* `schema` The *Schema* object, see [Schema](../objects/schema.md).
 * `options` The *Options* object, see [Options](../objects/options.md).
 * `callback` The `callback` gets one argument which is an *Error* object (see [Error](../objects/error.md). for more information).
 
