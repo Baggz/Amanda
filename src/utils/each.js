@@ -30,7 +30,7 @@ var each = function(list, iterator, callback) {
         if (list.hasOwnProperty(key)) {
           iterator.apply(list, [key, list[key]]);
         }
-      } 
+      }
     }
 
   };
@@ -41,64 +41,80 @@ var each = function(list, iterator, callback) {
    * @param {function} iterator
    * @param {function} callback
    */
-  var asyncEach = function(list, iterator, callback) {
+    var asyncEach = function(list, iterator, callback) {
 
-    var queue = [];
+      var finished    = 0;
+      var started     = 0;
+      var hasCalled   = false;
+      var mayCallback = false;
 
-    /**
-     * AddToQueue
-     *
-     * @param {string} key
-     * @param {string|object} value
-     */
-    var addToQueue = function(key, value) {
-      var index = queue.length + 1;
-      queue.push(function() {
-
-        var next = function(error) {
-          var fn = queue[index];
-          if (!error && fn) {
-            return fn();
-          } else if (!error && !fn) {
-            return callback();
-          } else {
-            return callback(error);
-          }
-        };
-
-        return iterator(key, value, next);
-
-      });
-    };
-
-    // If the list is an array
-    if (isArray(list) && !isEmpty(list)) {
-      for (var i = 0, len = list.length; i < len; i++) {
-        addToQueue(i, list[i]);
-      }
-
-    // If the list is an object
-    } else if (isObject(list) && !isEmpty(list)) {
-      for (var key in list) {
-        if (list.hasOwnProperty(key)) {
-          addToQueue(key, list[key]);
+      var tryCallback = function() {
+        if (mayCallback && finished == started) {
+          // finished all functions, celebrate!
+          callback();
+          return;
         }
       }
 
-    // If the list is not an array or an object
+      /**
+       * AddToQueue
+       *
+       * @param {string} key
+       * @param {string|object} value
+       */
+      var addToQueue = function(key, value) {
+        var cb = function(error) {
+          // return early if already called back
+          if (hasCalled) return;
+
+          if (error) {
+            // if error, fail fast
+            hasCalled = true;
+            callback(error);
+            return;
+          }
+
+          finished++;
+          tryCallback();
+          return;
+        };
+
+        // execute right away
+        started++;
+        iterator(key, value, cb);
+        return;
+      }
+
+
+      // If the list is an array
+      if (isArray(list) && !isEmpty(list)) {
+        for (var i = 0, len = list.length; i < len; i++) {
+          addToQueue(i, list[i]);
+        }
+
+      // If the list is an object
+      } else if (isObject(list) && !isEmpty(list)) {
+        for (var key in list) {
+          if (list.hasOwnProperty(key)) {
+            addToQueue(key, list[key]);
+          }
+        }
+
+      // If the list is not an array or an object
+      } else {
+        return callback();
+      }
+
+      // Done adding items. Allow callback to fire
+      mayCallback = true
+      tryCallback();
+      return;
+    };
+
+    if (typeof callback === 'undefined') {
+      return syncEach.apply(this, arguments);
     } else {
-      return callback();
+      return asyncEach.apply(this, arguments);
     }
 
-    // And go!
-    return queue[0]();
-
   };
-
-  if (typeof callback === 'undefined') {
-    return syncEach.apply(this, arguments);
-  } else {
-    return asyncEach.apply(this, arguments);
-  }
-
-};
