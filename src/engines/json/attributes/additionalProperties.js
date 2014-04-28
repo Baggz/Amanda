@@ -6,7 +6,8 @@ var additionalPropertiesAttribute = function additionalProperties(property, prop
   var self = this;
 
   // If an object is expected but something else was given that Object.keys() can't be called on.
-  // Use Object.prototype.toString() because typeof [] === 'object' and we dont want to consider arrays.
+  // Using Object.prototype.toString() because
+  // typeof [] === 'object' and typeof null === 'object' and we dont want to consider those.
   if (Object.prototype.toString.call(propertyValue) !== '[object Object]') {
     return callback();
   }
