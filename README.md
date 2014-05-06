@@ -110,8 +110,8 @@ Releases for the browser are available for download from GitHub.
 
 | **Version** | **Description** | **Size** | **Action** |
 |:------------|:----------------|:---------|:-----------|
-| `amanda.js` | *uncompressed, with comments* | 36.22 KB (7.23 KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/releases/latest/amanda.js) |
-| `amanda.min.js` | *compressed, without comments* | 13.71 KB (3.98 KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/releases/latest/amanda.min.js) |
+| `amanda.js` | *uncompressed, with comments* | 42.12 KB (7.98 KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/releases/latest/amanda.js) |
+| `amanda.min.js` | *compressed, without comments* | 13.8 KB (4.09 KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/releases/latest/amanda.min.js) |
 
 Or you can use [JAM](http://jamjs.org/).
 
@@ -152,7 +152,7 @@ require(['amanda'], function(amanda) {
 
 ## Documentation
 
-All documentation is available in the [/docs/](https://github.com/Baggz/Amanda/tree/master/examples) folder.
+All documentation is available in the [/docs/](https://github.com/Baggz/Amanda/tree/master/docs) folder.
 
 ## Compatibility
 

@@ -19,7 +19,7 @@
         propertyValue.forEach(function(subValue, subIndex) {
 
           if (subIndex !== index) {
-            if (isEqual(value, subValue)) {
+            if (isEqual(value, subValue)) {
               self.addError({
                 property: self.joinPath(property, subIndex)
               });

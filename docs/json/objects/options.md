@@ -40,7 +40,7 @@ var options = {
   messages: {
 
     // A custom error message as a string (with placeholders)
-    format: 'Uh oh! The property ‘{{property}}’ must be an {{attributeValue}}. Well, ‘{{propertyValue}}’ doesn't look like an email. ' // Uh oh! Param ‘email’ must be an email.
+    format: 'Uh oh! The property ‘{{property}}’ must be an {{attributeValue}}. Well, ‘{{propertyValue}}’ doesn\'t look like an email. ', // Uh oh! Param ‘email’ must be an email.
 
     // A custom error message as a function
     enum: function(property, propertyValue, attributeValue) {

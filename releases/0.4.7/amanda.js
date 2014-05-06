@@ -58,84 +58,67 @@ var each = function(list, iterator, callback) {
    * @param {function} iterator
    * @param {function} callback
    */
-    var asyncEach = function(list, iterator, callback) {
+  var asyncEach = function(list, iterator, callback) {
 
-      var finished    = 0;
-      var started     = 0;
-      var hasCalled   = false;
-      var mayCallback = false;
+    var queue = [];
 
-      var tryCallback = function() {
-        if (mayCallback && finished == started) {
-          // finished all functions, celebrate!
-          callback();
-          return;
-        }
-      }
+    /**
+     * AddToQueue
+     *
+     * @param {string} key
+     * @param {string|object} value
+     */
+    var addToQueue = function(key, value) {
+      var index = queue.length + 1;
+      queue.push(function() {
 
-      /**
-       * AddToQueue
-       *
-       * @param {string} key
-       * @param {string|object} value
-       */
-      var addToQueue = function(key, value) {
-        var cb = function(error) {
-          // return early if already called back
-          if (hasCalled) return;
-
-          if (error) {
-            // if error, fail fast
-            hasCalled = true;
-            callback(error);
-            return;
+        var next = function(error) {
+          var fn = queue[index];
+          if (!error && fn) {
+            return fn();
+          } else if (!error && !fn) {
+            return callback();
+          } else {
+            return callback(error);
           }
-
-          finished++;
-          tryCallback();
-          return;
         };
 
-        // execute right away
-        started++;
-        iterator(key, value, cb);
-        return;
-      }
+        return iterator(key, value, next);
 
-
-      // If the list is an array
-      if (isArray(list) && !isEmpty(list)) {
-        for (var i = 0, len = list.length; i < len; i++) {
-          addToQueue(i, list[i]);
-        }
-
-      // If the list is an object
-      } else if (isObject(list) && !isEmpty(list)) {
-        for (var key in list) {
-          if (list.hasOwnProperty(key)) {
-            addToQueue(key, list[key]);
-          }
-        }
-
-      // If the list is not an array or an object
-      } else {
-        return callback();
-      }
-
-      // Done adding items. Allow callback to fire
-      mayCallback = true
-      tryCallback();
-      return;
+      });
     };
 
-    if (typeof callback === 'undefined') {
-      return syncEach.apply(this, arguments);
+    // If the list is an array
+    if (isArray(list) && !isEmpty(list)) {
+      for (var i = 0, len = list.length; i < len; i++) {
+        addToQueue(i, list[i]);
+      }
+
+    // If the list is an object
+    } else if (isObject(list) && !isEmpty(list)) {
+      for (var key in list) {
+        if (list.hasOwnProperty(key)) {
+          addToQueue(key, list[key]);
+        }
+      }
+
+    // If the list is not an array or an object
     } else {
-      return asyncEach.apply(this, arguments);
+      return callback();
     }
+
+    // And go!
+    return queue[0]();
 
   };
 
+  if (typeof callback === 'undefined') {
+    return syncEach.apply(this, arguments);
+  } else {
+    return asyncEach.apply(this, arguments);
+  }
+
+};
 
 /**
  * Every
@@ -197,7 +180,7 @@ var isDefined = function(input) {
 
 /**
  * IsEmpty
- *  
+ *
  * Returns true if the passed-in object is empty.
  *
  * @param {object} input
@@ -1183,7 +1166,7 @@ Validation.prototype.addAttributeConstructor('type', typeConstructor);
 var ValidationError = function(parent) {
 
   this.length = 0;
-  
+
   this.errorMessages = parent.messages;
 
 };
@@ -1591,7 +1574,7 @@ Validation.prototype.validate = function(instance, schema, callback) {
     }
 
     if (isObject(instance) || isArray (instance)) {
-      return this.validateSchema(instance, schema, '', callbackProxy); 
+      return this.validateSchema(instance, schema, '', callbackProxy);
     }
 
     return this.validateProperty(undefined, instance, schema, callbackProxy);
@@ -1628,11 +1611,6 @@ Validation.prototype.validateItems = function(instance, schema, path, callback) 
    *   ...
    * }
    */
-
-  if (isUndefined(instance)) {
-    instance = []
-  }
-
   if (isArray(schema.items)) {
 
     // Additional items are allowed
@@ -1708,7 +1686,7 @@ Validation.prototype.validateItems = function(instance, schema, path, callback) 
  * @param {function} callback
  */
 Validation.prototype.validateProperties = function(instance, schema, path, callback) {
-  
+
   // Save a reference to the ‘this’
   var self = this;
 
@@ -1855,8 +1833,8 @@ Validation.prototype.validateProperty = function(property, propertyValue, proper
   if (propertyAttributes.required !== true && isUndefined(propertyValue)) {
     return callback();
   }
-  
-  // Validate the property  
+
+  // Validate the property
   return each(self.attributes, iterator, callback);
 
 };
@@ -1879,7 +1857,7 @@ Validation.prototype.validateSchema = function(instance, schema, path, callback)
      * {
      *   type: 'object',
      *   properties: {
-     *     ... 
+     *     ...
      *   }
      * }
      */
@@ -1896,7 +1874,7 @@ Validation.prototype.validateSchema = function(instance, schema, path, callback)
      *   type: 'array',
      *   items: {
      *     type: 'string'
-     *     ... 
+     *     ...
      *   }
      * }
      */
@@ -1925,7 +1903,7 @@ Validation.prototype.validateSchema = function(instance, schema, path, callback)
 
 };
 
-  
+
   /**
    * Export
    * --------------------
