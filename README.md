@@ -7,7 +7,6 @@ This is a fork of [Amanda](https://github.com/Baggz/Amanda) library.
 | **Branch** | **Status** |
 |:-----------|:----------|
 | master | [![Build Status](https://secure.travis-ci.org/apiaryio/Amanda.png?branch=master)](http://travis-ci.org/apiaryio/Amanda) |
-| dev | [![Build Status](https://secure.travis-ci.org/apiaryio/Amanda.png?branch=dev)](http://travis-ci.org/apiaryio/Amanda) |
 
 ## Authors
 
