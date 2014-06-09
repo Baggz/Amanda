@@ -474,6 +474,13 @@ var additionalPropertiesAttribute = function additionalProperties(property, prop
 
   var self = this;
 
+  // If an object is expected but something else was given that Object.keys() can't be called on.
+  // Using Object.prototype.toString() because
+  // typeof [] === 'object' and typeof null === 'object' and we dont want to consider those.
+  if (Object.prototype.toString.call(propertyValue) !== '[object Object]') {
+    return callback();
+  }
+
   /**
    * {
    *   additionalProperties: true,
@@ -537,6 +544,7 @@ var additionalPropertiesAttribute = function additionalProperties(property, prop
 
 // Export
 Validation.prototype.addAttribute('additionalProperties', additionalPropertiesAttribute);
+
 
 /**
  * DivisibleBy
@@ -1261,7 +1269,7 @@ var vowels = "aeiou",
 errorMessages = {
 
   /**
-   * Maximum
+   * Required
    *
    * @param {string} property
    * @param {any} propertyValue
@@ -1300,7 +1308,7 @@ errorMessages = {
   },
 
   /**
-   * MaxLength
+   * Length
    *
    * @param {string} property
    * @param {any} propertyValue
@@ -1349,7 +1357,7 @@ errorMessages = {
    * @param {string} attributeValue
    */
   except: function(property, propertyValue, attributeValue) {
-    return;
+      return 'The property ‘' + property + '’ cannot equal ‘' + propertyValue + '’.';
   },
 
   /**
@@ -1381,7 +1389,7 @@ errorMessages = {
   },
 
   /**
-   * Maximum
+   * Pattern
    *
    * @param {string} property
    * @param {any} propertyValue
@@ -1401,7 +1409,7 @@ errorMessages = {
   maxItems: function(property, propertyValue, attributeValue) {
     return [
       'The ‘' + property + '’ property must not contain more than ‘' + attributeValue + '’ items.',
-      'Currently it contains ‘' + propertyValue.items  + '’ items.'
+      'Currently it contains ‘' + propertyValue.length  + '’ items.'
     ].join(' ');
   },
 
@@ -1415,12 +1423,12 @@ errorMessages = {
   minItems: function(property, propertyValue, attributeValue) {
     return [
       'The ‘' + property + '’ property must contain at least ‘' + attributeValue + '’ items.',
-      'Currently it contains ‘' + propertyValue.items  + '’ items.'
+      'Currently it contains ‘' + propertyValue.length  + '’ items.'
     ].join(' ');
   },
 
   /**
-   * Maximum
+   * DivisibleBy
    *
    * @param {string} property
    * @param {any} propertyValue
@@ -1431,7 +1439,7 @@ errorMessages = {
   },
 
   /**
-   * Maximum
+   * UniqueItems
    *
    * @param {string} property
    * @param {any} propertyValue
@@ -1439,6 +1447,28 @@ errorMessages = {
    */
   uniqueItems: function(property, propertyValue, attributeValue) {
     return 'All items in the ‘' + property + '’ property must be unique.';
+  },
+
+  /**
+   * AdditionalProperties
+   *
+   * @param {string} property
+   * @param {any} propertyValue
+   * @param {string} attributeValue
+   */
+  additionalProperties: function(property, propertyValue, attributeValue) {
+    return 'Additional property ‘' + property + '’ is not allowed.';
+  },
+
+  /**
+   * AdditionalItems
+   *
+   * @param {string} property
+   * @param {any} propertyValue
+   * @param {string} attributeValue
+   */
+  additionalItems: function(property, propertyValue, attributeValue) {
+    return 'Additional item ‘' + property + '’ is not allowed.';
   },
 
   /**
@@ -1453,6 +1483,7 @@ errorMessages = {
   }
 
 };
+
 
 /**
  * GetProperty
