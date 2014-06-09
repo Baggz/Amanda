@@ -1507,21 +1507,19 @@ Validation.prototype.getProperty = function(property, source) {
  */
 Validation.prototype.joinPath = function(path, property) {
 
-  // If the ‘path’ is undefined (object), convert the path to a string
-  path = path || '';
+    path = path || [];
 
-  // Converts the ‘property’ to a string
-  property = property + '';
+    //copy to avoid sharing 1 instance
+    path = JSON.parse(JSON.stringify(path))
 
-  if (property.match(/^[a-zA-Z_][a-zA-Z0-9_]*$/)) {
-    return (path) ? (path + '.' + property) : property;
-  } else if (property.match(/^\d+$/)) {
-    return path + '[' + property + ']';
-  } else  {
-    return path + '["' + property + '"]';
-  }
+    // Converts the ‘property’ to a string
+    property = property + '';
+
+    path.push(property);
+    return path;
 
 };
+
 
 /**
  * Validation.validate
@@ -1827,14 +1825,24 @@ Validation.prototype.validateProperty = function(property, propertyValue, proper
     context.addError = function(message) {
 
       if (isObject(message)) {
+        property = message.property || property
+
+        if (!Array.isArray(property)) {
+            property = [property]
+        }
+
         return self.errors.push({
-          property: message.property || property,
+          property: property,
           propertyValue: message.propertyValue || propertyValue,
           attributeName: message.attributeName || attributeName,
           attributeValue: message.attributeValue || propertyAttributes[attributeName],
           message: message.message || undefined
         });
       }
+
+      if (!Array.isArray(property)) {
+            property = [property]
+        }
 
       return self.errors.push({
         property: property,
@@ -1888,6 +1896,7 @@ Validation.prototype.validateProperty = function(property, propertyValue, proper
   return each(self.attributes, iterator, callback);
 
 };
+
 
 /**
  * Validation.validateSchema
