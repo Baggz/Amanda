@@ -164,17 +164,20 @@ suite('JSON/ArraysObjects (without the ‘singleError’ flag)', function() {
       expect(error).to.have.property('2');
       expect(error).to.have.property('length', 3);
 
-      expect(error[0]).to.have.property('property', 'users[1].name');
+      expect(error[0]).to.have.property('property');
+      expect(error[0]['property']).to.eql( [ 'users', '1', 'name' ]);
       expect(error[0]).to.have.property('propertyValue', 123);
       expect(error[0]).to.have.property('attributeName', 'type');
       expect(error[0]).to.have.property('attributeValue', 'string');
 
-      expect(error[1]).to.have.property('property', 'users[1].surname');
+      expect(error[1]).to.have.property('property');
+      expect(error[1]['property']).to.eql( [ 'users', '1', 'surname' ]);
       expect(error[1]).to.have.property('propertyValue', 123);
       expect(error[1]).to.have.property('attributeName', 'type');
       expect(error[1]).to.have.property('attributeValue', 'string');
 
-      expect(error[2]).to.have.property('property', 'users[2].name');
+      expect(error[2]).to.have.property('property');
+      expect(error[2]['property']).to.eql( [ 'users', '2', 'name' ]);
       expect(error[2]).to.have.property('propertyValue', 123);
       expect(error[2]).to.have.property('attributeName', 'type');
       expect(error[2]).to.have.property('attributeValue', 'string');

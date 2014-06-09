@@ -48,7 +48,7 @@ suite('JSON/Error', function() {
       expect(error).to.have.property('getProperties');
       expect(error).to.have.property('getMessages');
 
-      expect(error.getProperties()).to.be.eql(['name', 'surname']);
+      expect(error.getProperties()).to.be.eql([['name'], ['surname']]);
 
     });
 
