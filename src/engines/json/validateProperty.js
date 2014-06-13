@@ -42,14 +42,24 @@ Validation.prototype.validateProperty = function(property, propertyValue, proper
     context.addError = function(message) {
 
       if (isObject(message)) {
+        property = message.property || property
+
+        if (!Array.isArray(property)) {
+            property = [property]
+        }
+
         return self.errors.push({
-          property: message.property || property,
+          property: property,
           propertyValue: message.propertyValue || propertyValue,
           attributeName: message.attributeName || attributeName,
           attributeValue: message.attributeValue || propertyAttributes[attributeName],
           message: message.message || undefined
         });
       }
+
+      if (!Array.isArray(property)) {
+            property = [property]
+        }
 
       return self.errors.push({
         property: property,

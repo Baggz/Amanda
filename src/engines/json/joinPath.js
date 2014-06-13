@@ -15,7 +15,6 @@ Validation.prototype.joinPath = function(path, property) {
     property = property + '';
 
     path.push(property);
-
     return path;
 
 };

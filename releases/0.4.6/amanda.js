@@ -47,7 +47,7 @@ var each = function(list, iterator, callback) {
         if (list.hasOwnProperty(key)) {
           iterator.apply(list, [key, list[key]]);
         }
-      }
+      } 
     }
 
   };
@@ -58,81 +58,67 @@ var each = function(list, iterator, callback) {
    * @param {function} iterator
    * @param {function} callback
    */
-    var asyncEach = function(list, iterator, callback) {
+  var asyncEach = function(list, iterator, callback) {
 
-      var finished    = 0;
-      var started     = 0;
-      var hasCalled   = false;
-      var mayCallback = false;
+    var queue = [];
 
-      var tryCallback = function() {
-        if (mayCallback && finished == started) {
-          // finished all functions, celebrate!
+    /**
+     * AddToQueue
+     *
+     * @param {string} key
+     * @param {string|object} value
+     */
+    var addToQueue = function(key, value) {
+      var index = queue.length + 1;
+      queue.push(function() {
+
+        var next = function(error) {
+          var fn = queue[index];
+          if (!error && fn) {
+            return fn();
+          } else if (!error && !fn) {
             return callback();
-        }
-      }
-
-      /**
-       * AddToQueue
-       *
-       * @param {string} key
-       * @param {string|object} value
-       */
-      var addToQueue = function(key, value) {
-        var cb = function(error) {
-          // return early if already called back
-          if (hasCalled) return;
-
-          if (error) {
-            // if error, fail fast
-            hasCalled = true;
+          } else {
             return callback(error);
-
           }
-
-          finished++;
-            return tryCallback();
-
         };
 
-        // execute right away
-        started++;
-        return iterator(key, value, cb);
-      }
+        return iterator(key, value, next);
 
-
-      // If the list is an array
-      if (isArray(list) && !isEmpty(list)) {
-        for (var i = 0, len = list.length; i < len; i++) {
-          addToQueue(i, list[i]);
-        }
-
-      // If the list is an object
-      } else if (isObject(list) && !isEmpty(list)) {
-        for (var key in list) {
-          if (list.hasOwnProperty(key)) {
-            addToQueue(key, list[key]);
-          }
-        }
-
-      // If the list is not an array or an object
-      } else {
-        return callback();
-      }
-
-      // Done adding items. Allow callback to fire
-      mayCallback = true
-      return tryCallback();
+      });
     };
 
-    if (typeof callback === 'undefined') {
-      return syncEach.apply(this, arguments);
+    // If the list is an array
+    if (isArray(list) && !isEmpty(list)) {
+      for (var i = 0, len = list.length; i < len; i++) {
+        addToQueue(i, list[i]);
+      }
+
+    // If the list is an object
+    } else if (isObject(list) && !isEmpty(list)) {
+      for (var key in list) {
+        if (list.hasOwnProperty(key)) {
+          addToQueue(key, list[key]);
+        }
+      }
+
+    // If the list is not an array or an object
     } else {
-      return asyncEach.apply(this, arguments);
+      return callback();
     }
+
+    // And go!
+    return queue[0]();
 
   };
 
+  if (typeof callback === 'undefined') {
+    return syncEach.apply(this, arguments);
+  } else {
+    return asyncEach.apply(this, arguments);
+  }
+
+};
 
 /**
  * Every
@@ -622,7 +608,10 @@ Validation.prototype.addAttributeConstructor('format', function formatConstructo
       if (isString(input)) {
         return input.match(/^\d{4}-(?:0[0-9]{1}|1[0-2]{1})-[0-9]{2}$/);
       }
-      return Object.prototype.toString.call(input) === '[object Date]';
+      if (isObject(input)) {
+        return Object.prototype.toString.call(input) === '[object Date]';
+      }
+      return false;
     },
 
     /**
@@ -808,7 +797,7 @@ Validation.prototype.addAttributeConstructor('format', function formatConstructo
      *   ...
      * }
      */
-    if (isString(attributeValue) && !hasProperty(formats, attributeValue)) {
+    if (isString(attributeValue) && !hasProperty(formats, attributeValue)) {
       this.addError('The format ‘' + attributeValue + '’ is not supported.');
       return callback();
     }
@@ -840,7 +829,6 @@ Validation.prototype.addAttributeConstructor('format', function formatConstructo
   };
 
 });
-
 
 /**
  * Length
@@ -1031,9 +1019,9 @@ var requiredAttribute = function required(property, propertyValue, attributeValu
   if (attributeValue) {
 
     var undefinedCondition = isUndefined(propertyValue);
-    var nullCondition = isNull(propertyValue);
+    var emptyCondition = (isString(propertyValue) || isArray(propertyValue) || isObject(propertyValue)) && isEmpty(propertyValue);
 
-    if (undefinedCondition || nullCondition) {
+    if (undefinedCondition || emptyCondition) {
       this.addError();
     }
 
@@ -1045,7 +1033,6 @@ var requiredAttribute = function required(property, propertyValue, attributeValu
 
 // Export
 Validation.prototype.addAttribute('required', requiredAttribute);
-
 
 /**
  * Type
@@ -1148,7 +1135,7 @@ Validation.prototype.addAttributeConstructor('type', typeConstructor);
         propertyValue.forEach(function(subValue, subIndex) {
 
           if (subIndex !== index) {
-            if (isEqual(value, subValue)) {
+            if (isEqual(value, subValue)) {
               self.addError({
                 property: self.joinPath(property, subIndex)
               });
@@ -1168,7 +1155,6 @@ Validation.prototype.addAttributeConstructor('type', typeConstructor);
   Validation.prototype.addAttribute('uniqueItems', attribute);
 
 }());
-
 
 /**
  * Error
@@ -1474,19 +1460,21 @@ Validation.prototype.getProperty = function(property, source) {
  */
 Validation.prototype.joinPath = function(path, property) {
 
-    path = path || [];
+  // If the ‘path’ is undefined (object), convert the path to a string
+  path = path || '';
 
-    //copy to avoid sharing 1 instance
-    path = JSON.parse(JSON.stringify(path))
+  // Converts the ‘property’ to a string
+  property = property + '';
 
-    // Converts the ‘property’ to a string
-    property = property + '';
-
-    path.push(property);
-    return path;
+  if (property.match(/^[a-zA-Z_][a-zA-Z0-9_]*$/)) {
+    return (path) ? (path + '.' + property) : property;
+  } else if (property.match(/^\d+$/)) {
+    return path + '[' + property + ']';
+  } else  {
+    return path + '["' + property + '"]';
+  }
 
 };
-
 
 /**
  * Validation.validate
@@ -1621,11 +1609,6 @@ Validation.prototype.validateItems = function(instance, schema, path, callback) 
    *   ...
    * }
    */
-
-  if (isUndefined(instance)) {
-    instance = []
-  }
-
   if (isArray(schema.items)) {
 
     // Additional items are allowed
@@ -1792,24 +1775,14 @@ Validation.prototype.validateProperty = function(property, propertyValue, proper
     context.addError = function(message) {
 
       if (isObject(message)) {
-        property = message.property || property
-
-        if (!Array.isArray(property)) {
-            property = [property]
-        }
-
         return self.errors.push({
-          property: property,
+          property: message.property || property,
           propertyValue: message.propertyValue || propertyValue,
           attributeName: message.attributeName || attributeName,
           attributeValue: message.attributeValue || propertyAttributes[attributeName],
           message: message.message || undefined
         });
       }
-
-      if (!Array.isArray(property)) {
-            property = [property]
-        }
 
       return self.errors.push({
         property: property,
@@ -1863,7 +1836,6 @@ Validation.prototype.validateProperty = function(property, propertyValue, proper
   return each(self.attributes, iterator, callback);
 
 };
-
 
 /**
  * Validation.validateSchema

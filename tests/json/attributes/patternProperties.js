@@ -62,7 +62,8 @@ suite('JSON/Attribute/patternProperties', function() {
       expect(error).to.have.property('0');
       expect(error).to.have.property('length', 1);
 
-      expect(error[0]).to.have.property('property', 'name');
+      expect(error[0]).to.have.property('property');
+      expect(error[0]['property']).to.eql(['name']);
       expect(error[0]).to.have.property('propertyValue', 123);
       expect(error[0]).to.have.property('attributeName', 'type');
       expect(error[0]).to.have.property('attributeValue', 'string');
