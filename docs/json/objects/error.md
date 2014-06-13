@@ -3,8 +3,8 @@
 **Example**
 
 ```javascript
-[
-  {
+{
+  '0': {
     property: 'users[0].username'
     propertyValue: 123
     attributeName: 'type'
@@ -12,7 +12,7 @@
     message: 'Lorem ipsum dolor isamet pide quidu delime.'
   },
   ...
-]
+}
 ```
 
 ### Methods

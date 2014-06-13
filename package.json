@@ -2,15 +2,20 @@
 
   "name": "amanda",
   "description": "JSON Schema validator",
-  "version": "0.4.9",
-  "author": "František Hába <hello@frantisekhaba.com> (https://github.com/Baggz)",
-
+  "version": "0.5.0",
+  "author": "František Hába <frantisek@apiary.io> (https://github.com/Baggz)",
+  "contributors": [
+    {
+        "name": "Peter Grilli",
+        "email": "tully@apiary.io"
+    }
+  ],
   "devDependencies": {
-    "mocha": "1.7.4",
+    "mocha": "1.12.0",
     "expect.js": "0.2.0",
-    "debug": "0.7.0",
-    "async": "0.1.22",
-    "uglify-js": "2.2.2"
+    "debug": "0.7.2",
+    "async": "0.2.9",
+    "uglify-js": "2.3.6"
   },
 
   "keywords": [

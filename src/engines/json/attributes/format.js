@@ -32,10 +32,7 @@ Validation.prototype.addAttributeConstructor('format', function formatConstructo
       if (isString(input)) {
         return input.match(/^\d{4}-(?:0[0-9]{1}|1[0-2]{1})-[0-9]{2}$/);
       }
-      if (isObject(input)) {
-        return Object.prototype.toString.call(input) === '[object Date]';
-      }
-      return false;
+      return Object.prototype.toString.call(input) === '[object Date]';
     },
 
     /**
@@ -221,7 +218,7 @@ Validation.prototype.addAttributeConstructor('format', function formatConstructo
      *   ...
      * }
      */
-    if (isString(attributeValue) && !hasProperty(formats, attributeValue)) {
+    if (isString(attributeValue) && !hasProperty(formats, attributeValue)) {
       this.addError('The format ‘' + attributeValue + '’ is not supported.');
       return callback();
     }

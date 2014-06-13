@@ -68,7 +68,8 @@ var each = function(list, iterator, callback) {
       var tryCallback = function() {
         if (mayCallback && finished == started) {
           // finished all functions, celebrate!
-            return callback();
+          callback();
+          return;
         }
       }
 
@@ -86,18 +87,19 @@ var each = function(list, iterator, callback) {
           if (error) {
             // if error, fail fast
             hasCalled = true;
-            return callback(error);
-
+            callback(error);
+            return;
           }
 
           finished++;
-            return tryCallback();
-
+          tryCallback();
+          return;
         };
 
         // execute right away
         started++;
-        return iterator(key, value, cb);
+        iterator(key, value, cb);
+        return;
       }
 
 
@@ -122,7 +124,8 @@ var each = function(list, iterator, callback) {
 
       // Done adding items. Allow callback to fire
       mayCallback = true
-      return tryCallback();
+      tryCallback();
+      return;
     };
 
     if (typeof callback === 'undefined') {
@@ -622,7 +625,10 @@ Validation.prototype.addAttributeConstructor('format', function formatConstructo
       if (isString(input)) {
         return input.match(/^\d{4}-(?:0[0-9]{1}|1[0-2]{1})-[0-9]{2}$/);
       }
-      return Object.prototype.toString.call(input) === '[object Date]';
+      if (isObject(input)) {
+        return Object.prototype.toString.call(input) === '[object Date]';
+      }
+      return false;
     },
 
     /**
@@ -1031,9 +1037,9 @@ var requiredAttribute = function required(property, propertyValue, attributeValu
   if (attributeValue) {
 
     var undefinedCondition = isUndefined(propertyValue);
-    var nullCondition = isNull(propertyValue);
+    var emptyCondition = (isString(propertyValue) || isArray(propertyValue) || isObject(propertyValue)) && isEmpty(propertyValue);
 
-    if (undefinedCondition || nullCondition) {
+    if (undefinedCondition || emptyCondition) {
       this.addError();
     }
 
@@ -1045,7 +1051,6 @@ var requiredAttribute = function required(property, propertyValue, attributeValu
 
 // Export
 Validation.prototype.addAttribute('required', requiredAttribute);
-
 
 /**
  * Type
@@ -1474,19 +1479,21 @@ Validation.prototype.getProperty = function(property, source) {
  */
 Validation.prototype.joinPath = function(path, property) {
 
-    path = path || [];
+  // If the ‘path’ is undefined (object), convert the path to a string
+  path = path || '';
 
-    //copy to avoid sharing 1 instance
-    path = JSON.parse(JSON.stringify(path))
+  // Converts the ‘property’ to a string
+  property = property + '';
 
-    // Converts the ‘property’ to a string
-    property = property + '';
-
-    path.push(property);
-    return path;
+  if (property.match(/^[a-zA-Z_][a-zA-Z0-9_]*$/)) {
+    return (path) ? (path + '.' + property) : property;
+  } else if (property.match(/^\d+$/)) {
+    return path + '[' + property + ']';
+  } else  {
+    return path + '["' + property + '"]';
+  }
 
 };
-
 
 /**
  * Validation.validate
@@ -1792,24 +1799,14 @@ Validation.prototype.validateProperty = function(property, propertyValue, proper
     context.addError = function(message) {
 
       if (isObject(message)) {
-        property = message.property || property
-
-        if (!Array.isArray(property)) {
-            property = [property]
-        }
-
         return self.errors.push({
-          property: property,
+          property: message.property || property,
           propertyValue: message.propertyValue || propertyValue,
           attributeName: message.attributeName || attributeName,
           attributeValue: message.attributeValue || propertyAttributes[attributeName],
           message: message.message || undefined
         });
       }
-
-      if (!Array.isArray(property)) {
-            property = [property]
-        }
 
       return self.errors.push({
         property: property,
@@ -1863,7 +1860,6 @@ Validation.prototype.validateProperty = function(property, propertyValue, proper
   return each(self.attributes, iterator, callback);
 
 };
-
 
 /**
  * Validation.validateSchema

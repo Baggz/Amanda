@@ -1,0 +1,33 @@
+{
+
+  "name": "amanda",
+  "description": "JSON Schema validator",
+  "version": "0.4.8",
+  "author": "František Hába <hello@frantisekhaba.com> (https://github.com/Baggz)",
+
+  "keywords": [
+    "JSON",
+    "JSON Schema",
+    "schema",
+    "validator",
+    "validate",
+    "JSON validator",
+    "schema validator",
+    "async",
+    "browser"
+  ],
+
+  "homepage": "https://github.com/Baggz/Amanda",
+
+  "development": {
+    "chaijs/chai": "*",
+    "visionmedia/mocha": "*"
+  },
+
+  "main": "releases/latest/amanda.js",
+
+  "scripts": [
+    "releases/latest/amanda.js"
+  ]
+
+}
