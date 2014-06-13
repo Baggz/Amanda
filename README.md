@@ -1,7 +1,7 @@
 <a name="amanda"></a>
 # Amanda
 
-[Amanda](https://github.com/Baggz/Amanda) is aiming to be **a universal schema validation library**. Currently it supports only the [JSON Schema Internet Draft](http://tools.ietf.org/html/draft-zyp-json-schema-03), but I'm planning to add [Orderly](http://orderly-json.org/), [Relax NG](http://relaxng.org/) and others very soon.
+[Amanda](https://github.com/apiaryio/Amanda) is aiming to be **a universal schema validation library**. Currently it supports only the [JSON Schema Internet Draft](http://tools.ietf.org/html/draft-zyp-json-schema-03), but I'm planning to add [Orderly](http://orderly-json.org/), [Relax NG](http://relaxng.org/) and others very soon.
 
 <a name="example"></a>
 ### Example
@@ -110,8 +110,8 @@ Releases for the browser are available for download from GitHub.
 
 | **Version** | **Description** | **Size** | **Action** |
 |:------------|:----------------|:---------|:-----------|
-| `amanda.js` | *uncompressed, with comments* | 42.12 KB (7.98 KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/releases/latest/amanda.js) |
-| `amanda.min.js` | *compressed, without comments* | 13.8 KB (4.09 KB gzipped) | [Download](https://raw.github.com/Baggz/Amanda/master/releases/latest/amanda.min.js) |
+| `amanda.js` | *uncompressed, with comments* | 42.12 KB (7.98 KB gzipped) | [Download](https://raw.github.com/apiaryio/Amanda/master/releases/latest/amanda.js) |
+| `amanda.min.js` | *compressed, without comments* | 13.8 KB (4.09 KB gzipped) | [Download](https://raw.github.com/apiaryio/Amanda/master/releases/latest/amanda.min.js) |
 
 Or you can use [JAM](http://jamjs.org/).
 
@@ -151,7 +151,7 @@ require(['amanda'], function(amanda) {
 
 ## Documentation
 
-All documentation is available in the [/docs/](https://github.com/Baggz/Amanda/tree/master/docs) folder.
+All documentation is available in the [/docs/](https://github.com/apiaryio/Amanda/tree/master/docs) folder.
 
 ## Compatibility
 
@@ -204,8 +204,8 @@ For more information on *semantic versioning*, please visit http://semver.org/.
 
 ## Authors
 
-František Hába ([@Baggz](https://github.com/Baggz)) created [Amanda](https://github.com/Baggz/Amanda) and [these people](https://github.com/Baggz/Amanda/graphs/contributors) have contributed.
+František Hába ([@Baggz](https://github.com/Baggz)) created [Amanda](https://github.com/apiaryio/Amanda) and [these people](https://github.com/apiaryio/Amanda/graphs/contributors) have contributed.
 
 ## License
 
-Please see the [LICENSE](https://github.com/Baggz/Amanda/blob/master/LICENSE) file.
+Please see the [LICENSE](https://github.com/apiaryio/Amanda/blob/master/LICENSE) file.
