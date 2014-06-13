@@ -17,7 +17,7 @@
     "browser"
   ],
 
-  "homepage": "https://github.com/Baggz/Amanda",
+  "homepage": "https://github.com/apiaryio/Amanda",
 
   "development": {
     "chaijs/chai": "*",
