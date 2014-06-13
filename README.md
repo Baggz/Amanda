@@ -147,8 +147,7 @@ require(['amanda'], function(amanda) {
 
 | **Branch** | **Status** |
 |:-----------|:----------|
-| master | [![Build Status](https://secure.travis-ci.org/Baggz/Amanda.png?branch=master)](http://travis-ci.org/Baggz/Amanda) |
-| dev | [![Build Status](https://secure.travis-ci.org/Baggz/Amanda.png?branch=dev)](http://travis-ci.org/Baggz/Amanda) |
+| master | [![Build Status](https://secure.travis-ci.org/apiaryio/Amanda.png?branch=master)](http://travis-ci.org/apiaryio/Amanda) |
 
 ## Documentation
 
