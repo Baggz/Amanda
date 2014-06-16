@@ -68,8 +68,7 @@ var each = function(list, iterator, callback) {
       var tryCallback = function() {
         if (mayCallback && finished == started) {
           // finished all functions, celebrate!
-          callback();
-          return;
+            return callback();
         }
       }
 
@@ -87,19 +86,18 @@ var each = function(list, iterator, callback) {
           if (error) {
             // if error, fail fast
             hasCalled = true;
-            callback(error);
-            return;
+            return callback(error);
+
           }
 
           finished++;
-          tryCallback();
-          return;
+            return tryCallback();
+
         };
 
         // execute right away
         started++;
-        iterator(key, value, cb);
-        return;
+        return iterator(key, value, cb);
       }
 
 
@@ -124,8 +122,7 @@ var each = function(list, iterator, callback) {
 
       // Done adding items. Allow callback to fire
       mayCallback = true
-      tryCallback();
-      return;
+      return tryCallback();
     };
 
     if (typeof callback === 'undefined') {
@@ -1042,9 +1039,9 @@ var requiredAttribute = function required(property, propertyValue, attributeValu
   if (attributeValue) {
 
     var undefinedCondition = isUndefined(propertyValue);
-    var emptyCondition = (isString(propertyValue) || isArray(propertyValue) || isObject(propertyValue)) && isEmpty(propertyValue);
+    var nullCondition = isNull(propertyValue);
 
-    if (undefinedCondition || emptyCondition) {
+    if (undefinedCondition || nullCondition) {
       this.addError();
     }
 
@@ -1056,6 +1053,7 @@ var requiredAttribute = function required(property, propertyValue, attributeValu
 
 // Export
 Validation.prototype.addAttribute('required', requiredAttribute);
+
 
 /**
  * Type
@@ -1507,21 +1505,19 @@ Validation.prototype.getProperty = function(property, source) {
  */
 Validation.prototype.joinPath = function(path, property) {
 
-  // If the ‘path’ is undefined (object), convert the path to a string
-  path = path || '';
+    path = path || [];
 
-  // Converts the ‘property’ to a string
-  property = property + '';
+    //copy to avoid sharing 1 instance
+    path = JSON.parse(JSON.stringify(path))
 
-  if (property.match(/^[a-zA-Z_][a-zA-Z0-9_]*$/)) {
-    return (path) ? (path + '.' + property) : property;
-  } else if (property.match(/^\d+$/)) {
-    return path + '[' + property + ']';
-  } else  {
-    return path + '["' + property + '"]';
-  }
+    // Converts the ‘property’ to a string
+    property = property + '';
+
+    path.push(property);
+    return path;
 
 };
+
 
 /**
  * Validation.validate
@@ -1827,14 +1823,24 @@ Validation.prototype.validateProperty = function(property, propertyValue, proper
     context.addError = function(message) {
 
       if (isObject(message)) {
+        property = message.property || property
+
+        if (!Array.isArray(property)) {
+            property = [property]
+        }
+
         return self.errors.push({
-          property: message.property || property,
+          property: property,
           propertyValue: message.propertyValue || propertyValue,
           attributeName: message.attributeName || attributeName,
           attributeValue: message.attributeValue || propertyAttributes[attributeName],
           message: message.message || undefined
         });
       }
+
+      if (!Array.isArray(property)) {
+            property = [property]
+        }
 
       return self.errors.push({
         property: property,
@@ -1888,6 +1894,7 @@ Validation.prototype.validateProperty = function(property, propertyValue, proper
   return each(self.attributes, iterator, callback);
 
 };
+
 
 /**
  * Validation.validateSchema

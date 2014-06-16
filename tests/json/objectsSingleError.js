@@ -52,7 +52,8 @@ suite('JSON/Objects (with the ‘singleError’ flag)', function() {
       expect(error).to.have.property('0');
       expect(error).to.have.property('length', 1);
 
-      expect(error[0]).to.have.property('property', 'name');
+      expect(error[0]).to.have.property('property');
+      expect(error[0]['property']).to.eql(['name']);
       expect(error[0]).to.have.property('propertyValue', 123);
       expect(error[0]).to.have.property('attributeName', 'type');
       expect(error[0]).to.have.property('attributeValue', 'string');
@@ -109,7 +110,8 @@ suite('JSON/Objects (with the ‘singleError’ flag)', function() {
       expect(error).to.have.property('0');
       expect(error).to.have.property('length', 1);
 
-      expect(error[0]).to.have.property('property', 'user');
+      expect(error[0]).to.have.property('property');
+      expect(error[0]['property']).to.eql( ['user']);
       expect(error[0]).to.have.property('propertyValue', 'Hello');
       expect(error[0]).to.have.property('attributeName', 'type');
       expect(error[0]).to.have.property('attributeValue', 'object');
@@ -157,7 +159,8 @@ suite('JSON/Objects (with the ‘singleError’ flag)', function() {
       expect(error).to.have.property('0');
       expect(error).to.have.property('length', 1);
 
-      expect(error[0]).to.have.property('property', 'user.location');
+      expect(error[0]).to.have.property('property');
+      expect(error[0]['property']).to.eql( ['user','location']);
       expect(error[0]).to.have.property('propertyValue', 123);
       expect(error[0]).to.have.property('attributeName', 'type');
       expect(error[0]).to.have.property('attributeValue', 'string');
@@ -177,7 +180,8 @@ suite('JSON/Objects (with the ‘singleError’ flag)', function() {
       expect(error).to.have.property('0');
       expect(error).to.have.property('length', 1);
 
-      expect(error[0]).to.have.property('property', 'user.language');
+      expect(error[0]).to.have.property('property');
+      expect(error[0]['property']).to.eql( ['user','language']);
       expect(error[0]).to.have.property('propertyValue', 123);
       expect(error[0]).to.have.property('attributeName', 'type');
       expect(error[0]).to.have.property('attributeValue', 'string');
@@ -280,7 +284,8 @@ suite('JSON/Objects (with the ‘singleError’ flag)', function() {
       expect(error).to.have.property('0');
       expect(error).to.have.property('length', 1);
 
-      expect(error[0]).to.have.property('property', '');
+      expect(error[0]).to.have.property('property');
+      expect(error[0]['property']).to.eql( ['']);
       expect(error[0]).to.have.property('propertyValue', 123);
       expect(error[0]).to.have.property('attributeName', 'type');
       expect(error[0]).to.have.property('attributeValue', 'object');
@@ -297,7 +302,8 @@ suite('JSON/Objects (with the ‘singleError’ flag)', function() {
       expect(error).to.have.property('0');
       expect(error).to.have.property('length', 1);
 
-      expect(error[0]).to.have.property('property', 'user');
+      expect(error[0]).to.have.property('property');
+      expect(error[0]['property']).to.eql( ['user']);
       expect(error[0]).to.have.property('propertyValue', 123);
       expect(error[0]).to.have.property('attributeName', 'type');
       expect(error[0]).to.have.property('attributeValue', 'object');
@@ -316,7 +322,8 @@ suite('JSON/Objects (with the ‘singleError’ flag)', function() {
       expect(error).to.have.property('0');
       expect(error).to.have.property('length', 1);
 
-      expect(error[0]).to.have.property('property', 'user.localization');
+      expect(error[0]).to.have.property('property');
+      expect(error[0]['property']).to.eql( ['user','localization']);
       expect(error[0]).to.have.property('propertyValue', 123);
       expect(error[0]).to.have.property('attributeName', 'type');
       expect(error[0]).to.have.property('attributeValue', 'object');
@@ -338,7 +345,9 @@ suite('JSON/Objects (with the ‘singleError’ flag)', function() {
       expect(error).to.have.property('0');
       expect(error).to.have.property('length', 1);
 
-      expect(error[0]).to.have.property('property', 'user.localization.language');
+
+      expect(error[0]).to.have.property('property');
+      expect(error[0]['property']).to.eql( ['user','localization','language']);
       expect(error[0]).to.have.property('propertyValue', 123);
       expect(error[0]).to.have.property('attributeName', 'type');
       expect(error[0]).to.have.property('attributeValue', 'string');
@@ -360,7 +369,9 @@ suite('JSON/Objects (with the ‘singleError’ flag)', function() {
       expect(error).to.have.property('0');
       expect(error).to.have.property('length', 1);
 
-      expect(error[0]).to.have.property('property', 'user.localization.location');
+
+      expect(error[0]).to.have.property('property');
+      expect(error[0]['property']).to.eql( ['user','localization','location']);
       expect(error[0]).to.have.property('propertyValue', 123);
       expect(error[0]).to.have.property('attributeName', 'type');
       expect(error[0]).to.have.property('attributeValue', 'string');
