@@ -6,9 +6,8 @@ var requiredAttribute = function required(property, propertyValue, attributeValu
   if (attributeValue) {
 
     var undefinedCondition = isUndefined(propertyValue);
-    var nullCondition = isNull(propertyValue);
 
-    if (undefinedCondition || nullCondition) {
+    if (undefinedCondition) {
       this.addError();
     }
 
