@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/apiaryio/Amanda.svg?branch=master)](https://travis-ci.org/apiaryio/Amanda)
+
 <a name="amanda"></a>
 # Amanda
 
