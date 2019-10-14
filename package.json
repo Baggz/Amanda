@@ -13,7 +13,7 @@
   "devDependencies": {
     "mocha": "1.12.0",
     "expect.js": "0.2.0",
-    "debug": "0.7.2",
+    "debug": "4.1.1",
     "async": "0.2.9",
     "uglify-js": "2.3.6"
   },
