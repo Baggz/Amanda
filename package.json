@@ -15,7 +15,7 @@
     "expect.js": "0.2.0",
     "debug": "0.7.2",
     "async": "0.2.9",
-    "uglify-js": "2.3.6"
+    "uglify-js": "3.6.1"
   },
 
   "keywords": [
