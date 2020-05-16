@@ -151,8 +151,7 @@ suite('JSON/ArraysObjects (with the ‘singleError’ flag)', function() {
       expect(error).to.have.property('0');
       expect(error).to.have.property('length', 1);
 
-      expect(error[0]).to.have.property('property');
-      expect(error[0]['property']).to.eql( [ 'users', '0', 'name' ]);
+      expect(error[0]).to.have.property('property', 'users[0].name');
       expect(error[0]).to.have.property('propertyValue', 123);
       expect(error[0]).to.have.property('attributeName', 'type');
       expect(error[0]).to.have.property('attributeValue', 'string');
@@ -174,8 +173,7 @@ suite('JSON/ArraysObjects (with the ‘singleError’ flag)', function() {
       expect(error).to.have.property('0');
       expect(error).to.have.property('length', 1);
 
-      expect(error[0]).to.have.property('property');
-      expect(error[0]['property']).to.eql( [ 'users', '0', 'surname' ]);
+      expect(error[0]).to.have.property('property', 'users[0].surname');
       expect(error[0]).to.have.property('propertyValue', 123);
       expect(error[0]).to.have.property('attributeName', 'type');
       expect(error[0]).to.have.property('attributeValue', 'string');
@@ -198,8 +196,7 @@ suite('JSON/ArraysObjects (with the ‘singleError’ flag)', function() {
       expect(error).to.have.property('0');
       expect(error).to.have.property('length', 1);
 
-      expect(error[0]).to.have.property('property');
-      expect(error[0]['property']).to.eql( [ 'users', '1', 'surname' ]);
+      expect(error[0]).to.have.property('property', 'users[1].surname');
       expect(error[0]).to.have.property('propertyValue', 123);
       expect(error[0]).to.have.property('attributeName', 'type');
       expect(error[0]).to.have.property('attributeValue', 'string');

@@ -49,8 +49,12 @@ suite('JSON/Attribute/required#string', function() {
       expect(error).to.be.ok();
     });
 
+    jsonSchemaValidator.validate('', schema, function(error) {
+      count += 1;
+      expect(error).to.be.ok();
+    });
 
-    expect(count).to.be.eql(2);
+    expect(count).to.be.eql(3);
 
   });
 
@@ -102,7 +106,12 @@ suite('JSON/Attribute/required#array', function() {
       expect(error).to.be.ok();
     });
 
-    expect(count).to.be.eql(2);
+    jsonSchemaValidator.validate([], schema, function(error) {
+      count += 1;
+      expect(error).to.be.ok();
+    });
+
+    expect(count).to.be.eql(3);
 
   });
 
@@ -156,7 +165,12 @@ suite('JSON/Attribute/required#object', function() {
       expect(error).to.be.ok();
     });
 
-    expect(count).to.be.eql(2);
+    jsonSchemaValidator.validate({}, schema, function(error) {
+      count += 1;
+      expect(error).to.be.ok();
+    });
+
+    expect(count).to.be.eql(3);
 
   });
 

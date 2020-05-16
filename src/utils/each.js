@@ -51,7 +51,8 @@ var each = function(list, iterator, callback) {
       var tryCallback = function() {
         if (mayCallback && finished == started) {
           // finished all functions, celebrate!
-            return callback();
+          callback();
+          return;
         }
       }
 
@@ -69,18 +70,19 @@ var each = function(list, iterator, callback) {
           if (error) {
             // if error, fail fast
             hasCalled = true;
-            return callback(error);
-
+            callback(error);
+            return;
           }
 
           finished++;
-            return tryCallback();
-
+          tryCallback();
+          return;
         };
 
         // execute right away
         started++;
-        return iterator(key, value, cb);
+        iterator(key, value, cb);
+        return;
       }
 
 
@@ -105,7 +107,8 @@ var each = function(list, iterator, callback) {
 
       // Done adding items. Allow callback to fire
       mayCallback = true
-      return tryCallback();
+      tryCallback();
+      return;
     };
 
     if (typeof callback === 'undefined') {

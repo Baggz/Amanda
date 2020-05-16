@@ -87,19 +87,18 @@ suite('JSON/Attribute/additionalProperties', function() {
     }, schema, function(error) {
 
       count += 1;
+
       expect(error).to.be.ok();
       expect(error).to.have.property('0');
       expect(error).to.have.property('1');
       expect(error).to.have.property('length', 2);
 
-      expect(error[0]).to.have.property('property');
-      expect(error[0]['property']).to.eql( ['surname']);
+      expect(error[0]).to.have.property('property', 'surname');
       expect(error[0]).to.have.property('propertyValue', 'Hába');
       expect(error[0]).to.have.property('attributeName', 'additionalProperties');
       expect(error[0]).to.have.property('attributeValue', false);
 
-      expect(error[1]).to.have.property('property');
-      expect(error[1]['property']).to.eql( ['age']);
+      expect(error[1]).to.have.property('property', 'age');
       expect(error[1]).to.have.property('propertyValue', 19);
       expect(error[1]).to.have.property('attributeName', 'additionalProperties');
       expect(error[1]).to.have.property('attributeValue', false);
@@ -148,12 +147,12 @@ suite('JSON/Attribute/additionalProperties', function() {
     }, schema, function(error) {
 
       count += 1;
+
       expect(error).to.be.ok();
       expect(error).to.have.property('0');
       expect(error).to.have.property('length', 1);
 
-      expect(error[0]).to.have.property('property');
-      expect(error[0]['property']).to.eql( ['surname']);
+      expect(error[0]).to.have.property('property', 'surname');
       expect(error[0]).to.have.property('propertyValue', 'Hába');
       expect(error[0]).to.have.property('attributeName', 'type');
       expect(error[0]).to.have.property('attributeValue', 'number');

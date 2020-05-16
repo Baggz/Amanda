@@ -6,15 +6,18 @@
  */
 Validation.prototype.joinPath = function(path, property) {
 
-    path = path || [];
+  // If the ‘path’ is undefined (object), convert the path to a string
+  path = path || '';
 
-    //copy to avoid sharing 1 instance
-    path = JSON.parse(JSON.stringify(path))
+  // Converts the ‘property’ to a string
+  property = property + '';
 
-    // Converts the ‘property’ to a string
-    property = property + '';
-
-    path.push(property);
-    return path;
+  if (property.match(/^[a-zA-Z_][a-zA-Z0-9_]*$/)) {
+    return (path) ? (path + '.' + property) : property;
+  } else if (property.match(/^\d+$/)) {
+    return path + '[' + property + ']';
+  } else  {
+    return path + '["' + property + '"]';
+  }
 
 };
